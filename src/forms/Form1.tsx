@@ -1,4 +1,5 @@
 
+import { format } from 'date-fns';
 import React, { useState } from 'react';
 
 interface FormField {
@@ -11,7 +12,15 @@ interface FormField {
   paymentForm: string;
 }
 
-const DynamicForm: React.FC = () => {
+interface IForm1 {
+  thisDay: ValuePiece
+}
+
+type ValuePiece = Date | null;
+
+type Value = ValuePiece | [ValuePiece, ValuePiece];
+
+const DynamicForm: React.FC<IForm1> = (props) => {
   const [formFields, setFormFields] = useState<FormField[]>([]);
   const [nextId, setNextId] = useState<number>(1);
 
@@ -27,37 +36,46 @@ const DynamicForm: React.FC = () => {
     setFormFields(updatedFormFields);
   };
 
+  console.log("jakie props", props.thisDay)
   return (
     <div>
       <button onClick={addFormField}>Dodaj pozycję</button>
+     
+      {/* {`${format(props.thisDay, 'yyyy')}`}   */}
       {formFields.map((field) => (
         
         <div key={field.id}>
+
             {field.id}
+            .
+            
+                
+{`${format(props.thisDay, 'dd-MM-yyyy')}`}
+<input
+            type="text"
+            placeholder="amount"
+            value={field.paymentForm}
+            onChange={(e) => handleInputChange(field.id, 'sellerName', e.target.value)}
+          />
           <input
             type="text"
             placeholder="Invoice Num"
             value={field.invoiceNum}
             onChange={(e) => handleInputChange(field.id, 'invoiceNum', e.target.value)}
           />
-          <input
+          {/* <input
             type="text"
             placeholder="Invoice Date"
             value={field.invoiceDate}
             onChange={(e) => handleInputChange(field.id, 'invoiceDate', e.target.value)}
-          />
+          /> */}
           <input
             type="text"
             placeholder="Seller Name"
             value={field.sellerName}
             onChange={(e) => handleInputChange(field.id, 'sellerName', e.target.value)}
           />
-           <input
-            type="text"
-            placeholder="payment"
-            value={field.paymentForm}
-            onChange={(e) => handleInputChange(field.id, 'sellerName', e.target.value)}
-          />
+        
         </div>
       ))}
     </div>
