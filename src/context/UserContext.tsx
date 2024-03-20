@@ -30,13 +30,13 @@ export const UserContextProvider = ({ children }: Props) => {
     return unsubscribe
   }, [setCurrentUser]);
 
-  const value = {
+  const currentUserData = {
     currentUser, 
     setCurrentUser,
   }
 
   return (
-    <UserContext.Provider value={value}>
+    <UserContext.Provider value={currentUserData}>
       {children}
     </UserContext.Provider>
   );

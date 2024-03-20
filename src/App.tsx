@@ -12,6 +12,7 @@ import { getFirestore } from 'firebase/firestore'
 import { getStorage } from 'firebase/storage'
 import { getAnalytics } from 'firebase/analytics'
 import { config } from './config'
+import { UserContext, UserContextProvider } from './context/UserContext'
 
 export const app = initializeApp(config.firebaseConfig)
 //console.log("app",app)
@@ -28,8 +29,11 @@ function App() {
     <>
 
     <div className='container'>
- <BrowserRouter>      
+ <BrowserRouter>  
+
+ <UserContextProvider>  
    <Routes>
+
        <Route 
         path="/" 
         element={
@@ -53,6 +57,8 @@ function App() {
                }
        />
    </Routes>
+
+   </UserContextProvider> 
    </BrowserRouter> 
    
     </div>

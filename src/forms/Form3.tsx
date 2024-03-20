@@ -1,1 +1,1 @@
-//vat dopisywanie stawek
+//incomes
