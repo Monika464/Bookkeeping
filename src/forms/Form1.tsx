@@ -1,6 +1,6 @@
 // //EXPENCES 
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { format, getDate, getMonth, getYear, parse } from 'date-fns';
 import { useContext } from 'react'
 import { UserContext } from '../context/UserContext';
@@ -32,20 +32,13 @@ const DynamicForm: React.FC<IForm1> = (props) => {
   const [formFields, setFormFields] = useState<FormField[]>([]);
   const [nextId, setNextId] = useState<number>(1);
   const {currentUser} = useContext(UserContext);
-  //console.log("co mamy w formfields", formFields)
+  console.log("co mamy w formfields", formFields)
   //const docRef = doc(db, "cities", "SF");
   //const querySnapshot = await getDocs(collection(db, "cities", "SF", "landmarks"));
-  console.log("props", props.thisDay)
+  //console.log("props", props.thisDay)
 
   const thisDay = props.thisDay;
-     //console.log("thisDay",new Date(thisDay?.getTime()))
-    // const thisDayData = new Date(thisDay?.getTime())
-     //console.log("thisDay",thisDayData)
-   //  const formattedDate: string = format(new Date(thisDay?.getTime()), 'MMMM');
-    // console.log("formattedDate",formattedDate)
 
-  //console.log(format(new Date(com.created_at?.toMillis()), 'yyyy-MM-dd HH:mm'))
-  console.log("thisDay",typeof(thisDay))
   const year: number = getYear(thisDay);
   //console.log("year",year)
   const month: number = getMonth(thisDay);
@@ -54,8 +47,8 @@ const DynamicForm: React.FC<IForm1> = (props) => {
   //console.log("day",day)
   const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 const monthName = monthNames[month];
-  const formattedDate = day + monthName;
-  console.log("formattedDate",formattedDate)
+  //const formattedDate = day + monthName;
+  //console.log("formattedDate",formattedDate)
   //console.log("hej", format(props.thisDay, 'do LLLL yyyy', {locale: pl}))  
 
 
@@ -67,8 +60,17 @@ const monthName = monthNames[month];
   
   
   const addFormField = () => {
-    setFormFields([...formFields, { id: nextId, invoiceNum: '', invoiceDate: thisDay, sellerName: '', 
-                paymentForm: 'Przelew', amount: '',invoiceName: '',description: '', category: 'service' }]);
+    setFormFields([...formFields, 
+      { id: nextId, 
+        invoiceNum: '',
+         invoiceDate: thisDay,
+          sellerName: '', 
+         paymentForm: 'przelew',
+          amount: '',
+          invoiceName: '',
+          description: '', 
+          category: 'service' 
+        }]);
     setNextId(nextId + 1);
   };
 
@@ -79,6 +81,8 @@ const monthName = monthNames[month];
       return; // Jeśli wartość nie spełnia wymagań, nie aktualizujemy stanu
     }
 
+    //dopisz czyszczenie formularza
+
     const updatedFormFields = formFields.map((field) =>
      // field.id === id ? { ...field, [inputName]: value } : field
      field.id === id ? { ...field, [inputName]: value } : field
@@ -87,36 +91,81 @@ const monthName = monthNames[month];
   };
 
 
-  console.log('formFields',formFields[0])
+
+
+
+  formFields.map((el)=>{console.log("el",el)})
 //tu bedzie funcja wysylajaca do bazy
 
-const sendToBase = async ()=>{
-  //const uid = currentUser?.uid;
-  console.log("currentUser?.uid",currentUser?.uid)
-  const uid = "user1id";
-  const userId = currentUser?.uid;
+const sendToBase = async (e)=>{
 
-  const collectionRef = collection(db, `${userId}`);
+   e.preventDefault()
+    //const uid = currentUser?.uid;
+    console.log("currentUser?.uid",currentUser?.uid)
+    const uid = "user1id";
+    const userId = currentUser?.uid;
+     const collectionRef = collection(db, `${userId}`);
 
-await setDoc(doc(collectionRef), {
-  id: userId,
-  invoiceNum: formFields[0].invoiceNum,
-  invoiceDate: thisDay,
-  sellerName: formFields[0].sellerName,
-  paymentForm: formFields[0].paymentForm,
-  amount: formFields[0].amount,
-  invoiceName: formFields[0].invoiceName,
-  description: formFields[0].invoiceName,
-  category: formFields[0].category,
+  // Tworzymy tablicę do przechowywania danych z wszystkich pól formularza
+  const formData = formFields.map(field => ({
+   
+   userId: userId,
+   id:field.id,
+   invoiceNum: field.invoiceNum,
+   amount: field.amount,
+    invoiceName: field.invoiceName,
+    category: field.category,
+  description: field.description,
+  paymentForm: field.paymentForm,
+  sellerName: field.sellerName,
   year: year,
   month: monthName,
   day: day,
   type: "expenses"
-    });
+
+
+
+  // invoiceNum: formFields[0].invoiceNum,
+  // invoiceDate: thisDay,
+  // sellerName: formFields[0].sellerName,
+  // paymentForm: formFields[0].paymentForm,
+  // amount: formFields[0].amount,
+  // invoiceName: formFields[0].invoiceName,
+  // description: formFields[0].description,
+  // category: formFields[0].category,
+  // year: year,
+  // month: monthName,
+  // day: day,
+  // type: "expenses"
+  }));
+
+  // Iterujemy przez tablicę danych i zapisujemy każdy obiekt do bazy danych
+  formData.forEach(async (data) => {
+    await setDoc(doc(collectionRef), data);
+  });
+
+  // await setDoc(doc(collectionRef), {
+  // id: userId,
+  // invoiceNum: formFields[0].invoiceNum,
+  // invoiceDate: thisDay,
+  // sellerName: formFields[0].sellerName,
+  // paymentForm: formFields[0].paymentForm,
+  // amount: formFields[0].amount,
+  // invoiceName: formFields[0].invoiceName,
+  // description: formFields[0].description,
+  // category: formFields[0].category,
+  // year: year,
+  // month: monthName,
+  // day: day,
+  // type: "expenses"
+  //   });
  
   }
 
-
+// useEffect(()=>{
+//   setFormFields([]);
+//   setNextId(1);
+// },[sendToBase])
 
 
 
@@ -136,7 +185,7 @@ await setDoc(doc(collectionRef), {
           />
           <input
             type="text" 
-            placeholder="kwota"
+            placeholder="kwota w zł"
             value={field.amount}
             onChange={(e) => handleInputChange(field.id, 'amount', e.target.value)}
           />
@@ -165,8 +214,8 @@ await setDoc(doc(collectionRef), {
             value={field.paymentForm}
             onChange={(e) => handleInputChange(field.id, 'paymentForm', e.target.value)}
           >
-            <option value="Przelew">Przelew</option>
-            <option value="Gotówka">Gotówka</option>
+            <option value="przelew">Przelew</option>
+            <option value="gotowka">Gotówka</option>
           </select>
           <select
             value={field.category}
@@ -194,247 +243,3 @@ export default DynamicForm;
 
 
 
-
-
-// import React, { useState } from 'react';
-// import { format } from 'date-fns';
-
-// interface FormField {
-//   id: number;
-//   invoiceNum: string;
-//   invoiceDate: string;
-//   sellerName: string;
-//   paymentForm: string;
-//   amount: number
-// }
-
-// interface IForm1 {
-//   thisDay: ValuePiece;
-// }
-
-// type ValuePiece = Date | null;
-
-// const DynamicForm: React.FC<IForm1> = (props) => {
-//   const [formFields, setFormFields] = useState<FormField[]>([]);
-//   const [nextId, setNextId] = useState<number>(1);
-
-//   console.log("co mamy w formfields", formFields)
-
-//   const addFormField = () => {
-//     setFormFields([...formFields, { id: nextId, invoiceNum: '', invoiceDate: '', sellerName: '', paymentForm: 'Przelew', amount: 0 }]);
-//     setNextId(nextId + 1);
-//   };
-
-//   const handleInputChange = (id: number, inputName: string, value: string) => {
-//     const updatedFormFields = formFields.map((field) =>
-//       field.id === id ? { ...field, [inputName]: value } : field
-//     );
-//     setFormFields(updatedFormFields);
-//   };
-
-//   //console.log("props", props.thisDay)
-//   //tu zapiszemy do 
-
-//   return (
-//     <div>
-//       <button onClick={addFormField}>Dodaj pozycję</button>
-//       {formFields.map((field) => (
-//         <div key={field.id}>
-//           {field.id}.
-//           {/* {`${format(props.thisDay, 'dd-MM')}`} */}
-//           <input
-//             type="text"
-//             placeholder="Nr faktury"
-//             value={field.invoiceNum}
-//             onChange={(e) => handleInputChange(field.id, 'invoiceNum', e.target.value)}
-//           />
-//           <input
-//   type="number"
-//   placeholder="kwota"
-//   value={field.amount}
-//   onChange={(e) => handleInputChange(field.id, 'amount', e.target.value)}
-//   onKeyDown={(e) => {
-//     // Pozwól na naciśnięcie klawiszy numerycznych oraz klawiszy służących do nawigacji (np. strzałki, klawisz Backspace)
-//     if (
-//       !(
-//         (e.key >= '0' && e.key <= '9') ||
-//         e.key === 'ArrowLeft' ||
-//         e.key === 'ArrowRight' ||
-//         e.key === 'Backspace' ||
-//         e.key === 'Delete' ||
-//         e.key === 'Tab' ||
-//         e.key === ',' || // akceptuj przecinek dla obsługi wartości dziesiętnych (opcjonalnie)
-//         e.key === '.'
-//       )
-//     ) {
-//       e.preventDefault();
-//     }
-//   }}
-// />
-//             {/* <input
-//             type="number"
-//             placeholder="kwota"
-//             value={field.amount}
-//             onChange={(e) => handleInputChange(field.id, 'amount', e.target.value)}
-//           /> */}
-//           {/* <input
-//             type="text"
-//             placeholder="Data faktury"
-//             value={field.invoiceDate}
-//             onChange={(e) => handleInputChange(field.id, 'invoiceDate', e.target.value)}
-//           /> */}
-//           <input
-//             type="text"
-//             placeholder="Nazwa sprzedawcy"
-//             value={field.sellerName}
-//             onChange={(e) => handleInputChange(field.id, 'sellerName', e.target.value)}
-//           />
-//           <select
-//             value={field.paymentForm}
-//             onChange={(e) => handleInputChange(field.id, 'paymentForm', e.target.value)}
-//           >
-//             <option value="Przelew">Przelew</option>
-//             <option value="Gotówka">Gotówka</option>
-//           </select>
-//         </div>
-//       ))}
-//       <button>nowy wyslij koszt</button>
-//     </div>
-//   );
-// };
-
-// export default DynamicForm;
-
-
-// // import { format } from 'date-fns';
-// // import React, { useState } from 'react';
-
-// // interface FormField {
-// //   id: number;
-// //   value: string;
-// //   invoiceNum: string;
-// //   invoiceDate: string;
-// //   paymentDate: string;
-// //   sellerName: string;
-// //   paymentForm: string;
-// // }
-
-// // interface IForm1 {
-// //   thisDay: ValuePiece
-// // }
-
-// // type ValuePiece = Date | null;
-
-// // type Value = ValuePiece | [ValuePiece, ValuePiece];
-
-// // const DynamicForm: React.FC<IForm1> = (props) => {
-// //   const [formFields, setFormFields] = useState<FormField[]>([]);
-// //   const [nextId, setNextId] = useState<number>(1);
-
-// //   const addFormField = () => {
-// //     setFormFields([...formFields, { id: nextId, value: '', invoiceNum: '', invoiceDate: '', paymentDate: '', sellerName: '' ,paymentForm: ''}]);
-// //     setNextId(nextId + 1);
-// //   };
-
-// //   const handleInputChange = (id: number, inputName: string, value: string) => {
-// //     const updatedFormFields = formFields.map((field) =>
-// //       field.id === id ? { ...field, [inputName]: value } : field
-// //     );
-// //     setFormFields(updatedFormFields);
-// //   };
-
-// //   console.log("jakie props", props.thisDay)
-// //   return (
-// //     <div>
-// //       <button onClick={addFormField}>Dodaj pozycję</button>
-     
-// //       {/* {`${format(props.thisDay, 'yyyy')}`}   */}
-// //       {formFields.map((field) => (
-        
-// //         <div key={field.id}>
-
-// //             {field.id}
-// //             .
-            
-                
-// // {`${format(props.thisDay, 'dd-MM-yyyy')}`}
-// // <input
-// //             type="text"
-// //             placeholder="amount"
-// //             value={field.paymentForm}
-// //             onChange={(e) => handleInputChange(field.id, 'sellerName', e.target.value)}
-// //           />
-// //           <input
-// //             type="text"
-// //             placeholder="Invoice Num"
-// //             value={field.invoiceNum}
-// //             onChange={(e) => handleInputChange(field.id, 'invoiceNum', e.target.value)}
-// //           />
-// //           {/* <input
-// //             type="text"
-// //             placeholder="Invoice Date"
-// //             value={field.invoiceDate}
-// //             onChange={(e) => handleInputChange(field.id, 'invoiceDate', e.target.value)}
-// //           /> */}
-// //           <input
-// //             type="text"
-// //             placeholder="Seller Name"
-// //             value={field.sellerName}
-// //             onChange={(e) => handleInputChange(field.id, 'sellerName', e.target.value)}
-// //           />
-        
-// //         </div>
-// //       ))}
-// //     </div>
-// //   );
-// // };
-// // //payment amount, payment date, vat,// przychody to co na glowny //forma platnosci
-
-// // export default DynamicForm;
-
-// // // import React, { useState } from 'react';
-
-// // // interface FormField {
-// // //   id: number;
-// // //   value: string;
-// // //   invoiceNum: string;
-// // //   invoiceDate: string;
-
-// // // }
-
-// // // const DynamicForm: React.FC = () => {
-// // //   const [formFields, setFormFields] = useState<FormField[]>([]);
-// // //   const [nextId, setNextId] = useState<number>(1);
-
-// // //   const addFormField = () => {
-// // //     setFormFields([...formFields, { id: nextId, value: '' ,invoiceNum: '', invoiceDate: ''}]);
-// // //     setNextId(nextId + 1);
-// // //   };
-
-// // //   const handleInputChange = (id: number, value: string) => {
-// // //     const updatedFormFields = formFields.map((field) =>
-// // //       field.id === id ? { ...field, value, invoiceNum,invoiceDate} : field
-// // //     );
-// // //     setFormFields(updatedFormFields);
-// // //   };
-
-// // //   return (
-// // //     <div>
-// // //       <button onClick={addFormField}>Dodaj</button>
-// // //       {formFields.map((field) => (
-// // //         <div>
-// // //         <input
-// // //           key={field.id}
-// // //           type="text"
-// // //           value={field.value}
-// // //           onChange={(e) => handleInputChange(field.id, e.target.value)}
-// // //         />
-// // //          {field.value}{field.id}
-// // //         </div>
-       
-// // //       ))}
-// // //     </div>
-// // //   );
-// // // };
-
-// // // export default DynamicForm;

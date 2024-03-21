@@ -109,23 +109,25 @@ return(<div>expenses
 
         <div>
             
-                 {Object.values(content).map((element,index) => (
+                 {/* {Object.values(content).map((element,index) => (
                 <div key={index}>
-                    {/* Tutaj możesz wyrenderować zawartość każdego elementu content */}
-                    {/* Na przykład: */}
-                    {/* <p>{content[key]}</p> */}
                     {` sprzedawca ${element?.seller}`}
-                    {`element.invoiceno ${element?.invoiceno}`}
-                  
+                    {`element.invoiceno ${element?.invoiceno}`}     
                 </div>
-                ))}
+                ))} */}
                    {Object.values(invoices).map((invoice,index) => (
                     <div key={index}>
                         {/* Tutaj możesz wyrenderować zawartość każdego elementu content */}
                         {/* Na przykład: */}
                         {/* <p>{content[key]}</p> */}
-                        {` sprzedawca ${invoice.invoiceName}`}
+                        {` lp ${invoice.id}`}
+                        {` numer ${invoice.invoiceNum}`}
                         {` kwota ${invoice.amount}`}
+                        {` nazwa ${invoice.invoiceName}`}
+                        {` sprzedawca ${invoice.sellerName}`}
+                        {` forma ${invoice.paymentForm}`}
+                        {` opis ${invoice.description}`}
+                       
                         {/* {`element.invoiceno ${element?.invoiceno}`} */}
                       
                     </div>
