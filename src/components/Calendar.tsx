@@ -63,13 +63,13 @@ const CalendarPage: React.FunctionComponent<ICalendarProps> =() => {
                <DayExpenses thisDay={value}/>
                 <br></br>
                 <Form1 thisDay={value}/>
-                <button onClick={sendSelectedDateExpense}>Send</button>
+                {/* <button onClick={sendSelectedDateExpense}>Send</button> */}
                 <br></br><br></br>
                
                  Przychody
                  {/* 'tu sie z bazy maja wyswietlac' */}
                  <Form1 thisDay={value}/>
-                 <button onClick={sendSelectedDateIncome}>Send</button>
+                 {/* <button onClick={sendSelectedDateIncome}>Send</button> */}
                  </div>
             )}
         </div>

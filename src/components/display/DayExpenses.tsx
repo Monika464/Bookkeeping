@@ -1,4 +1,4 @@
-import { collection, getDocs, query, where } from "firebase/firestore";
+import { collection, deleteDoc, deleteField, doc, getDocs, query, updateDoc, where } from "firebase/firestore";
 import { db } from "../../App";
 import { useContext, useEffect, useState } from 'react'
 import { UserContext } from '../../context/UserContext';
@@ -14,9 +14,12 @@ export interface IDayExpenses {
 
 
 const DayExpenses : React.FunctionComponent<IDayExpenses > =(props) =>{
-    
+    const [selectedInvoices, setSelectedInvoices] = useState([]);
+
     const [content,setContent] = useState({})
     const [invoices, setInvoices] = useState({});
+    const [isEditMode, setIsEditMode] = useState(false);
+
 //invoices powinin sie zmieniac
 
     const thisDay = props.thisDay;
@@ -44,7 +47,10 @@ const monthName = monthNames[month];
               const querySnapshot = await getDocs(q);
                 querySnapshot.forEach((doc) => {
                  console.log(doc.id, " march=> ", doc.data());
-                 newData[doc.id] =  doc.data(); 
+               
+                // newData[doc.id] =  doc.data(); 
+                newData[doc.id] = { ...doc.data(), itid: doc.id };
+                 //newData ={...doc.data(),itid: doc.id}
                 });
                 setInvoices(newData)   
 
@@ -56,6 +62,7 @@ const monthName = monthNames[month];
     }
 
     console.log('invoices',invoices)
+ 
     //     try {
     //         const querySnapshot1 = await getDocs(
     //              query(collection(db, `${uid}`, "2024", "january", "1marzec", "fakkosztowe"))
@@ -100,26 +107,109 @@ useEffect(()=>{
     
 },[props])
 
+// Funkcja do obsługi zaznaczania i odznaczania checkboxów
+const handleCheckboxChange = (e) => {
+    const value = e.target.value;
+    if (e.target.checked) {
+      setSelectedInvoices([...selectedInvoices, value]);
+    } else {
+      setSelectedInvoices(selectedInvoices.filter(invoice => invoice !== value));
+    }
+  };
+  
+  // Funkcja obsługująca kliknięcie przycisku "Delete"
+  const handleDeleteClick = async () => {
+   // const usersCollectionRef = collection(db, `${userId}`);
+selectedInvoices.map((item)=>{
+    console.log("iterms to delete", item)
+    deleteDoc(doc(db, `${userId}`, item));
+})
+    console.log(selectedInvoices);
+    //  selectedInvoices.map((item)=>{
+    //     await deleteDoc(doc(db, `${userId}`, "DC"));
+    // })
+  };
 
+// Funkcja do zmiany nazwy przycisku
+const getButtonLabel = () => {
+    return isEditMode ? "Finish" : "Edit";
+  };
 //console.log("content",content)
+
+// Funkcja do obsługi kliknięcia przycisku "Edit" lub "Finish"
+
 
 return(<div>expenses
 
+<div>
+    {Object.values(invoices).map((invoice, index) => (
+      <div key={index}>
+        {isEditMode && (
+            <>
+        <input
+          type="checkbox"
+          id={`invoice-checkbox-${index}`}
+          value={invoice.itid}
+          onChange={handleCheckboxChange}
+        />
+        <label htmlFor={`invoice-checkbox-${index}`}>
+          {` numer ${invoice.invoiceNum}, kwota ${invoice.amount}, nazwa ${invoice.invoiceName}, sprzedawca ${invoice.sellerName}, forma ${invoice.paymentForm}, opis ${invoice.description}`}
+        </label>
+        </>)}
 
+         {` numer ${invoice.invoiceNum}, kwota ${invoice.amount}, nazwa ${invoice.invoiceName}, sprzedawca ${invoice.sellerName}, forma ${invoice.paymentForm}, opis ${invoice.description}`}
+      </div>
+    ))}
+    {/* <button onClick={handleDeleteClick}>Delete</button> */}
+    {isEditMode && (
+        <button onClick={handleDeleteClick}>remove selected items</button>
+      )}
+      {/* <button onClick={() => setIsEditMode(!isEditMode)}>edytuj</button> */}
+      <button onClick={() => setIsEditMode(!isEditMode)}>
+      {getButtonLabel()}
+    </button>
+  </div>
 
-        <div>
-            
-                 {/* {Object.values(content).map((element,index) => (
-                <div key={index}>
-                    {` sprzedawca ${element?.seller}`}
-                    {`element.invoiceno ${element?.invoiceno}`}     
-                </div>
-                ))} */}
-                   {Object.values(invoices).map((invoice,index) => (
+{/* {Object.values(invoices).map((invoice, index) => (
+  <div key={index}>
+    <input
+      type="checkbox"
+      id={`invoice-checkbox-${index}`}
+      value={invoice.invoiceNum}
+      onChange={(e) => console.log(e.target.value)}
+    />
+    <label htmlFor={`invoice-checkbox-${index}`}>
+      {` lp ${invoice.id}, numer ${invoice.invoiceNum}, kwota ${invoice.amount}, nazwa ${invoice.invoiceName}, sprzedawca ${invoice.sellerName}, forma ${invoice.paymentForm}, opis ${invoice.description}`}
+    </label>
+    <button onClick={(e) => console.log(e.target.previousSibling.value)}>Delete</button>
+  </div>
+))} */}
+
+        {/* <div>
+        {Object.values(invoices).map((invoice, index) => (
+  <div key={index}>
+    <input
+      type="checkbox"
+      id={`invoice-checkbox-${index}`}
+      value={JSON.stringify(invoice)}
+      onChange={(e) => console.log(e.target.value)}
+    />
+    <label htmlFor={`invoice-checkbox-${index}`}>
+      {` lp ${invoice.id}, numer ${invoice.invoiceNum}, kwota ${invoice.amount}, nazwa ${invoice.invoiceName}, sprzedawca ${invoice.sellerName}, forma ${invoice.paymentForm}, opis ${invoice.description}`}
+    </label>
+  </div>
+))} */}
+        {/* <select onChange={(e) => console.log("co sie wyswietla",e.target.value)}>
+  {Object.values(invoices).map((invoice, index) => (
+    <option key={index} value={invoice.invoiceNum}>
+      {`lp ${invoice.id}, numer ${invoice.invoiceNum}, kwota ${invoice.amount}, nazwa ${invoice.invoiceName}, sprzedawca ${invoice.sellerName}, forma ${invoice.paymentForm}, opis ${invoice.description}`}
+    </option>
+  ))}
+</select> */}
+        
+                   {/* {Object.values(invoices).map((invoice,index) => (
                     <div key={index}>
-                        {/* Tutaj możesz wyrenderować zawartość każdego elementu content */}
-                        {/* Na przykład: */}
-                        {/* <p>{content[key]}</p> */}
+                  
                         {` lp ${invoice.id}`}
                         {` numer ${invoice.invoiceNum}`}
                         {` kwota ${invoice.amount}`}
@@ -128,11 +218,11 @@ return(<div>expenses
                         {` forma ${invoice.paymentForm}`}
                         {` opis ${invoice.description}`}
                        
-                        {/* {`element.invoiceno ${element?.invoiceno}`} */}
+                        
                       
                     </div>
-                ))}
-        </div>
+                ))} */}
+       
     
 
 </div>)
