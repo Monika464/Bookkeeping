@@ -6,6 +6,8 @@ import Form1 from "../forms/Form1";
 import { format } from "date-fns";
 import { pl } from "date-fns/locale";
 import DayExpenses from "./display/DayExpenses";
+import Form3 from "../forms/Form3";
+import DayIncomes from "./display/DayIncomes";
 
 export interface ICalendarProps {};
 
@@ -67,8 +69,9 @@ const CalendarPage: React.FunctionComponent<ICalendarProps> =() => {
                 <br></br><br></br>
                
                  Przychody
+                 <DayIncomes thisDay={value}/>
                  {/* 'tu sie z bazy maja wyswietlac' */}
-                 <Form1 thisDay={value}/>
+                 <Form3 thisDay={value}/>
                  {/* <button onClick={sendSelectedDateIncome}>Send</button> */}
                  </div>
             )}

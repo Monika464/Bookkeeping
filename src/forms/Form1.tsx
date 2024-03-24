@@ -32,10 +32,7 @@ const DynamicForm: React.FC<IForm1> = (props) => {
   const [formFields, setFormFields] = useState<FormField[]>([]);
   const [nextId, setNextId] = useState<number>(1);
   const {currentUser} = useContext(UserContext);
-  console.log("co mamy w formfields", formFields)
-  //const docRef = doc(db, "cities", "SF");
-  //const querySnapshot = await getDocs(collection(db, "cities", "SF", "landmarks"));
-  //console.log("props", props.thisDay)
+
 
   const thisDay = props.thisDay;
 
@@ -90,18 +87,22 @@ const monthName = monthNames[month];
     setFormFields(updatedFormFields);
   };
 
+  const resetForm = () => {
+    // Reset form fields to default state
+    setFormFields([]);
+    setNextId(1);
+  }
 
 
 
-
-  formFields.map((el)=>{console.log("el",el)})
+  //formFields.map((el)=>{console.log("el",el)})
 //tu bedzie funcja wysylajaca do bazy
 
 const sendToBase = async (e)=>{
 
    e.preventDefault()
     //const uid = currentUser?.uid;
-    console.log("currentUser?.uid",currentUser?.uid)
+    //console.log("currentUser?.uid",currentUser?.uid)
     const uid = "user1id";
     const userId = currentUser?.uid;
      const collectionRef = collection(db, `${userId}`);
@@ -123,52 +124,14 @@ const sendToBase = async (e)=>{
   day: day,
   type: "expenses"
 
-
-
-  // invoiceNum: formFields[0].invoiceNum,
-  // invoiceDate: thisDay,
-  // sellerName: formFields[0].sellerName,
-  // paymentForm: formFields[0].paymentForm,
-  // amount: formFields[0].amount,
-  // invoiceName: formFields[0].invoiceName,
-  // description: formFields[0].description,
-  // category: formFields[0].category,
-  // year: year,
-  // month: monthName,
-  // day: day,
-  // type: "expenses"
   }));
 
-  // Iterujemy przez tablicę danych i zapisujemy każdy obiekt do bazy danych
   formData.forEach(async (data) => {
     await setDoc(doc(collectionRef), data);
   });
 
-
-
-  // await setDoc(doc(collectionRef), {
-  // id: userId,
-  // invoiceNum: formFields[0].invoiceNum,
-  // invoiceDate: thisDay,
-  // sellerName: formFields[0].sellerName,
-  // paymentForm: formFields[0].paymentForm,
-  // amount: formFields[0].amount,
-  // invoiceName: formFields[0].invoiceName,
-  // description: formFields[0].description,
-  // category: formFields[0].category,
-  // year: year,
-  // month: monthName,
-  // day: day,
-  // type: "expenses"
-  //   });
- 
+  resetForm();
   }
-
-// useEffect(()=>{
-//   setFormFields([]);
-//   setNextId(1);
-// },[sendToBase])
-
 
 
   return (

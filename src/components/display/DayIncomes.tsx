@@ -5,7 +5,7 @@ import { UserContext } from '../../context/UserContext';
 import { Value } from "../Calendar";
 import { getDate, getMonth, getYear } from "date-fns";
 
-export interface IDayExpenses {
+export interface IDayIncomes  {
     thisDay: Value
 };
 
@@ -13,7 +13,7 @@ export interface IDayExpenses {
 
 
 
-const DayExpenses : React.FunctionComponent<IDayExpenses > =(props) =>{
+const DayIncomes : React.FunctionComponent<IDayIncomes > =(props) =>{
     const [selectedInvoices, setSelectedInvoices] = useState([]);
 
     const [content,setContent] = useState({})
@@ -40,7 +40,7 @@ const monthName = monthNames[month];
             const q = query(usersCollectionRef, 
                 where('year', '==', year), 
                 where('month', '==', monthName), 
-                where('type', '==', 'expenses'), 
+                where('type', '==', 'incomes'), 
                 where('day', '==', day), 
               )
               let newData = {}
@@ -102,7 +102,7 @@ const getButtonLabel = () => {
 // Funkcja do obsługi kliknięcia przycisku "Edit" lub "Finish"
 
 
-return(<div>expenses
+return(<div>incomes
 
 <div>
     {Object.values(invoices).map((invoice, index) => (
@@ -137,4 +137,4 @@ return(<div>expenses
 </div>)
 }
 
-export default DayExpenses;
+export default DayIncomes;
