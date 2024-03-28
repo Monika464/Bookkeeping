@@ -21,6 +21,7 @@ interface FormField {
   description: string;
 //   category: string;
   source: string;
+  paid: boolean;
 }
 
 interface IForm3 {
@@ -69,7 +70,8 @@ const monthName = monthNames[month];
           invoiceName: '',
           description: '', 
         //   category: 'service' 
-        source: 'skladki'
+        source: 'skladki',
+        paid: true
         }]);
     setNextId(nextId + 1);
   };
@@ -126,7 +128,8 @@ const sendToBase = async (e)=>{
   year: year,
   month: monthName,
   day: day,
-  type: "incomes"
+  type: "incomes",
+  paid: field.paid
 
   }));
 
@@ -207,6 +210,15 @@ const sendToBase = async (e)=>{
             value={field.description}
             onChange={(e) => handleInputChange(field.id, 'description', e.target.value)}
           />
+
+             <select
+            value={field.paid}
+            onChange={(e) => handleInputChange(field.id, 'paid', e.target.value)}
+          >
+            <option value="true">opłacone</option>
+            <option value="false">nieopłacone</option>
+          </select>
+
         </div>
       ))}
       <button onClick={sendToBase}>zapisz income</button>

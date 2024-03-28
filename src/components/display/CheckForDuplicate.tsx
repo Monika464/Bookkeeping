@@ -86,16 +86,16 @@ const readingFromBase = useCallback(async()=>{
      
 
   
-     console.log('duplicates',duplicates)
+    // console.log('duplicates',duplicates)
 
-return(<div style={{color: "red"}}>Zdublowane numery faktur:
+return(<div>
 <br></br><br></br>
   {/* <button onClick={readingFromBase}>read</button> */}
-  {duplicates && Object.values(duplicates).map((dup, index) => (
+  {duplicates && <div style={{color: "red"}}>Zdublowane numery faktur</div> && Object.values(duplicates).map((dup, index) => (
     <div key={index} style={{color: "red"}}>
       {dup.type === "incomes" ? "przychody" : "koszty" }
       <br></br>
-      {`data  ${dup.day} ${dup.month} ${dup.year}`}
+      {`data   ${dup.day} ${dup.month} ${dup.year}`}
 {` numer ${dup.invoiceNum}, kwota ${dup.amount}, nazwa ${dup.invoiceName}, sprzedawca ${dup.sellerName}, forma ${dup.paymentForm}, opis ${dup.description}`}
 </div>
   ))}

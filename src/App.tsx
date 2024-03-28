@@ -13,6 +13,9 @@ import { getStorage } from 'firebase/storage'
 import { getAnalytics } from 'firebase/analytics'
 import { config } from './config'
 import { UserContext, UserContextProvider } from './context/UserContext'
+import YearDisplay from './components/display/YearDisplay'
+import MonthDisplay from './components/display/MonthDisplay'
+import Balance from './pages/Balance'
 
 export const app = initializeApp(config.firebaseConfig)
 //console.log("app",app)
@@ -38,6 +41,29 @@ function App() {
         path="/" 
         element={
          <Home />        
+               }              
+         />
+
+
+       <Route 
+        path="/year" 
+        element={
+         <YearDisplay/>  
+               }              
+         />
+
+
+       <Route 
+        path="/month" 
+        element={
+         <MonthDisplay/>  
+               }              
+         />
+
+<Route 
+        path="/balance" 
+        element={
+         <Balance/>  
                }              
          />
 
