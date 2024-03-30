@@ -61,7 +61,7 @@ const useQuerySrodkiTrwale = () => {
 
         Object.values(dataFromSrodkiTrwale)
         .map((item, index) => {
-    console.log("item",item.amount)
+    //console.log("item",item.amount)
     
     if(item.amount > 10000){
     temp.push(item)
@@ -76,9 +76,6 @@ const useQuerySrodkiTrwale = () => {
     //console.log("nowe query",dataFromSrodkiTrwaleMod)
     
  
-
-
-    
 
 
     return dataFromSrodkiTrwaleMod;
