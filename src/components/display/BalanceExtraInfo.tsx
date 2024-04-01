@@ -57,7 +57,7 @@ const BalanceExtraInfo: React.FunctionComponent<IBalanceExtraInfoProps> = (props
 
   return (
     <div>
-      BalanceExtraInfo
+      Amortyzacja
       {Object.values(dataFromSrodkiTrwaleMod).map((item, index) => (
         <div key={index}>
           {` numer ${item.invoiceNum}, kwota ${item.amount}, nazwa ${item.invoiceName}, sprzedawca ${item.sellerName}, forma ${item.paymentForm}, opis ${item.description} ${item.endValue ? `, po amortyzacji ${item.endValue}` : ''}`}

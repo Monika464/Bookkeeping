@@ -16,6 +16,7 @@ import { UserContext, UserContextProvider } from './context/UserContext'
 import YearDisplay from './components/display/YearDisplay'
 import MonthDisplay from './components/display/MonthDisplay'
 import Balance from './pages/Balance'
+import FormLoansCredits from './forms/FormLoansCredits'
 
 export const app = initializeApp(config.firebaseConfig)
 //console.log("app",app)
@@ -66,6 +67,14 @@ function App() {
          <Balance/>  
                }              
          />
+
+<Route 
+        path="/loans" 
+        element={
+         <FormLoansCredits/>  
+               }              
+         />
+
 
 <Route 
         path="/login2" 
