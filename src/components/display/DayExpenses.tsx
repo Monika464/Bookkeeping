@@ -45,14 +45,20 @@ const monthName = monthNames[month];
               )
               let newData = {}
               const querySnapshot = await getDocs(q);
-                querySnapshot.forEach((doc) => {
-                // console.log(doc.id, " march=> ", doc.data());
-               
-                // newData[doc.id] =  doc.data(); 
-                newData[doc.id] = { ...doc.data(), itid: doc.id };
-                 //newData ={...doc.data(),itid: doc.id}
-                });
-                setInvoices(newData)   
+
+  querySnapshot.forEach((doc) => {
+    // console.log(doc.id, " march=> ", doc.data());
+   
+    // newData[doc.id] =  doc.data(); 
+
+    newData[doc.id] = { ...doc.data(), itid: doc.id };
+  
+     //newData ={...doc.data(),itid: doc.id}
+    });
+    setInvoices(newData)   
+
+
+              
 
 
         } catch (error) {

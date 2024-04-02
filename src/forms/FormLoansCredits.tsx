@@ -28,7 +28,7 @@ const FormLoansCredits: React.FC<IFormLoansCredits> = (props) => {
   
 
   //console.log('dataFrombaseI',dataFromBaseI)
-  console.log('dataFrombaseLongTermE',dataFromBaseLongTermE)
+  //console.log('dataFrombaseLongTermE',dataFromBaseLongTermE)
   //console.log('dataFrombaseLongTermI',dataFromBaseLongTermI)
   
 
@@ -36,14 +36,14 @@ const FormLoansCredits: React.FC<IFormLoansCredits> = (props) => {
     setSelectedOptionE(event.target.value); // Ustawienie nowej wybranej wartości
     isSendE(false)
   };
-  console.log('selectedOptionE',selectedOptionE)
+  //console.log('selectedOptionE',selectedOptionE)
 
   const handleSelectChangeI = (event) => {
     setSelectedOptionI(event.target.value); // Ustawienie nowej wybranej wartości
     isSendI(false)
   };
 
-console.log("selectedOptionI",selectedOptionI)
+//console.log("selectedOptionI",selectedOptionI)
 
 const updateExpenses = async()=>{
   const itemRefE = doc(db, uid, selectedOptionE)
@@ -70,7 +70,7 @@ const updateInvest = async()=>{
     return (<div>
       <br></br>
 
-Oznacz koszty dlgoterminowe (pow.12 msc)
+Oznacz koszty,zobowiązania dlgoterminowe (pow.12 msc)
 <br></br>
 
 <select value={selectedOptionE} onChange={handleSelectChangeE}>
@@ -84,13 +84,14 @@ Oznacz koszty dlgoterminowe (pow.12 msc)
 <button onClick={updateExpenses}>oznacz</button>
 {sendE && <p>zapisano fakturę jako inwestycję długoterminową</p>}
 <br></br>
-Showing long term expenses
+Showing long term expenses and inwestments
 <br></br>
 <ShowData dataToShow={dataFromBaseLongTermE}/>
 
 <br></br><br></br>
 
 Oznacz przychody dlgoterminowe: otrzymane pozyczki, kredyty (pow.12 msc)
+i dotacje na przyszły rok
 <br></br>
 
 <select value={selectedOptionI} onChange={handleSelectChangeI}>
@@ -105,8 +106,8 @@ Oznacz przychody dlgoterminowe: otrzymane pozyczki, kredyty (pow.12 msc)
 {sendI && <p>zapisano fakturę jako kredyt długoterminowy</p>}
 
 <br></br>
-Showing long term inwestments
-{/* tu musza byc inne */}
+
+Showing long term incomes
 <br></br>
 <ShowData dataToShow={dataFromBaseLongTermI}/>
 

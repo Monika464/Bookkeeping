@@ -50,7 +50,7 @@ const useDataBaseQuery  = (year: string | number, typeInvoice: string, other1?: 
                   newData[doc.id] = { ...doc.data(), itid: doc.id };
                 });
                 setDataFromBase(newData)
-        console.log("ta wybrano")
+       // console.log("ta wybrano")
             } else
             {  
                 const q = query(userCollectionRef, 
@@ -71,7 +71,7 @@ const useDataBaseQuery  = (year: string | number, typeInvoice: string, other1?: 
                   newData[doc.id] = { ...doc.data(), itid: doc.id };
                 });
                 setDataFromBase(newData)
-                console.log("zwykla wybrano")
+               // console.log("zwykla wybrano")
            }
 
 

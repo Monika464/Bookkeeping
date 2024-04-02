@@ -25,18 +25,26 @@ const readingFromBase = useCallback(async()=>{
 
    try {
     let newData = {}
-    const testD = []
+    //const testD = []
     const querySnapshot = await getDocs(collection(db, `${userId}`));
+    
     querySnapshot.forEach((doc) => {
       // doc.data() is never undefined for query doc snapshots
       //console.log(doc.id, " => ", doc.data());
-      newData[doc.id] = { ...doc.data(), itid: doc.id };
+      const idHasCash = /cash/i.test(doc.id);
+
+      if (!idHasCash) {
+        newData[doc.id] = { ...doc.data(), itid: doc.id };
+      }
+   
+      
       //const testD = [{...doc.data()},doc.id]
-      testD.push({...doc.data()},doc.id)
+      //testD.push({...doc.data()},doc.id)
       //console.log("test", testD )
     }); 
     setDataFromBase(newData)
-    setDataFromBase2(testD)
+    
+    //setDataFromBase2(testD)
    } catch (error) {
     
    }

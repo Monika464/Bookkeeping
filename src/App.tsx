@@ -17,6 +17,7 @@ import YearDisplay from './components/display/YearDisplay'
 import MonthDisplay from './components/display/MonthDisplay'
 import Balance from './pages/Balance'
 import FormLoansCredits from './forms/FormLoansCredits'
+import { YearContextProvider } from './context/YearContextType'
 
 export const app = initializeApp(config.firebaseConfig)
 //console.log("app",app)
@@ -36,6 +37,7 @@ function App() {
  <BrowserRouter>  
 
  <UserContextProvider>  
+ <YearContextProvider>
    <Routes>
 
        <Route 
@@ -92,8 +94,9 @@ function App() {
                }
        />
    </Routes>
-
+   </YearContextProvider>
    </UserContextProvider> 
+   
    </BrowserRouter> 
    
     </div>
