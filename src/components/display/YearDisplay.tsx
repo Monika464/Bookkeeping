@@ -3,6 +3,7 @@ import { useCallback, useContext, useEffect, useState } from 'react';
 import { UserContext } from '../../context/UserContext';
 import { collection, getDocs, query, where } from 'firebase/firestore';
 import { db } from '../../App';
+import { YearSelector, useYear } from '../../context/YearContextType';
 
 const YearDisplay: React.FunctionComponent<IYearDisplay> =(props) => {
 
@@ -14,18 +15,22 @@ const YearDisplay: React.FunctionComponent<IYearDisplay> =(props) => {
 
 
 const userId = currentUser?.uid;
+const { editedYear } = useYear();
+const editedYearNum = parseInt(editedYear)
 
 useEffect(() => {
     readingFromBase();
- },[currentUser])
+ },[currentUser,editedYear])
 
+ console.log("editedYear",editedYearNum)
     const readingFromBase = useCallback(async()=>{
 
 try {
-    const citiesRef = collection(db, `${userId}`);
+    const colRef = collection(db, `${userId}`);
 
-        const q1 = query(citiesRef, 
-            where("year", "==", 2024),
+    if(editedYear){
+        const q1 = query(colRef, 
+            where("year", "==", editedYearNum),
             where("type", "==", "expenses"),
             );
          let newDataExp = {}
@@ -36,10 +41,10 @@ try {
           newDataExp[doc.id] = { ...doc.data(), itid: doc.id };
         });
         setDataFromBaseExp(newDataExp)
+    }
 
-
-         const q2 = query(citiesRef, 
-            where("year", "==", 2024),
+         const q2 = query(colRef, 
+            where("year", "==", editedYearNum),
             where("type", "==", "incomes"),
             );
          let newDataInc = {}
@@ -57,11 +62,11 @@ try {
      }
       
            
-     },[setDataFromBaseExp,dataFromBaseInc, dataFromBaseExp,setDataFromBaseInc, userId])
+     },[setDataFromBaseExp,dataFromBaseInc, dataFromBaseExp,setDataFromBaseInc, userId,editedYearNum])
 
      //console.log("przychody",dataFromBaseInc)
         //console.log("koszty",dataFromBaseExp)
-    // console.log("data from exp",dataFromBaseExp)
+   console.log("data from base",dataFromBaseExp)
     // console.log("data from inc",dataFromBaseInc)
    
     
@@ -98,13 +103,13 @@ try {
     return(<div>
 
         Roczne zestawienie
-
+        <YearSelector/>
         <br></br>
 Koszty
 <br></br>
 {Object.values(dataFromBaseExp).map((exp, index) => (
       <div key={index}>
- {` numer ${exp.invoiceNum}, kwota ${exp.amount}, nazwa ${exp.invoiceName}, sprzedawca ${exp.sellerName}, forma ${exp.paymentForm}, opis ${exp.description}`}
+ {` numer ${exp.invoiceNum}, kwota ${exp.amount},data ${exp.day}-${exp.month}, nazwa ${exp.invoiceName}, sprzedawca ${exp.sellerName}, forma ${exp.paymentForm}, opis ${exp.description}`}
       </div>
       
 ))}
@@ -113,7 +118,7 @@ Przychody
 <br></br>
 {Object.values(dataFromBaseInc).map((inc, index) => (
       <div key={index}>
- {` numer ${inc.invoiceNum}, kwota ${inc.amount}, nazwa ${inc.invoiceName}, sprzedawca ${inc.sellerName}, forma ${inc.paymentForm}, opis ${inc.description}`}
+ {` numer ${inc.invoiceNum}, kwota ${inc.amount}, data ${inc.day}-${inc.month}, nazwa ${inc.invoiceName}, sprzedawca ${inc.sellerName}, forma ${inc.paymentForm}, opis ${inc.description}`}
       </div>
       
 ))}

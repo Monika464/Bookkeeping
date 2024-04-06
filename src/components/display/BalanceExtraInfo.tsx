@@ -21,11 +21,19 @@ const BalanceExtraInfo: React.FunctionComponent<IBalanceExtraInfoProps> = (props
   const dataFromSrodkiTrwaleMod = useQuerySrodkiTrwale();
   //console.log("srodki trwałe",dataFromSrodkiTrwaleMod);
  
-
   const handleAmortizationClick = (index) => {
-    setAmortizationValues((prev) => ({ ...prev, [index]: true }));
-    //setButtonLabels((prev) => ({ ...prev, [index]: "Zakończ" }));
+    if (amortizationValues[index]) {
+      // Jeśli wartość już istnieje, ustaw ją na null lub undefined
+      setAmortizationValues((prev) => ({ ...prev, [index]: null }));
+    } else {
+      // W przeciwnym razie ustaw wartość na true
+      setAmortizationValues((prev) => ({ ...prev, [index]: true }));
+    }
   };
+  // const handleAmortizationClick = (index) => {
+  //   setAmortizationValues((prev) => ({ ...prev, [index]: true }));
+  //   //setButtonLabels((prev) => ({ ...prev, [index]: "Zakończ" }));
+  // };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>, index) => {
     const { value } = e.target;
@@ -60,8 +68,8 @@ const BalanceExtraInfo: React.FunctionComponent<IBalanceExtraInfoProps> = (props
       Amortyzacja
       {Object.values(dataFromSrodkiTrwaleMod).map((item, index) => (
         <div key={index}>
-          {` numer ${item.invoiceNum}, kwota ${item.amount}, nazwa ${item.invoiceName}, sprzedawca ${item.sellerName}, forma ${item.paymentForm}, opis ${item.description} ${item.endValue ? `, po amortyzacji ${item.endValue}` : ''}`}
-          <button onClick={() => handleAmortizationClick(index)}> "Amortyzacja"</button>
+          {` numer ${item.invoiceNum}, kwota ${item.amount}, nazwa ${item.invoiceName}, data ${item.day}-${item.month},sprzedawca ${item.sellerName}, forma ${item.paymentForm}, opis ${item.description} ${item.endValue ? `, po amortyzacji ${item.endValue}` : ''}`}
+          <button onClick={() => handleAmortizationClick(index)}> Amortyzacja</button>
           {amortizationValues[index] && (
             <div>
               <p>Wartość w ostatnim dniu bilansowym</p>

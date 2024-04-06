@@ -5,6 +5,7 @@ import { UserContext } from "../context/UserContext";
 import { db } from "../App";
 import useDataBaseQuery from "../hooks/useDatabaseQuery";
 import ShowData from "../components/ShowData";
+import { useYear } from "../context/YearContextType";
 
 export interface IFormLoansCredits{}
 
@@ -12,29 +13,167 @@ const FormLoansCredits: React.FC<IFormLoansCredits> = (props) => {
   
   const [selectedOptionE, setSelectedOptionE] = useState('');
   const [selectedOptionI, setSelectedOptionI] = useState('');
+  const [dataFromBaseExp, setDataFromBaseExp] = useState({})
+  const [isEmptyExp, setIsEmptyExp] = useState(false);
+  const [dataFromBaseInc, setDataFromBaseInc] = useState({})
+  const [isEmptyInc, setIsEmptyInc] = useState(false);
+  const [dataFromBaseExpLong, setDataFromBaseExpLong] = useState({})
+  const [isEmptyExpLong, setIsEmptyExpLong] = useState(false);
+  const [dataFromBaseIncLong, setDataFromBaseIncLong] = useState({})
+  const [isEmptyIncLong, setIsEmptyIncLong] = useState(false);
 
  const [sendE,isSendE] = useState(false);
  const [sendI,isSendI] = useState(false);
 
+ const { editedYear } = useYear();
+ const editedYearNum = parseInt(editedYear)
+
+
+
+
   const {currentUser} = useContext(UserContext);
   const uid = currentUser?.uid
+  //const { editedYear } = useYear();
+
+//zczytywanie kosztow do selecta
+
+const readExpenses =useCallback(async() =>{
+  //  const itemRefI = doc(db, uid, `cash ${editedYear}`) 
+    const userCollectionRef = collection(db, `${uid}`);
+    const q = query(userCollectionRef,
+        where("year", "==", editedYearNum),
+        where("type", "==", "expenses")
+    )
+
+    let newData = {}
+            const querySnapshot1 = await getDocs(q);
+           if(querySnapshot1.empty){
+            setIsEmptyExp(true)
+           } else {
+
+            querySnapshot1.forEach((doc) => {
+                // doc.data() is never undefined for query doc snapshots
+               // console.log("nasz rok",doc.id, " => ", doc.data());
+                newData[doc.id] = { ...doc.data(), itid: doc.id };
+              });
+              setDataFromBaseExp(newData)
+              setIsEmptyExp(false)
+           }
+          
+
+            console.log("dataFromBaseExp",dataFromBaseExp)
+},[uid,editedYear,dataFromBaseExp])
+
+//zczytywanie pozyczek, kredytow do selecta
+
+const readIncomes =useCallback(async() =>{
+  //  const itemRefI = doc(db, uid, `cash ${editedYear}`) 
+    const userCollectionRef = collection(db, `${uid}`);
+    const q = query(userCollectionRef,
+        where("year", "==", editedYearNum),
+        where("type", "==", "incomes")
+    )
+
+    let newData = {}
+            const querySnapshot1 = await getDocs(q);
+           if(querySnapshot1.empty){
+            setIsEmptyInc(true)
+           } else {
+
+            querySnapshot1.forEach((doc) => {
+                // doc.data() is never undefined for query doc snapshots
+               // console.log("nasz rok",doc.id, " => ", doc.data());
+                newData[doc.id] = { ...doc.data(), itid: doc.id };
+              });
+              setDataFromBaseInc(newData)
+              setIsEmptyInc(false)
+           }
+          
+
+            console.log("dataFromBaseExp",dataFromBaseExp)
+},[uid,editedYear,dataFromBaseExp, dataFromBaseInc])
+
+//zczytywanie kosztow long term
+
+const readExpensesLong =useCallback(async() =>{
+  //  const itemRefI = doc(db, uid, `cash ${editedYear}`) 
+    const userCollectionRef = collection(db, `${uid}`);
+    const q = query(userCollectionRef,
+        where("year", "==", editedYearNum),
+        where("type", "==", "expenses"),
+        where("longTerm", "==", true)
+    )
+
+    let newData = {}
+            const querySnapshot1 = await getDocs(q);
+           if(querySnapshot1.empty){
+            setIsEmptyExpLong(true)
+           } else {
+
+            querySnapshot1.forEach((doc) => {
+                // doc.data() is never undefined for query doc snapshots
+               // console.log("nasz rok",doc.id, " => ", doc.data());
+                newData[doc.id] = { ...doc.data(), itid: doc.id };
+              });
+              setDataFromBaseExpLong(newData)
+              setIsEmptyExp(false)
+           }
+          
+
+            console.log("dataFromBaseLong",dataFromBaseExpLong)
+
+},[uid,editedYear,dataFromBaseExp])
 
 
-  const dataFromBaseE = useDataBaseQuery(2024,"expenses");
-  const dataFromBaseI = useDataBaseQuery(2024,"incomes");
-  const dataFromBaseLongTermE = useDataBaseQuery(2024,"expenses","longTerm",true);
-  const dataFromBaseLongTermI = useDataBaseQuery(2024,"incomes","longTerm",true);
-  
-  
+const readIncomesLong =useCallback(async() =>{
+  //  const itemRefI = doc(db, uid, `cash ${editedYear}`) 
+    const userCollectionRef = collection(db, `${uid}`);
+    const q = query(userCollectionRef,
+        where("year", "==", editedYearNum),
+        where("type", "==", "expenses"),
+        where("longTerm", "==", true)
+    )
 
-  //console.log('dataFrombaseI',dataFromBaseI)
-  //console.log('dataFrombaseLongTermE',dataFromBaseLongTermE)
-  //console.log('dataFrombaseLongTermI',dataFromBaseLongTermI)
-  
+    let newData = {}
+            const querySnapshot1 = await getDocs(q);
+           if(querySnapshot1.empty){
+            setIsEmptyIncLong(true)
+           } else {
+
+            querySnapshot1.forEach((doc) => {
+                // doc.data() is never undefined for query doc snapshots
+               // console.log("nasz rok",doc.id, " => ", doc.data());
+                newData[doc.id] = { ...doc.data(), itid: doc.id };
+              });
+              setDataFromBaseIncLong(newData)
+              setIsEmptyIncLong(false)
+           }
+          
+
+            console.log("dataFromBaseIncLong",dataFromBaseIncLong)
+
+},[uid,editedYear,dataFromBaseExp])
+
+
+
+
+
+useEffect(()=>{
+  readExpenses();
+  readIncomes();
+  readExpensesLong();
+  readIncomesLong();
+},[uid,editedYear])
+
+//koniec
+
+
+
 
   const handleSelectChangeE = (event) => {
     setSelectedOptionE(event.target.value); // Ustawienie nowej wybranej wartości
     isSendE(false)
+    //setSelectedOptionE('')
   };
   //console.log('selectedOptionE',selectedOptionE)
 
@@ -74,9 +213,9 @@ Oznacz koszty,zobowiązania dlgoterminowe (pow.12 msc)
 <br></br>
 
 <select value={selectedOptionE} onChange={handleSelectChangeE}>
-  {Object.values(dataFromBaseE).map((el, index) => (
+  {Object.values(dataFromBaseExp).map((el, index) => (
     <option key={el.itid} value={el.itid}>
-      {`${el.invoiceNum},${el.amount},${el.invoiceName}, ${el.sellerName}`}
+      {`${el.invoiceNum},${el.amount},${el.day}-${el.month},${el.invoiceName}, ${el.sellerName}`}
     </option>
   ))}
 </select>
@@ -86,7 +225,7 @@ Oznacz koszty,zobowiązania dlgoterminowe (pow.12 msc)
 <br></br>
 Showing long term expenses and inwestments
 <br></br>
-<ShowData dataToShow={dataFromBaseLongTermE}/>
+ <ShowData dataToShow={dataFromBaseExpLong}/> 
 
 <br></br><br></br>
 
@@ -95,9 +234,9 @@ i dotacje na przyszły rok
 <br></br>
 
 <select value={selectedOptionI} onChange={handleSelectChangeI}>
-  {Object.values(dataFromBaseI).map((el, index) => (
+  {Object.values(dataFromBaseInc).map((el, index) => (
     <option key={el.itid} value={el.itid}>
-      {`${el.invoiceNum},${el.amount},${el.invoiceName}, ${el.sellerName}`}
+      {`${el.invoiceNum},${el.amount},${el.day}-${el.month},${el.invoiceName}, ${el.sellerName}`}
     </option>
   ))}
 </select>
@@ -109,7 +248,7 @@ i dotacje na przyszły rok
 
 Showing long term incomes
 <br></br>
-<ShowData dataToShow={dataFromBaseLongTermI}/>
+<ShowData dataToShow={dataFromBaseIncLong}/> 
 
 
 

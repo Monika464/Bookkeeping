@@ -25,7 +25,7 @@ interface CashState {
 
 
     const { editedYear } = useYear();
-    console.log("editedYear",editedYear)
+    //console.log("editedYear",editedYear)
     const {currentUser} = useContext(UserContext);
     const uid = currentUser?.uid
   
