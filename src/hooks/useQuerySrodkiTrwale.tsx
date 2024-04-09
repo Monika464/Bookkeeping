@@ -2,6 +2,7 @@ import { useCallback, useContext, useEffect, useState } from 'react';
 import { UserContext } from '../context/UserContext';
 import { collection, getDocs, query, where } from 'firebase/firestore';
 import { db } from '../App';
+import { useYear } from '../context/YearContextType';
 
 export interface IQuerySrodkiTrwale{
     year?: string;
@@ -20,9 +21,13 @@ const useQuerySrodkiTrwale = () => {
     const [dataFromSrodkiTrwaleMod, setDataFromSrodkiTrwaleMod] = useState({})
     const userId = currentUser?.uid;
 
+    const { editedYear } = useYear();
+    const editedYearNum = parseInt(editedYear)  
+    //console.log("editedYearNum",editedYearNum)
+
     useEffect(() => {
         readingFromBase();
-     },[currentUser])
+     },[currentUser,editedYear])
      
 
     const readingFromBase = useCallback(async()=>{
@@ -34,7 +39,7 @@ const useQuerySrodkiTrwale = () => {
 
     const q = query(collRef, 
         // where("year", "==", 2024),
-        where("year", "==", 2024),
+        where("year", "==", editedYearNum),
         where("type", "==", "expenses"),
         // where("amount", ">", parseFloat("10000"))
         where("amount", ">", "10000")
@@ -44,7 +49,7 @@ const useQuerySrodkiTrwale = () => {
         const querySnapshot = await getDocs(q);
         querySnapshot.forEach((doc) => {
           // doc.data() is never undefined for query doc snapshots
-         // console.log("nasz rok",doc.id, " => ", doc.data());
+         //console.log("nasz rok",doc.id, " => ", doc.data());
           newData[doc.id] = { ...doc.data(), itid: doc.id };
         });
         setDataFromSrodkiTrwale(newData)
@@ -54,7 +59,7 @@ const useQuerySrodkiTrwale = () => {
             console.log(error)
         }
     
-    },[setDataFromSrodkiTrwale, userId])
+    },[setDataFromSrodkiTrwale, userId,editedYearNum])
 
     useEffect(()=>{
         let temp = []
@@ -71,9 +76,9 @@ const useQuerySrodkiTrwale = () => {
 
         //console.log("temp",temp);
         setDataFromSrodkiTrwaleMod(temp)
-    },[readingFromBase,userId, dataFromSrodkiTrwale])
+    },[readingFromBase,userId, dataFromSrodkiTrwale,editedYearNum])
 
-    //console.log("nowe query",dataFromSrodkiTrwaleMod)
+    //console.log("srodki do amor",dataFromSrodkiTrwaleMod)
     
  
 

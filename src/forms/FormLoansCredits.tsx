@@ -61,7 +61,7 @@ const readExpenses =useCallback(async() =>{
            }
           
 
-            console.log("dataFromBaseExp",dataFromBaseExp)
+            //console.log("dataFromBaseExp",dataFromBaseExp)
 },[uid,editedYear,dataFromBaseExp])
 
 //zczytywanie pozyczek, kredytow do selecta
@@ -120,7 +120,7 @@ const readExpensesLong =useCallback(async() =>{
            }
           
 
-            console.log("dataFromBaseLong",dataFromBaseExpLong)
+           // console.log("dataFromBaseLong",dataFromBaseExpLong)
 
 },[uid,editedYear,dataFromBaseExp])
 
@@ -150,7 +150,7 @@ const readIncomesLong =useCallback(async() =>{
            }
           
 
-            console.log("dataFromBaseIncLong",dataFromBaseIncLong)
+           // console.log("dataFromBaseIncLong",dataFromBaseIncLong)
 
 },[uid,editedYear,dataFromBaseExp])
 

@@ -1,17 +1,22 @@
 import { onValue } from "firebase/database";
 import useQuerySrodkiTrwale from "../../hooks/useQuerySrodkiTrwale";
 import useQueryToBase from "../../hooks/useQuerySrodkiTrwale";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { doc, updateDoc } from "firebase/firestore";
+import { addDoc, collection, doc, updateDoc } from "firebase/firestore";
 import { UserContext } from '../../context/UserContext';
 import { db } from "../../App";
+import { useYear } from "../../context/YearContextType";
 
 export interface IBalanceExtraInfoProps {}
 
-const BalanceExtraInfo: React.FunctionComponent<IBalanceExtraInfoProps> = (props) => {
+const Amortization: React.FunctionComponent<IBalanceExtraInfoProps> = (props) => {
   
     const [amortizationValues, setAmortizationValues] = useState({});
+    const [currentValue, setCurrentValue] = useState(0);
+    const [recNumber, setRecNumber] = useState('');
+    const [day, setDay] = useState(0);
+    const [month, setMonth] = useState(0);
   const [buttonLabels, setButtonLabels] = useState({});
   const [InputIsShown, setInputIsShown]=  useState(false);
   const navigate = useNavigate();
@@ -19,16 +24,48 @@ const BalanceExtraInfo: React.FunctionComponent<IBalanceExtraInfoProps> = (props
   const {currentUser} = useContext(UserContext);
   const uid = currentUser?.uid
   const dataFromSrodkiTrwaleMod = useQuerySrodkiTrwale();
-  //console.log("srodki trwałe",dataFromSrodkiTrwaleMod);
+  console.log("srodki trwałe",dataFromSrodkiTrwaleMod);
+ 
+
+ const { editedYear } = useYear();
+ const editedYearNum = parseInt(editedYear)
+
+ const checkCurrentValue = async(ind)=>{
+  const currentV = await dataFromSrodkiTrwaleMod[ind].amount
+  setCurrentValue(currentV)
+  const recN = await dataFromSrodkiTrwaleMod[ind].invoiceNum
+  setRecNumber(recN);
+  const d = await dataFromSrodkiTrwaleMod[ind].day
+  setDay(d)
+  const m = await dataFromSrodkiTrwaleMod[ind].month
+  setMonth(m);
+  //console.log('currentValue',dataFromSrodkiTrwaleMod[ind].amount);
+ // console.log("i co mamy",currentValue);
+     }
+
+  
+
+     useEffect(() => {
+      console.log("i co mamy", currentValue);
+    }, [currentValue]);
  
   const handleAmortizationClick = (index) => {
     if (amortizationValues[index]) {
       // Jeśli wartość już istnieje, ustaw ją na null lub undefined
       setAmortizationValues((prev) => ({ ...prev, [index]: null }));
+   
+      //ten index pozwoli na zlokalizowanie w mapowanej 
+      //trzeba zrobic zmienna editingIndex i go zapisac
+      //tablicy elementu wartosci poprzedniej - updatedValue = koszt do zapisania
     } else {
       // W przeciwnym razie ustaw wartość na true
       setAmortizationValues((prev) => ({ ...prev, [index]: true }));
+      checkCurrentValue(index);
     }
+
+  
+
+       
   };
   // const handleAmortizationClick = (index) => {
   //   setAmortizationValues((prev) => ({ ...prev, [index]: true }));
@@ -43,24 +80,70 @@ const BalanceExtraInfo: React.FunctionComponent<IBalanceExtraInfoProps> = (props
   const handleSaveClick = async(id) => {
     // Tutaj możesz umieścić logikę zapisywania wartości amortyzacji
     console.log("Zapisano wartość amortyzacji dla elementu", id);
-    console.log("amortizationValues",(Object.keys(amortizationValues)));
+    //console.log("amortizationValues",(Object.keys(amortizationValues)));
     const itemToUpdate = (Object.keys(amortizationValues))[1];
     console.log("itemToUpdate",itemToUpdate)
+    console.log("amortizationValues",amortizationValues[1])
     const valueToUpdate = (Object.values(amortizationValues))[1]
     console.log('valueToUpdate',valueToUpdate)
     //if(itemToUpdate){updateItem();}
     if(uid && itemToUpdate){
         const itemRef = doc(db, uid, itemToUpdate);
-    if(valueToUpdate){
+   
+        if(valueToUpdate){
         await updateDoc(itemRef, {
             endValue: valueToUpdate
           })
           .then(()=>{setAmortizationValues({})})
         }
+
+        dodajNowyElementDoKolekcji(`${uid}`, {
+          userId: uid,
+          amount: currentValue - valueToUpdate,
+          invoiceNum: `${recNumber}-${editedYearNum}`,
+          day: 31,
+          month: 12,
+          year: editedYearNum,
+          type: "expenses",
+          nazwa: `koszty amortyzacji zakupu ${recNumber}`
+        });
+
+
         }
   };
 
-  
+  //zmapyj tablice srodki trwale i znajdz wartosc
+  //edytowanego ellemenu
+
+// Dodaj nowy dokument do kolekcji
+async function dodajNowyElementDoKolekcji(colectionName: string, data) {
+  try {
+    const docRef = await addDoc(collection(db, colectionName), data);
+
+    console.log('Dodano dokument o ID: ', docRef.id);
+  } catch (error) {
+    console.error('Błąd podczas dodawania dokumentu: ', error);
+  }
+}
+
+
+// const newData = {
+//   userId: uid,
+//   invoiceNum: amortizationValues.,
+//   amount: field.amount,
+//    invoiceName: field.invoiceName,
+//    category: field.category,
+//  description: field.description,
+//  paymentForm: field.paymentForm,
+//  sellerName: field.sellerName,
+//  year: year,
+//  month: monthName,
+//  day: day,
+//  type: "expenses"
+// };
+
+
+
   
 
   return (
@@ -83,6 +166,8 @@ const BalanceExtraInfo: React.FunctionComponent<IBalanceExtraInfoProps> = (props
               <button onClick={() => handleSaveClick(item.itid)}>Zapisz</button>
               <br />
               <br />
+
+         
             </div>
           )}
         </div>
@@ -91,7 +176,7 @@ const BalanceExtraInfo: React.FunctionComponent<IBalanceExtraInfoProps> = (props
   );
 };
 
-export default BalanceExtraInfo;
+export default Amortization;
 
 
 // import { onValue } from "firebase/database";
