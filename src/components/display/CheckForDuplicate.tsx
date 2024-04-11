@@ -24,7 +24,8 @@ useEffect(()=>{
 const readingFromBase = useCallback(async()=>{
 
    try {
-    let newData = {}
+    let newData = {};
+    let newDataAssets = {};
     //const testD = []
     const querySnapshot = await getDocs(collection(db, `${userId}`));
     
@@ -32,10 +33,13 @@ const readingFromBase = useCallback(async()=>{
       // doc.data() is never undefined for query doc snapshots
       //console.log(doc.id, " => ", doc.data());
       const idHasCash = /cash/i.test(doc.id);
+      const idHasAssets = /assets/i.test(doc.id);
 
-      if (!idHasCash) {
+      if (!idHasCash && !idHasAssets) {
         newData[doc.id] = { ...doc.data(), itid: doc.id };
       }
+
+     
    
       
       //const testD = [{...doc.data()},doc.id]
@@ -54,7 +58,7 @@ const readingFromBase = useCallback(async()=>{
      
      useEffect(() => {
       //readingFromBase();
-
+      console.log('dataFromBase',dataFromBase)
       const duplicates = Object.values(dataFromBase).reduce((tempDuplicates, element1, index1, array) => {
         const foundDuplicates = array.filter((element2, index2) => {
           return element1.invoiceNum === element2.invoiceNum && index1 !== index2;

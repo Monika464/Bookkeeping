@@ -7,6 +7,9 @@ import FormMoneyResultStart from "../forms/FormMoneyResultStart";
 import { useYear } from "../context/YearContextType";
 import useDataBaseQuery from "../hooks/useDatabaseQuery";
 import Amortization from "../components/display/Amortization";
+import AssetsForAmortisation from "../forms/AssetsForAmortisation";
+import IncomeLoan from "../forms/IncomeLoan";
+import ExtraObligationForm from "../forms/ExtraObligationForm";
 
 export interface IBalance {}
 
@@ -23,13 +26,17 @@ const Balance: React.FunctionComponent<IBalance> =() => {
 <br></br><br></br>
 <YearSelector/>
 <br></br><br></br>
-
-        <Amortization/>
-        <FormLoansCredits  />
+<CashForm/>
+<br></br><br></br>
+        <AssetsForAmortisation/>
+        <br></br><br></br>
+      <IncomeLoan/>
+      <br></br><br></br>
+      <ExtraObligationForm/>
         <br></br><br></br>
         <FormMoneyResultStart/>
         <BalanceAP/>
-        <CashForm/>
+        
     </div>)
 }
 

@@ -62,7 +62,7 @@ interface CashState {
               await setDoc(itemRefI, {
                 cashInHand: cashState.cashInHand,
                 cashInBank: cashState.cashInBank,
-                id: editedYear
+                id: `cash ${editedYear}`
                 })
                 //.then(()=>{isSendI(true)})
             }
@@ -88,7 +88,7 @@ interface CashState {
       //  const itemRefI = doc(db, uid, `cash ${editedYear}`) 
         const userCollectionRef = collection(db, `${uid}`);
         const q = query(userCollectionRef,
-            where("id", "==", `${editedYear}`)
+            where("id", "==", `cash ${editedYear}`)
         )
 
         let newData = {}
@@ -107,7 +107,7 @@ interface CashState {
                }
               
 
-                console.log("dataFromBaseCash",dataFromBase)
+              //  console.log("dataFromBaseCash",dataFromBase)
     },[uid,editedYear])
 
     useEffect(()=>{})
