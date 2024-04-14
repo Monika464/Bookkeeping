@@ -90,11 +90,9 @@ const AssetsForAmortisation: React.FunctionComponent<IAssetsForAmortisationProps
         <div>
 
           {isEmptyAsset && <div>
-            
-            
-            Srodki trwałe 
+           
             <label>
-                Srodki trwałe nie uwzględnione na liście rachunków
+                Srodki trwałe (po amortyzacji jeśli dotyczy)
                 <input type="number" value={assetsState} onChange={handleTotalAssetsChange} />
             </label>
             <br></br>
@@ -108,7 +106,7 @@ const AssetsForAmortisation: React.FunctionComponent<IAssetsForAmortisationProps
               
     {Object.values(assetsStateInBase).map((element, index) => (
       <div key={index}>
-        Srodki trwałe nieuwzględnione na liście rachunków: {element.assetsextra}
+        Srodki trwałe (po amortyzacji jeśli dotyczy): {element.assetsextra}
         </div>
      ))}
 

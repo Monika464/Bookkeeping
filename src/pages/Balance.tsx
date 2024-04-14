@@ -10,6 +10,7 @@ import Amortization from "../components/display/Amortization";
 import AssetsForAmortisation from "../forms/AssetsForAmortisation";
 import IncomeLoan from "../forms/IncomeLoan";
 import ExtraObligationForm from "../forms/ExtraObligationForm";
+import ProfitLossAccount from "../components/display/ProfitLossAccount";
 
 export interface IBalance {}
 
@@ -34,8 +35,9 @@ const Balance: React.FunctionComponent<IBalance> =() => {
       <br></br><br></br>
       <ExtraObligationForm/>
         <br></br><br></br>
-        <FormMoneyResultStart/>
-        <BalanceAP/>
+        <ProfitLossAccount/>
+        {/* <FormMoneyResultStart/>
+        <BalanceAP/> */}
         
     </div>)
 }

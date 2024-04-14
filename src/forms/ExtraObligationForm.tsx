@@ -48,7 +48,7 @@ const ExtraObligationForm: React.FunctionComponent<IExtraObligationProps> = (pro
           
               let newData = {}
                       const querySnapshot1 = await getDocs(q);
-                      console.log("querySnapshot1",querySnapshot1.docs)
+                      //console.log("querySnapshot1",querySnapshot1.docs)
                      if(querySnapshot1.empty){
                         setIsEmptyObligation(true)
                      } else {
@@ -74,7 +74,7 @@ const ExtraObligationForm: React.FunctionComponent<IExtraObligationProps> = (pro
             
           },[uid,editedYear,readOblibations])
  
-        console.log("obligationStateInBase", setObligationStateInBase)
+       // console.log("obligationStateInBase", setObligationStateInBase)
     
         const removeObligations =async ()=>{
 
@@ -94,8 +94,9 @@ const ExtraObligationForm: React.FunctionComponent<IExtraObligationProps> = (pro
         <div>
          {isEmptyObligation && <div>
           <label>
-                Pozostałe zobowiazania nieuwzlędnione na liscie faktur(na przyklad przyszle zobowiazania)
-                wynikajace z dotacji na pryszłe okresy
+                Pozostałe zobowiazania nieuwzlędnione na liscie faktur(w tym przychody przyszłych okresów
+                jak dotacje na rok przyszły)
+
                 <input type="number" value={extraobliState} onChange={handleExtraObligationChange} />
             </label>
             <br></br>
@@ -108,7 +109,8 @@ const ExtraObligationForm: React.FunctionComponent<IExtraObligationProps> = (pro
             {!isEmptyObligation && <div>
               {Object.values(obligationStateInBase).map((element, index) => (
               <div key={index}>
-              Pozostałe zobowiazania: {element.obligation}
+              Pozostałe zobowiazania nieuwzlędnione na liscie faktur(w tym przychody przyszłych okresów
+                jak dotacje na rok przyszły): {element.obligation}
             </div>
                ))}
                <button onClick={removeObligations}>wyczysc stan zobowiązań</button>

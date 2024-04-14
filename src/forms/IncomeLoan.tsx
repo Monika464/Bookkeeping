@@ -1,6 +1,6 @@
 import { useCallback, useContext, useEffect, useState } from "react";
 import useQuerySrodkiTrwale from "../hooks/useQuerySrodkiTrwale";
-import { collection, doc, getDocs, query, updateDoc, where } from "firebase/firestore";
+import { collection, deleteDoc, doc, getDocs, query, updateDoc, where } from "firebase/firestore";
 import { UserContext } from "../context/UserContext";
 import { useYear } from "../context/YearContextType";
 import { db } from "../App";
@@ -16,14 +16,15 @@ const IncomeLoan: React.FC<IIncomeLoan> = (props) => {
   const [isEmptyIncLong, setIsEmptyIncLoan] = useState(false);
     const [selectedOptionI, setSelectedOptionI] = useState('');
     const [sendI,isSendI] = useState(false);
-   
-   
+    const [isEditMode, setIsEditMode] = useState(false);
+    const [selectedInvoices, setSelectedInvoices] = useState([]);
+
     const {currentUser} = useContext(UserContext);
     const uid = currentUser?.uid
     const { editedYear } = useYear();
  const editedYearNum = parseInt(editedYear);
 
- console.log("editedYear",editedYear)
+ //console.log("editedYear",editedYear)
     
  const readIncomes =useCallback(async() =>{
         //  const itemRefI = doc(db, uid, `cash ${editedYear}`) 
@@ -55,6 +56,8 @@ const IncomeLoan: React.FC<IIncomeLoan> = (props) => {
       },[uid,editedYear]);
 
       const readIncomesLoan =useCallback(async() =>{
+
+        setDataFromBaseIncLoan({})
         //  const itemRefI = doc(db, uid, `cash ${editedYear}`) 
           const userCollectionRef = collection(db, `${uid}`);
           const q = query(userCollectionRef,
@@ -112,10 +115,46 @@ const IncomeLoan: React.FC<IIncomeLoan> = (props) => {
       }
       };
 
+      // Funkcja do obsługi zaznaczania i odznaczania checkboxów
+const handleCheckboxChange = (e) => {
+  const value = e.target.value;
+  if (e.target.checked) {
+    setSelectedInvoices([...selectedInvoices, value]);
+  } else {
+    setSelectedInvoices(selectedInvoices.filter(invoice => invoice !== value));
+  }
+};
+
+// Funkcja do zmiany nazwy przycisku
+const getButtonLabel = () => {
+  return isEditMode ? "Finish" : "Edit";
+};
+
+//delete updatujac w bazie czyli usywajac zawartosc loan
+const handleDeleteClick = async () => {
+  // const usersCollectionRef = collection(db, `${userId}`);
+  selectedInvoices.map((item)=>{
+
+   const docRef = doc(db, `${uid}`, item);
+   const updateTimestamp = updateDoc(docRef, {
+    loan: false
+});
+})
+
+
+}
     return(<div>
-        Oznacz przychód pochodzacy z kredytu pozyczki
+        Oznacz otrzymany kredyt lub pozyczkę pozyczki
         <br></br>
         <select value={selectedOptionI} onChange={handleSelectChangeI}>
+  <option value="" disabled defaultValue>Wybierz opcję...</option>
+  {dataFromBaseInc && Object.values(dataFromBaseInc).map((el, index) => (
+    <option key={el.itid} value={el.itid}>
+      {`${el.invoiceNum},${el.amount},${el.day}-${el.month},${el.invoiceName}, ${el.sellerName}`}
+    </option>
+  ))}
+</select>
+        {/* <select value={selectedOptionI} onChange={handleSelectChangeI}>
   
   {dataFromBaseInc && Object.values(dataFromBaseInc).map((el, index) => (
     <option key={el.itid} value={el.itid}>
@@ -123,11 +162,36 @@ const IncomeLoan: React.FC<IIncomeLoan> = (props) => {
     </option>
   ))}
 
-</select>
+</select> */}
 <br></br>
 <button onClick={updateInvest}>oznacz</button>
 {sendI && <p>zapisano fakturę jako  środki otrzymane z pożyczki, kredytu</p>}
- <ShowData dataToShow={dataFromBaseIncLoan}/> 
+ {/* <ShowData dataToShow={dataFromBaseIncLoan}/>  */}
+ {Object.values(dataFromBaseIncLoan).map((invoice, index) => (
+   <div key={index}>
+       {isEditMode && (
+            <>
+         <input
+          type="checkbox"
+          id={`invoice-checkbox-${index}`}
+          value={invoice.itid}
+          onChange={handleCheckboxChange}
+         />
+        <label htmlFor={`invoice-checkbox-${index}`}>
+          {` numer ${invoice.invoiceNum}, kwota ${invoice.amount},${invoice.day}-${invoice.month}, nazwa ${invoice.invoiceName}, sprzedawca ${invoice.sellerName}, forma ${invoice.paymentForm}, opis ${invoice.description}`}
+        </label>
+        </>)}
+      {!isEditMode && <>{` numer ${invoice.invoiceNum}, kwota ${invoice.amount}, ${invoice.day}-${invoice.month},nazwa ${invoice.invoiceName}, sprzedawca ${invoice.sellerName}, forma ${invoice.paymentForm}, opis ${invoice.description}`}</>}  
+
+</div>
+ ))}
+
+{isEditMode && (
+        <button onClick={handleDeleteClick}>remove selected items</button>
+      )}
+ <button onClick={() => setIsEditMode(!isEditMode)}>
+      {getButtonLabel()}
+    </button>
 
 </div>)
 

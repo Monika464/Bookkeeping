@@ -9,6 +9,7 @@ import { useYear } from "../context/YearContextType";
 
 export interface IFormLoansCredits{}
 
+//UWAGA TEGO CHYBA NIE MA
 const FormLoansCredits: React.FC<IFormLoansCredits> = (props) => {
   
   const [selectedOptionE, setSelectedOptionE] = useState('');
@@ -155,7 +156,28 @@ const readIncomesLong =useCallback(async() =>{
 },[uid,editedYear,dataFromBaseExp])
 
 
+// // Funkcja do obsługi zaznaczania i odznaczania checkboxów
+// const handleCheckboxChange = (e) => {
+//   const value = e.target.value;
+//   if (e.target.checked) {
+//     setSelectedInvoices([...selectedInvoices, value]);
+//   } else {
+//     setSelectedInvoices(selectedInvoices.filter(invoice => invoice !== value));
+//   }
+// };
 
+// // Funkcja obsługująca kliknięcie przycisku "Delete"
+// const handleDeleteClick = async () => {
+//  // const usersCollectionRef = collection(db, `${userId}`);
+// selectedInvoices.map((item)=>{
+//  // console.log("iterms to delete", item)
+//   deleteDoc(doc(db, `${userId}`, item));
+// })
+//   //console.log(selectedInvoices);
+//   //  selectedInvoices.map((item)=>{
+//   //     await deleteDoc(doc(db, `${userId}`, "DC"));
+//   // })
+// };
 
 
 useEffect(()=>{
@@ -208,7 +230,7 @@ const updateInvest = async()=>{
  
     return (<div>
       <br></br>
-
+hej
 Oznacz koszty,zobowiązania dlgoterminowe (pow.12 msc)
 <br></br>
 

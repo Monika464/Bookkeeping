@@ -22,7 +22,7 @@ useEffect(() => {
     readingFromBase();
  },[currentUser,editedYear])
 
- console.log("editedYear",editedYearNum)
+ //console.log("editedYear",editedYearNum)
     const readingFromBase = useCallback(async()=>{
 
 try {
@@ -66,7 +66,7 @@ try {
 
      //console.log("przychody",dataFromBaseInc)
         //console.log("koszty",dataFromBaseExp)
-   console.log("data from base",dataFromBaseExp)
+   //console.log("data from base",dataFromBaseExp)
     // console.log("data from inc",dataFromBaseInc)
    
     

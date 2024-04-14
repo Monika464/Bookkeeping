@@ -2,6 +2,7 @@ import { useCallback, useContext, useEffect, useState } from "react";
 import { UserContext } from "../context/UserContext";
 import { and, collection, getDocs, or, query, where } from "firebase/firestore";
 import { db } from "../App";
+import { useYear } from "../context/YearContextType";
 
 export interface IDatabaseQuery{
     //year: string;
@@ -12,10 +13,12 @@ export interface IDatabaseQuery{
 }
 
 
-const useDataBaseQuery  = (year: string | number, typeInvoice: string, other1?: string, other2?: string | boolean) => {
+// const useDataBaseQuery  = (year: string | number, typeInvoice: string, other1?: string, other2?: string | boolean) => {
+    const useDataBaseQuery  = (typeInvoice: string, other1?: string, other2?: string | boolean) => {
 
     const {currentUser} = useContext(UserContext);
-    
+    const { editedYear } = useYear();
+    const editedYearNum = parseInt(editedYear)
     const [dataFromBase, setDataFromBase] = useState({})
 
 
@@ -29,7 +32,7 @@ const useDataBaseQuery  = (year: string | number, typeInvoice: string, other1?: 
     
     useEffect(() => {
         readingFromBase();
-     },[currentUser])
+     },[currentUser,editedYear])
 
     const readingFromBase = useCallback(async()=>{
 
@@ -38,7 +41,7 @@ const useDataBaseQuery  = (year: string | number, typeInvoice: string, other1?: 
         
             if(other1){
                 const q = query(userCollectionRef,
-                where("year", "==", year),
+                where("year", "==", editedYearNum),
                 where(`${other1}`, "==", other2),
                  where("type", "==", `${typeInvoice}`)   
                 )
@@ -56,7 +59,7 @@ const useDataBaseQuery  = (year: string | number, typeInvoice: string, other1?: 
                 const q = query(userCollectionRef, 
                 // where("year", "==", `${year}`),
                 // where("type", "==", `${typeInvoice}`)
-                where("year", "==", year),
+                where("year", "==", editedYearNum),
                 where("type", "==", `${typeInvoice}`),
               
                 )
@@ -80,7 +83,7 @@ const useDataBaseQuery  = (year: string | number, typeInvoice: string, other1?: 
              }
               
                   
-             },[setDataFromBase, dataFromBase,userId])
+             },[setDataFromBase, dataFromBase,userId,editedYear])
         
 
 

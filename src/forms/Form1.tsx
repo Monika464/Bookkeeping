@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { format, getDate, getMonth, getYear, parse } from 'date-fns';
 import { useContext } from 'react'
 import { UserContext } from '../context/UserContext';
-import { collection, doc, getDoc, getDocs, query, setDoc, where } from 'firebase/firestore';
+import { collection, doc, getDoc, getDocs, query, serverTimestamp, setDoc, where } from 'firebase/firestore';
 import { db } from '../App';
 import { pl } from 'date-fns/locale';
 import { Value } from '../components/Calendar';
@@ -19,6 +19,7 @@ interface FormField {
   invoiceName: string;
   description: string;
   category: string;
+  paid: boolean;
 }
 
 interface IForm1 {
@@ -66,7 +67,8 @@ const monthName = monthNames[month];
           amount: '',
           invoiceName: '',
           description: '', 
-          category: 'service' 
+          category: 'service' ,
+          paid: true
         }]);
     setNextId(nextId + 1);
   };
@@ -93,10 +95,11 @@ const monthName = monthNames[month];
     setNextId(1);
   }
 
-
+//console.log("server",serverTimestamp())
 
   //formFields.map((el)=>{console.log("el",el)})
 //tu bedzie funcja wysylajaca do bazy
+//console.log("formFields",formFields)
 
 const sendToBase = async (e)=>{
 
@@ -122,9 +125,12 @@ const sendToBase = async (e)=>{
   year: year,
   month: monthName,
   day: day,
-  type: "expenses"
+  type: "expenses",
+  paid: field.paid,
+  timestamp: serverTimestamp()
 
   }));
+
 
   formData.forEach(async (data) => {
     await setDoc(doc(collectionRef), data);
@@ -196,6 +202,32 @@ const sendToBase = async (e)=>{
             value={field.description}
             onChange={(e) => handleInputChange(field.id, 'description', e.target.value)}
           />
+<select
+  value={field.paid.toString()} // Konwertuj wartość boolean na string
+  onChange={(e) => {
+    // Konwertuj wartość z powrotem na boolean
+    const value = e.target.value === "true" ? true : false;
+    handleInputChange(field.id, 'paid', value);
+  }}
+>
+  <option value="true">opłacone</option>
+  <option value="false">nieopłacone</option>
+</select>
+{/* <select
+            value={field.paid}
+            onChange={
+              (e) => {
+                handleInputChange(field.id, 'paid', e.target.value)
+                // console.log("target value",e.target.value)
+                // console.log("field.paid",typeof(field.paid))
+              }
+            
+            }
+          > 
+            <option value="true">opłacone</option>
+            <option value="false">nieopłacone</option>
+          </select>
+          */}
         </div>
       ))}
       <button onClick={sendToBase}>nowy wyslij koszt</button>

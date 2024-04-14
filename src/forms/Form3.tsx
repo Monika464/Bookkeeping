@@ -5,7 +5,7 @@ import React, { useEffect, useState } from 'react';
 import { format, getDate, getMonth, getYear, parse } from 'date-fns';
 import { useContext } from 'react'
 import { UserContext } from '../context/UserContext';
-import { collection, doc, getDoc, getDocs, query, setDoc, where } from 'firebase/firestore';
+import { collection, doc, getDoc, getDocs, query, serverTimestamp, setDoc, where } from 'firebase/firestore';
 import { db } from '../App';
 import { pl } from 'date-fns/locale';
 import { Value } from '../components/Calendar';
@@ -129,7 +129,8 @@ const sendToBase = async (e)=>{
   month: monthName,
   day: day,
   type: "incomes",
-  paid: field.paid
+  paid: field.paid,
+  timestamp: serverTimestamp()
 
   }));
 
@@ -210,14 +211,24 @@ const sendToBase = async (e)=>{
             value={field.description}
             onChange={(e) => handleInputChange(field.id, 'description', e.target.value)}
           />
-
-             <select
+<select
+  value={field.paid.toString()} // Konwertuj wartość boolean na string
+  onChange={(e) => {
+    // Konwertuj wartość z powrotem na boolean
+    const value = e.target.value === "true" ? true : false;
+    handleInputChange(field.id, 'paid', value);
+  }}
+>
+<option value="true">opłacone</option>
+  <option value="false">nieopłacone</option>
+</select>
+             {/* <select
             value={field.paid}
             onChange={(e) => handleInputChange(field.id, 'paid', e.target.value)}
           >
             <option value="true">opłacone</option>
             <option value="false">nieopłacone</option>
-          </select>
+          </select> */}
 
         </div>
       ))}

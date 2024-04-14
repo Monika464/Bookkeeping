@@ -19,6 +19,7 @@ const DayExpenses : React.FunctionComponent<IDayExpenses > =(props) =>{
     const [content,setContent] = useState({})
     const [invoices, setInvoices] = useState({});
     const [isEditMode, setIsEditMode] = useState(false);
+    const [isEditModePaid, setIsEditModePaid] = useState(false);
 
 //invoices powinin sie zmieniac
 
@@ -67,7 +68,7 @@ const monthName = monthNames[month];
 
     }
 
-    //console.log('invoices',invoices)
+  //console.log('expenses',invoices)
  
 
  
@@ -93,22 +94,41 @@ selectedInvoices.map((item)=>{
    // console.log("iterms to delete", item)
     deleteDoc(doc(db, `${userId}`, item));
 })
-    console.log(selectedInvoices);
-    //  selectedInvoices.map((item)=>{
-    //     await deleteDoc(doc(db, `${userId}`, "DC"));
-    // })
+ 
   };
 
-// Funkcja do zmiany nazwy przycisku
+// Funkcja do zmiany nazwy przycisku delete
 const getButtonLabel = () => {
-    return isEditMode ? "Finish" : "Edit";
+    return isEditMode ? "Finish editing for delete" : "Edit for delete";
   };
+
+  // Funkcja obsługująca kliknięcie przycisku "Zaplac"
+  const handlePayClick = async () => {
+    // const usersCollectionRef = collection(db, `${userId}`);
+   selectedInvoices.map((item)=>{
+    const itemRefI = doc(db, userId, item);
+      if(item){
+        updateDoc(itemRefI, {
+         paid: true
+        })
+      //.then(()=>{isSendI(true)})
+      }
+   })
+}
+
+
+// Funkcja do zmiany nazwy przycisku
+const getButtonLabelPaid = () => {
+  return isEditModePaid ? "Finish editing for pay" : "Edit for pay";
+};
+
 //console.log("content",content)
 
 // Funkcja do obsługi kliknięcia przycisku "Edit" lub "Finish"
 
 
-return(<div>expenses
+return(
+<div>expenses
 
 <div>
     {Object.values(invoices).map((invoice, index) => (
@@ -122,24 +142,62 @@ return(<div>expenses
           onChange={handleCheckboxChange}
         />
         <label htmlFor={`invoice-checkbox-${index}`}>
-          {` numer ${invoice.invoiceNum}, kwota ${invoice.amount}, nazwa ${invoice.invoiceName}, sprzedawca ${invoice.sellerName}, forma ${invoice.paymentForm}, opis ${invoice.description}`}
+          {` numer ${invoice.invoiceNum}, kwota ${invoice.amount}, 
+          nazwa ${invoice.invoiceName}, sprzedawca ${invoice.sellerName}, 
+          forma ${invoice.paymentForm}, opis ${invoice.description},
+          ${invoice.paid ? "zaplacony" : 'niezapłacony'}
+          `}
         </label>
         </>)}
 
-         {` numer ${invoice.invoiceNum}, kwota ${invoice.amount}, nazwa ${invoice.invoiceName}, sprzedawca ${invoice.sellerName}, forma ${invoice.paymentForm}, opis ${invoice.description}`}
+        {isEditModePaid && (
+            <>
+        <input
+          type="checkbox"
+          id={`invoice-checkbox-${index}`}
+          value={invoice.itid}
+          onChange={handleCheckboxChange}
+        />
+        <label htmlFor={`invoice-checkbox-${index}`}>
+          {` numer ${invoice.invoiceNum}, kwota ${invoice.amount}, nazwa ${invoice.invoiceName}, sprzedawca ${invoice.sellerName}, forma ${invoice.paymentForm}, opis ${invoice.description},
+             ${invoice.paid ? "zaplacony" : 'niezapłacony'}
+          `}
+        </label>
+        </>)}
+
+
+        {!isEditMode && !isEditModePaid &&<div>
+          {` numer ${invoice.invoiceNum}, kwota ${invoice.amount}, 
+          nazwa ${invoice.invoiceName}, sprzedawca ${invoice.sellerName}, 
+          forma ${invoice.paymentForm}, opis ${invoice.description},
+          ${invoice.paid ? "zaplacony" : 'niezapłacony'}
+           `}
+          </div>} 
       </div>
     ))}
     {/* <button onClick={handleDeleteClick}>Delete</button> */}
+    
     {isEditMode && (
         <button onClick={handleDeleteClick}>remove selected items</button>
-      )}
+    )}
       {/* <button onClick={() => setIsEditMode(!isEditMode)}>edytuj</button> */}
       <button onClick={() => setIsEditMode(!isEditMode)}>
       {getButtonLabel()}
     </button>
+
+    {isEditModePaid && (
+        <button onClick={handlePayClick}>pay selected items</button>
+    )}
+      {/* <button onClick={() => setIsEditMode(!isEditMode)}>edytuj</button> */}
+      <button onClick={() => setIsEditModePaid(!isEditModePaid)}>
+      {getButtonLabelPaid()}
+    </button>
+
+
+
+
+
   </div>
-
-
 </div>)
 }
 

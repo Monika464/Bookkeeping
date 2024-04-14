@@ -34,8 +34,9 @@ const readingFromBase = useCallback(async()=>{
       //console.log(doc.id, " => ", doc.data());
       const idHasCash = /cash/i.test(doc.id);
       const idHasAssets = /assets/i.test(doc.id);
+      const idHasObligation = /obligation/i.test(doc.id);
 
-      if (!idHasCash && !idHasAssets) {
+      if (!idHasCash && !idHasAssets && !idHasObligation) {
         newData[doc.id] = { ...doc.data(), itid: doc.id };
       }
 
@@ -58,7 +59,7 @@ const readingFromBase = useCallback(async()=>{
      
      useEffect(() => {
       //readingFromBase();
-      console.log('dataFromBase',dataFromBase)
+     // console.log('dataFromBase',dataFromBase)
       const duplicates = Object.values(dataFromBase).reduce((tempDuplicates, element1, index1, array) => {
         const foundDuplicates = array.filter((element2, index2) => {
           return element1.invoiceNum === element2.invoiceNum && index1 !== index2;
