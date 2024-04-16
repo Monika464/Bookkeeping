@@ -102,11 +102,20 @@ const monthName = monthNames[month];
 //console.log("formFields",formFields)
 
 const sendToBase = async (e)=>{
+e.preventDefault();
 
-   e.preventDefault()
+// Sprawdź, czy wszystkie pola "kwota w zł" są wypełnione
+const isAmountFilled = formFields.every(field => field.amount.trim() !== '');
+
+// Jeśli nie wszystkie pola "kwota w zł" są wypełnione, zatrzymaj wysyłanie formularza
+if (!isAmountFilled) {
+  alert("Proszę wypełnić pole 'kwota w zł'!");
+  return;
+}
+
     //const uid = currentUser?.uid;
     //console.log("currentUser?.uid",currentUser?.uid)
-    const uid = "user1id";
+    //const uid = "user1id";
     const userId = currentUser?.uid;
      const collectionRef = collection(db, `${userId}`);
 

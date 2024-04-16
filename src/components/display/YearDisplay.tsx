@@ -1,7 +1,7 @@
 export interface IYearDisplay {}
 import { useCallback, useContext, useEffect, useState } from 'react';
 import { UserContext } from '../../context/UserContext';
-import { collection, getDocs, query, where } from 'firebase/firestore';
+import { collection, getDocs, orderBy, query, where } from 'firebase/firestore';
 import { db } from '../../App';
 import { YearSelector, useYear } from '../../context/YearContextType';
 
@@ -29,11 +29,14 @@ try {
     const colRef = collection(db, `${userId}`);
 
     if(editedYear){
+
         const q1 = query(colRef, 
             where("year", "==", editedYearNum),
             where("type", "==", "expenses"),
+
             );
          let newDataExp = {}
+
         const querySnapshot1 = await getDocs(q1);
         querySnapshot1.forEach((doc) => {
           // doc.data() is never undefined for query doc snapshots
@@ -41,13 +44,14 @@ try {
           newDataExp[doc.id] = { ...doc.data(), itid: doc.id };
         });
         setDataFromBaseExp(newDataExp)
-    }
+    
 
          const q2 = query(colRef, 
             where("year", "==", editedYearNum),
             where("type", "==", "incomes"),
             );
          let newDataInc = {}
+
         const querySnapshot2 = await getDocs(q2);
         querySnapshot2.forEach((doc) => {
           // doc.data() is never undefined for query doc snapshots
@@ -55,7 +59,7 @@ try {
           newDataInc[doc.id] = { ...doc.data(), itid: doc.id };
         });
         setDataFromBaseInc(newDataInc)
-
+    }
 
      } catch (error) {
       console.log(error)
@@ -65,7 +69,9 @@ try {
      },[setDataFromBaseExp,dataFromBaseInc, dataFromBaseExp,setDataFromBaseInc, userId,editedYearNum])
 
      //console.log("przychody",dataFromBaseInc)
-        //console.log("koszty",dataFromBaseExp)
+       // console.log("koszty",dataFromBaseExp)
+       // console.log("yearExpenses",yearExpenses)
+       // console.log("yearIncomes",yearIncomes)
    //console.log("data from base",dataFromBaseExp)
     // console.log("data from inc",dataFromBaseInc)
    
@@ -109,7 +115,12 @@ Koszty
 <br></br>
 {Object.values(dataFromBaseExp).map((exp, index) => (
       <div key={index}>
- {` numer ${exp.invoiceNum}, kwota ${exp.amount},data ${exp.day}-${exp.month}, nazwa ${exp.invoiceName}, sprzedawca ${exp.sellerName}, forma ${exp.paymentForm}, opis ${exp.description}`}
+ {` numer ${exp.invoiceNum}, kwota ${exp.amount},
+ data ${exp.day}-${exp.month}, nazwa ${exp.invoiceName}, 
+ sprzedawca ${exp.sellerName}, forma ${exp.paymentForm}, 
+ opis ${exp.description},
+ ${exp.paid ? "zaplacony" : 'niezapłacony'}
+ `}
       </div>
       
 ))}
@@ -118,7 +129,12 @@ Przychody
 <br></br>
 {Object.values(dataFromBaseInc).map((inc, index) => (
       <div key={index}>
- {` numer ${inc.invoiceNum}, kwota ${inc.amount}, data ${inc.day}-${inc.month}, nazwa ${inc.invoiceName}, sprzedawca ${inc.sellerName}, forma ${inc.paymentForm}, opis ${inc.description}`}
+ {` numer ${inc.invoiceNum}, kwota ${inc.amount}, 
+ data ${inc.day}-${inc.month}, nazwa ${inc.invoiceName}, 
+ sprzedawca ${inc.sellerName}, forma ${inc.paymentForm}, 
+ opis ${inc.description},
+ ${inc.paid ? "zaplacony" : 'niezapłacony'}
+ `}
       </div>
       
 ))}

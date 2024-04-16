@@ -30,7 +30,7 @@ const ProfitLossAccount: React.FunctionComponent<IProfitLossAccount> =(props) =>
 
 const yearExpense = useDataBaseQuery("expenses");
 const yearIncome = useDataBaseQuery("incomes");
-console.log("yearExpenses",yearExpense)
+//console.log("yearExpenses",yearExpense)
 
 const yearExpenses = useCounting(yearExpense);
 const yearIncomes = useCounting(yearIncome);
@@ -45,13 +45,19 @@ const yearResult = yearIncomes - yearExpenses;
  const darowizny  = useDataBaseQuery("incomes","source","darowizmy");
 const inne = useDataBaseQuery("incomes","source","inne");
 
+const uslugi = useDataBaseQuery("expenses","category","service");
+const administracja = useDataBaseQuery("expenses","category","administration");
+
 const yearDotacje = useCounting(dotacje);
 const yearSkladki = useCounting(skladki);
-//const yeardarowizny = // dokoncz to 
+const yearDarowizny = useCounting(darowizny); 
+const yearInne = useCounting(inne);
+const yearUslugi = useCounting(uslugi);
+const yearAdministration = useCounting(administracja);
 
     const inneDane1 = useMoneyAssetsQuery("cash");
     const inneDane2 = useMoneyAssetsQuery("assets");
-    const inneDane3 = useMoneyAssetsQuery("obligation")
+    const inneDane3 = useMoneyAssetsQuery("obligation");
     // console.log("inneDane1",inneDane1);
     // console.log("inneDane2",inneDane2)
     // console.log("inneDane3",inneDane3)
@@ -73,19 +79,31 @@ const yearSkladki = useCounting(skladki);
 
 
     
-   console.log("dotacje",dotacje) 
+   //console.log("dotacje",dotacje) 
     
     
-    return(<div style={{fontSize: 20}}>ProfitLossAccount
+    return(<div style={{fontSize: 20}}>
+        <h1>Informacja dodatkowa do bilansu</h1>
         <br></br><br></br>
         Wynik: {yearResult}
         <br></br>
         Z czego
-        <h2>Przychody </h2>
+        <h3>A. Przychody z działalności statutowej</h3>
         <br></br>
         <p>Z dotacji: {yearDotacje}zł</p>
         <p>Ze składek: {yearSkladki}zł</p>
-
+        <p>Z darowizn: {yearDarowizny}zł</p>
+        <p>Inne: {yearInne}zł</p>
+        <br></br>
+        <h3>B. Koszty działalności statutowej</h3>
+        <p>Wszystkie koszty: {yearExpenses}zł</p>
+        z czego:
+        <p> koszty zadań: {yearUslugi}zł</p>
+        <p>koszty administracyjne {yearAdministration}zł</p>
+        <br></br>
+        <h3>C. Zysk (strata) z działalności statutowej (A-B)</h3>
+        {(yearIncomes - yearExpenses) >= 0 ? `zysk ${yearIncomes - yearExpenses}zł` : `strata ${yearIncomes - yearExpenses}zł` }
+        <br></br>
     </div>)
 }
 

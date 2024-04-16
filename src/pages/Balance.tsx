@@ -33,11 +33,11 @@ const Balance: React.FunctionComponent<IBalance> =() => {
         <br></br><br></br>
       <IncomeLoan/>
       <br></br><br></br>
-      <ExtraObligationForm/>
+      {/* <ExtraObligationForm/> */}
         <br></br><br></br>
         <ProfitLossAccount/>
-        {/* <FormMoneyResultStart/>
-        <BalanceAP/> */}
+        {/* <FormMoneyResultStart/>*/}
+        <BalanceAP/> 
         
     </div>)
 }

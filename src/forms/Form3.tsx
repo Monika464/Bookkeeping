@@ -105,11 +105,18 @@ const monthName = monthNames[month];
 //tu bedzie funcja wysylajaca do bazy
 
 const sendToBase = async (e)=>{
+   e.preventDefault();
+   // Sprawdź, czy wszystkie pola "kwota w zł" są wypełnione
+const isAmountFilled = formFields.every(field => field.amount.trim() !== '');
 
-   e.preventDefault()
+// Jeśli nie wszystkie pola "kwota w zł" są wypełnione, zatrzymaj wysyłanie formularza
+if (!isAmountFilled) {
+  alert("Proszę wypełnić pole 'kwota w zł'!");
+  return;
+}
     //const uid = currentUser?.uid;
     //console.log("currentUser?.uid",currentUser?.uid)
-    const uid = "user1id";
+    //const uid = "user1id";
     const userId = currentUser?.uid;
      const collectionRef = collection(db, `${userId}`);
 
