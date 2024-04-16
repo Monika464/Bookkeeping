@@ -21,7 +21,6 @@ const DayExpenses : React.FunctionComponent<IDayExpenses > =(props) =>{
     const [isEditMode, setIsEditMode] = useState(false);
     const [isEditModePaid, setIsEditModePaid] = useState(false);
 
-//invoices powinin sie zmieniac
 
     const thisDay = props.thisDay;
     const {currentUser} = useContext(UserContext);
@@ -150,7 +149,23 @@ return(
         </label>
         </>)}
 
-        {isEditModePaid && (
+        {isEditModePaid && !invoice.paid && (
+    <>
+        <input
+          type="checkbox"
+          id={`invoice-checkbox-${index}`}
+          value={invoice.itid}
+          onChange={handleCheckboxChange}
+        />
+        <label htmlFor={`invoice-checkbox-${index}`}>
+          {` numer ${invoice.invoiceNum}, kwota ${invoice.amount}, nazwa ${invoice.invoiceName}, sprzedawca ${invoice.sellerName}, forma ${invoice.paymentForm}, opis ${invoice.description},
+             ${invoice.paid ? "zapłacony" : 'niezapłacony'}
+          `}
+        </label>
+    </>
+)}
+
+        {/* {isEditModePaid && (
             <>
         <input
           type="checkbox"
@@ -163,7 +178,7 @@ return(
              ${invoice.paid ? "zaplacony" : 'niezapłacony'}
           `}
         </label>
-        </>)}
+        </>)} */}
 
 
         {!isEditMode && !isEditModePaid &&<div>

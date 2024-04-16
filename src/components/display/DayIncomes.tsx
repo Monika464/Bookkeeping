@@ -139,7 +139,22 @@ return(<div>incomes
           `}
         </label>
         </>)}
-
+        {isEditModePaid && !invoice.paid && (
+    <>
+        <input
+          type="checkbox"
+          id={`invoice-checkbox-${index}`}
+          value={invoice.itid}
+          onChange={handleCheckboxChange}
+        />
+        <label htmlFor={`invoice-checkbox-${index}`}>
+          {` numer ${invoice.invoiceNum}, kwota ${invoice.amount}, nazwa ${invoice.invoiceName}, sprzedawca ${invoice.sellerName}, forma ${invoice.paymentForm}, opis ${invoice.description},
+             ${invoice.paid ? "zapłacony" : 'niezapłacony'}
+          `}
+        </label>
+    </>
+)}
+{/* 
         {isEditModePaid && (
             <>
         <input
@@ -155,7 +170,7 @@ return(<div>incomes
           ${invoice.paid ? "zaplacony" : 'niezapłacony'}
           `}
         </label>
-        </>)}
+        </>)} */}
 
         {!isEditMode && !isEditModePaid &&<div>
           {` numer ${invoice.invoiceNum}, kwota ${invoice.amount}, 
