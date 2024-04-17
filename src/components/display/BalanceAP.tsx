@@ -23,7 +23,7 @@ const BalanceAP: React.FunctionComponent<IBalanceAP> = (props) => {
     const koszty = useDataBaseQuery("expenses")
    const pozyczki = useDataBaseQuery("incomes","loan",true);
 
-   console.log("pozyczki",pozyczki)
+   //console.log("pozyczki",pozyczki)
 
     const yearZaplacone = useCounting(zaplacone);
     const yearNiezaplacone = useCounting(niezaplacone);

@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState } from 'react';
+import useYearForContext from '../hooks/useYearForContext';
 
 interface YearContextType {
   editedYear: string;
@@ -28,16 +29,26 @@ const useYear = () => {
 const YearSelector: React.FC = () => {
   const { editedYear, setEditedYear } = useYear();
 
+  const years= useYearForContext()
+
   const handleYearChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setEditedYear(e.target.value);
   };
 
+  //console.log("years",years)
   return (
     <select value={editedYear} onChange={handleYearChange}>
-      <option value="2024">2024</option>
-      <option value="2023">2023</option>
-      <option value="2022">2022</option>
-    </select>
+    {years.map((year) => (
+      <option key={year} value={year}>
+        {year}
+      </option>
+    ))}
+  </select>
+    // <select value={editedYear} onChange={handleYearChange}>
+    //   <option value="2024">2024</option>
+    //   <option value="2023">2023</option>
+    //   <option value="2022">2022</option>
+    // </select>
   );
 };
 
