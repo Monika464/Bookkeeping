@@ -18,6 +18,8 @@ import MonthDisplay from './components/display/MonthDisplay'
 import Balance from './pages/Balance'
 import FormLoansCredits from './forms/FormLoansCredits'
 import { YearContextProvider } from './context/YearContextType'
+import ContractorsForm from './forms/ContractorsForm'
+import ContractorsPage from './pages/ContractorsPage'
 
 export const app = initializeApp(config.firebaseConfig)
 //console.log("app",app)
@@ -71,11 +73,19 @@ function App() {
          />
 
 <Route 
+        path="/contractor" 
+        element={
+         <ContractorsPage/>  
+               }              
+         />
+
+
+{/* <Route 
         path="/loans" 
         element={
          <FormLoansCredits/>  
                }              
-         />
+         /> */}
 
 
 <Route 

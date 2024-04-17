@@ -89,9 +89,9 @@ const handleCheckboxChange = (e) => {
   // Funkcja obsługująca kliknięcie przycisku "Delete"
   const handleDeleteClick = async () => {
    // const usersCollectionRef = collection(db, `${userId}`);
-selectedInvoices.map((item)=>{
+selectedInvoices.map(async(item)=>{
    // console.log("iterms to delete", item)
-    deleteDoc(doc(db, `${userId}`, item));
+   await deleteDoc(doc(db, `${userId}`, item));
 })
  
   };
@@ -104,10 +104,10 @@ const getButtonLabel = () => {
   // Funkcja obsługująca kliknięcie przycisku "Zaplac"
   const handlePayClick = async () => {
     // const usersCollectionRef = collection(db, `${userId}`);
-   selectedInvoices.map((item)=>{
-    const itemRefI = doc(db, userId, item);
+   selectedInvoices.map(async(item)=>{
+     const itemRefI = doc(db, userId, item);
       if(item){
-        updateDoc(itemRefI, {
+        await updateDoc(itemRefI, {
          paid: true
         })
       //.then(()=>{isSendI(true)})

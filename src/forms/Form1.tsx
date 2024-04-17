@@ -8,6 +8,7 @@ import { collection, doc, getDoc, getDocs, query, serverTimestamp, setDoc, where
 import { db } from '../App';
 import { pl } from 'date-fns/locale';
 import { Value } from '../components/Calendar';
+import useGetContractors from '../hooks/useGetContractors';
 
 interface FormField {
   id: number;
@@ -33,7 +34,8 @@ const DynamicForm: React.FC<IForm1> = (props) => {
   const [formFields, setFormFields] = useState<FormField[]>([]);
   const [nextId, setNextId] = useState<number>(1);
   const {currentUser} = useContext(UserContext);
-
+const contractors = useGetContractors();
+//console.log("contractors",contractors)
 
   const thisDay = props.thisDay;
 
@@ -176,14 +178,33 @@ if (!isAmountFilled) {
             onChange={(e) => handleInputChange(field.id, 'invoiceName', e.target.value)}
           />
           <select
+  value={field.sellerName}
+  onChange={(e) => handleInputChange(field.id, 'sellerName', e.target.value)}
+>
+  <option value="">Kontrahent</option>
+  {Object.values(contractors).map((contractor, index) => (
+    <option key={contractor.itid} value={`${contractor.companyName} ${contractor.nip}`}>
+      {`${contractor.companyName} ${contractor.nip}`}
+    </option>
+  ))}
+</select>
+          {/* <select
             value={field.sellerName}
             onChange={(e) => handleInputChange(field.id, 'sellerName', e.target.value)}
           >
             <option value="">Kontrahent</option>
+  
+{Object.values(contractors).map((contractor, index) => (
+    <option key={contractor.itid} value={contractor.companyName}>
+      {contractor.companyName}{contractor.nip}
+    </option>
+  ))}
+       </select> */}
+            {/* <option value="">Kontrahent</option>
             <option value="Jozek">Jozek</option>
             <option value="Franek">Franek</option>
-            <option value="Zoska">Zoska</option>
-          </select>
+            <option value="Zoska">Zoska</option> */}
+       
           {/* <input
             type="text"
             placeholder="Nazwa sprzedawcy"
