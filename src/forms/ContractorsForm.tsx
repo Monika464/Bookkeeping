@@ -21,6 +21,7 @@ const ContractorsForm: React.FunctionComponent<IContractorsFormProps> = (props) 
 
     const [formFields, setFormFields] = useState<FormField[]>([]);
     const [nextId, setNextId] = useState<number>(1);
+    const [showAddButton, setShowAddButton] = useState<boolean>(true);
     const {currentUser} = useContext(UserContext);
 
     const addFormField = () => {
@@ -36,6 +37,7 @@ const ContractorsForm: React.FunctionComponent<IContractorsFormProps> = (props) 
             nip: '',
             }]);
         setNextId(nextId + 1);
+        setShowAddButton(false);
       };
     
       const handleInputChange = (id: number, inputName: string, value: string) => {
@@ -56,7 +58,7 @@ const ContractorsForm: React.FunctionComponent<IContractorsFormProps> = (props) 
         setFormFields([]);
         setNextId(1);
       }
- console.log("formFields", formFields);
+ //console.log("formFields", formFields);
 
 
  const sendToBase = async (e)=>{
@@ -99,6 +101,7 @@ const ContractorsForm: React.FunctionComponent<IContractorsFormProps> = (props) 
       });
     
       resetForm();
+      setShowAddButton(true);
       }
     
 
@@ -111,10 +114,10 @@ const ContractorsForm: React.FunctionComponent<IContractorsFormProps> = (props) 
 
 
     return(<>
-        <button onClick={addFormField}>Dodaj kontrahenta</button>
+        <button onClick={addFormField} className="btn">Dodaj kontrahenta</button>
       {formFields.map((field) => (
         <div key={field.id}>
-          {field.id}.
+          {/* {field.id}. */}
           <input
             type="text" 
             placeholder="companyName"
@@ -163,10 +166,10 @@ const ContractorsForm: React.FunctionComponent<IContractorsFormProps> = (props) 
             value={field.nip}
             onChange={(e) => handleInputChange(field.id, 'nip', e.target.value)}
             />
-
+<button onClick={sendToBase} className="btn">Zapisz w bazie</button>
         </div>
       ))}
-      <button onClick={sendToBase}>nowy wyslij koszt</button>
+      
   
     </>)
 }

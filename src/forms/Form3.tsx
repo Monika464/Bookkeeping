@@ -35,6 +35,7 @@ const DynamicForm3: React.FC<IForm3> = (props) => {
   
   const [formFields, setFormFields] = useState<FormField[]>([]);
   const [nextId, setNextId] = useState<number>(1);
+  const [showAddButton, setShowAddButton] = useState<boolean>(true);
   const {currentUser} = useContext(UserContext);
   const contractors = useGetContractors();
 
@@ -46,8 +47,9 @@ const DynamicForm3: React.FC<IForm3> = (props) => {
  // console.log("month",month)
   const day: number = getDate(thisDay);
   //console.log("day",day)
+  //const monthNames = ['Styczeń', 'Luty', 'Marzec', 'Kwiecień', 'Maj', 'Czerwiec', 'Lipiec', 'Sierpień', 'Wrzesień', 'Październik', 'Listopad', 'Grudzień'];
   const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-const monthName = monthNames[month];
+  const monthName = monthNames[month];
   //const formattedDate = day + monthName;
   //console.log("formattedDate",formattedDate)
   //console.log("hej", format(props.thisDay, 'do LLLL yyyy', {locale: pl}))  
@@ -75,6 +77,7 @@ const monthName = monthNames[month];
         paid: true
         }]);
     setNextId(nextId + 1);
+    setShowAddButton(false); 
   };
 
   const handleInputChange = (id: number, inputName: string, value: string) => {
@@ -147,15 +150,17 @@ if (!isAmountFilled) {
   });
 
   resetForm();
+  setShowAddButton(true)
   }
 
 
   return (
-    <div>
-      <button onClick={addFormField}>Dodaj pozycję</button>
+    <div className='invoiceForm'>
+      {showAddButton &&<button onClick={addFormField} className='btn'>Dodaj pozycję</button>}
+      <div>
       {formFields.map((field) => (
         <div key={field.id}>
-          {field.id}.
+          {/* {field.id}. */}
           <input
             type="text" 
             placeholder="Nr faktury"
@@ -186,21 +191,7 @@ if (!isAmountFilled) {
     </option>
   ))}
 </select>
-          {/* <select
-            value={field.sellerName}
-            onChange={(e) => handleInputChange(field.id, 'sellerName', e.target.value)}
-          >
-            <option value="">Kontrahent</option>
-            <option value="Jozek">Jozek</option>
-            <option value="Franek">Franek</option>
-            <option value="Zoska">Zoska</option>
-          </select> */}
-          {/* <input
-            type="text"
-            placeholder="Nazwa sprzedawcy"
-            value={field.sellerName}
-            onChange={(e) => handleInputChange(field.id, 'sellerName', e.target.value)}
-          /> */}
+    
           <select
             value={field.paymentForm}
             onChange={(e) => handleInputChange(field.id, 'paymentForm', e.target.value)}
@@ -249,10 +240,11 @@ if (!isAmountFilled) {
             <option value="true">opłacone</option>
             <option value="false">nieopłacone</option>
           </select> */}
-
+          <br></br>
+<button onClick={sendToBase} className='btn'>zapisz przychód</button>
         </div>
       ))}
-      <button onClick={sendToBase}>zapisz income</button>
+      </div>
     </div>
   );
 };

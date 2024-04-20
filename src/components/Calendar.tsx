@@ -8,18 +8,20 @@ import { pl } from "date-fns/locale";
 import DayExpenses from "./display/DayExpenses";
 import Form3 from "../forms/Form3";
 import DayIncomes from "./display/DayIncomes";
+import { useYear } from "../context/YearContextType";
+import CheckForDuplicates from "./display/CheckForDuplicate";
 
 export interface ICalendarProps {};
 
-export type ValuePiece = Date | null;
+export type ValuePiece = Date | string | null;
 //type ValuePiece = Date;
 
 export type Value = ValuePiece | [ValuePiece, ValuePiece];
 
-const CalendarPage: React.FunctionComponent<ICalendarProps> =() => {
+const CalendarElement: React.FunctionComponent<ICalendarProps> =() => {
     const [value, onChange] = useState<Value>(new Date());
     const [chosenDay, setChosenDay] = useState<ValuePiece>();
-
+    const { editedYear } = useYear();
   //console.log("hej", format(value, 'do LLLL yyyy', {locale: pl}))  
     // console.log("typeV",typeof(value))
     // const today = new Date();
@@ -32,20 +34,21 @@ const CalendarPage: React.FunctionComponent<ICalendarProps> =() => {
     };
 
     const handleDayClick = (value: ValuePiece) => {
-        setChosenDay(value);
+       setChosenDay(value);
+        //setChosenDay(value instanceof Date ? value : null)
     };
 
-    const sendSelectedDateExpense = () => {
-        if (chosenDay !== undefined && chosenDay !== null) {
-            saveToDatabase(chosenDay);
-        }
-    };
+    // const sendSelectedDateExpense = () => {
+    //     if (chosenDay !== undefined && chosenDay !== null) {
+    //         saveToDatabase(chosenDay);
+    //     }
+    // };
 
-    const sendSelectedDateIncome = () => {
-        if (chosenDay !== undefined && chosenDay !== null) {
-            saveToDatabase(chosenDay);
-        }
-    };
+    // const sendSelectedDateIncome = () => {
+    //     if (chosenDay !== undefined && chosenDay !== null) {
+    //         saveToDatabase(chosenDay);
+    //     }
+    // };
 
     //console.log("chosenDay",typeof(chosenDay))
     //console.log("chosenDay2",new Date(chosenDay?.getTime()))
@@ -53,7 +56,10 @@ const CalendarPage: React.FunctionComponent<ICalendarProps> =() => {
 
     return (
         <div>
+             
+             <br></br>
             <Calendar onChange={onChange} value={value} onClickDay={handleDayClick} />
+
             {chosenDay && (
                
                <div>
@@ -70,16 +76,20 @@ const CalendarPage: React.FunctionComponent<ICalendarProps> =() => {
                
                  Przychody
                  <DayIncomes thisDay={value}/>
-                 {/* 'tu sie z bazy maja wyswietlac' */}
+                 <br></br>
                  <Form3 thisDay={value}/>
+                 <br></br><br></br>
                  {/* <button onClick={sendSelectedDateIncome}>Send</button> */}
                  </div>
             )}
+
+<CheckForDuplicates/>
+
         </div>
     );
 }
 
-export default CalendarPage;
+export default CalendarElement;
 
 // import { useState } from "react";
 // import Calendar from 'react-calendar'

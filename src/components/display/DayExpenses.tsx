@@ -4,35 +4,52 @@ import { useContext, useEffect, useState } from 'react'
 import { UserContext } from '../../context/UserContext';
 import { Value } from "../Calendar";
 import { getDate, getMonth, getYear } from "date-fns";
+import { useNavigate } from "react-router-dom";
 
 export interface IDayExpenses {
-    thisDay: Value
+    thisDay: Value 
 };
 
 //props z calendara to bedzie data this date
+export interface Invoice {
+  amount: string;
+  category: string;
+  day: number;
+  description: string;
+  id: number;
+  invoiceName: string;
+  invoiceNum: string;
+  itid: string;
+  month: string;
+  paid: boolean; // Poprawka: zmiana typu na boolean
+  paymentForm: string;
+  sellerName: string;
+}
 
 
-
-const DayExpenses : React.FunctionComponent<IDayExpenses > =(props) =>{
-    const [selectedInvoices, setSelectedInvoices] = useState([]);
-
-    const [content,setContent] = useState({})
-    const [invoices, setInvoices] = useState({});
+const DayExpenses : React.FunctionComponent<IDayExpenses> =(props) =>{
+    // const [selectedInvoices, setSelectedInvoices] = useState([]);
+    const [selectedInvoices, setSelectedInvoices] = useState<{[key: string]: Invoice[]}>([]);
+    const [invoices, setInvoices] = useState<{[key: string]: Invoice}>({});
     const [isEditMode, setIsEditMode] = useState(false);
     const [isEditModePaid, setIsEditModePaid] = useState(false);
 
 
     const thisDay = props.thisDay;
+
+    
     const {currentUser} = useContext(UserContext);
     const day: number = getDate(thisDay);
     const month: number = getMonth(thisDay);
-    const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-const monthName = monthNames[month];
+   const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+   //const monthNames = ['Styczeń', 'Luty', 'Marzec', 'Kwiecień', 'Maj', 'Czerwiec', 'Lipiec', 'Sierpień', 'Wrzesień', 'Październik', 'Listopad', 'Grudzień'];
+   const monthName = monthNames[month];
     //const uid = "user1id";
     const userId = currentUser?.uid;
     const year: number = getYear(thisDay);
     //console.log("currentUser",currentUser)
-
+    const navigate = useNavigate();
+    
     const readingFromBase =async()=>{
 
         try {
@@ -66,9 +83,9 @@ const monthName = monthNames[month];
         }
 
     }
-
-  //console.log('expenses',invoices)
  
+  console.log('expenses',invoices)
+  //console.log("invoices",invoices)
 
  
 useEffect(()=>{
@@ -93,7 +110,7 @@ selectedInvoices.map(async(item)=>{
    // console.log("iterms to delete", item)
    await deleteDoc(doc(db, `${userId}`, item));
 })
- 
+//navigate('/loginout');
   };
 
 // Funkcja do zmiany nazwy przycisku delete
@@ -121,18 +138,19 @@ const getButtonLabelPaid = () => {
   return isEditModePaid ? "Finish editing for pay" : "Edit for pay";
 };
 
-//console.log("content",content)
-
+//console.log("invoices",invoices);
+const isInvoicesEmpty = Object.keys(invoices).length === 0;
+//invoices ? console.log("sa") : console.log("nie ma")
 // Funkcja do obsługi kliknięcia przycisku "Edit" lub "Finish"
 
 
 return(
-<div>expenses
+<div>
 
 <div>
     {Object.values(invoices).map((invoice, index) => (
       <div key={index}>
-        {isEditMode && (
+        {isEditMode &&  (
             <>
         <input
           type="checkbox"
@@ -141,50 +159,45 @@ return(
           onChange={handleCheckboxChange}
         />
         <label htmlFor={`invoice-checkbox-${index}`}>
-          {` numer ${invoice.invoiceNum}, kwota ${invoice.amount}, 
-          nazwa ${invoice.invoiceName}, sprzedawca ${invoice.sellerName}, 
-          forma ${invoice.paymentForm}, opis ${invoice.description},
+          {`${invoice.invoiceNum}, 
+          ${invoice.amount} zł, 
+           ${invoice.invoiceName}, 
+           ${invoice.sellerName}, 
+           ${invoice.paymentForm}, 
+           ${invoice.description},
           ${invoice.paid ? "zaplacony" : 'niezapłacony'}
           `}
         </label>
         </>)}
 
         {isEditModePaid && !invoice.paid && (
-    <>
-        <input
+         <>
+           <input
           type="checkbox"
           id={`invoice-checkbox-${index}`}
           value={invoice.itid}
           onChange={handleCheckboxChange}
-        />
-        <label htmlFor={`invoice-checkbox-${index}`}>
-          {` numer ${invoice.invoiceNum}, kwota ${invoice.amount}, nazwa ${invoice.invoiceName}, sprzedawca ${invoice.sellerName}, forma ${invoice.paymentForm}, opis ${invoice.description},
+          />
+          <label htmlFor={`invoice-checkbox-${index}`}>
+          {`  ${invoice.invoiceNum}, 
+           ${invoice.amount} zł, 
+           ${invoice.invoiceName}, 
+           ${invoice.sellerName}, 
+           ${invoice.paymentForm}, 
+           ${invoice.description},
              ${invoice.paid ? "zapłacony" : 'niezapłacony'}
           `}
         </label>
     </>
 )}
 
-        {/* {isEditModePaid && (
-            <>
-        <input
-          type="checkbox"
-          id={`invoice-checkbox-${index}`}
-          value={invoice.itid}
-          onChange={handleCheckboxChange}
-        />
-        <label htmlFor={`invoice-checkbox-${index}`}>
-          {` numer ${invoice.invoiceNum}, kwota ${invoice.amount}, nazwa ${invoice.invoiceName}, sprzedawca ${invoice.sellerName}, forma ${invoice.paymentForm}, opis ${invoice.description},
-             ${invoice.paid ? "zaplacony" : 'niezapłacony'}
-          `}
-        </label>
-        </>)} */}
-
-
         {!isEditMode && !isEditModePaid &&<div>
-          {` numer ${invoice.invoiceNum}, kwota ${invoice.amount}, 
-          nazwa ${invoice.invoiceName}, sprzedawca ${invoice.sellerName}, 
-          forma ${invoice.paymentForm}, opis ${invoice.description},
+          {` ${invoice.invoiceNum}, 
+           ${invoice.amount} zł, 
+           ${invoice.invoiceName}, 
+           ${invoice.sellerName}, 
+           ${invoice.paymentForm}, 
+           ${invoice.description},
           ${invoice.paid ? "zaplacony" : 'niezapłacony'}
            `}
           </div>} 
@@ -193,20 +206,20 @@ return(
     {/* <button onClick={handleDeleteClick}>Delete</button> */}
     
     {isEditMode && (
-        <button onClick={handleDeleteClick}>remove selected items</button>
+        <button onClick={handleDeleteClick} className="btn">usuń wybrane faktury</button>
     )}
       {/* <button onClick={() => setIsEditMode(!isEditMode)}>edytuj</button> */}
-      <button onClick={() => setIsEditMode(!isEditMode)}>
+      { !isEditModePaid && !isInvoicesEmpty && <button onClick={() => setIsEditMode(!isEditMode)} className="btnsmall">
       {getButtonLabel()}
-    </button>
+    </button>}
 
     {isEditModePaid && (
-        <button onClick={handlePayClick}>pay selected items</button>
+        <button onClick={handlePayClick} className="btn">opłać wybraną fakturę</button>
     )}
       {/* <button onClick={() => setIsEditMode(!isEditMode)}>edytuj</button> */}
-      <button onClick={() => setIsEditModePaid(!isEditModePaid)}>
+      { !isEditMode && !isInvoicesEmpty && <button onClick={() => setIsEditModePaid(!isEditModePaid)} className="btnsmall">
       {getButtonLabelPaid()}
-    </button>
+    </button>}
 
 
 

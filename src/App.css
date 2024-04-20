@@ -1,0 +1,11 @@
+.App {
+    display: flex; 
+    padding: 0 60px;
+  }
+  .App .container{
+   
+    flex: 1 1 0; 
+     padding: 0 60px; 
+    /* flex-wrap: wrap; */
+   
+  } 

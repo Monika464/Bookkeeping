@@ -111,34 +111,50 @@ try {
         Roczne zestawienie
         <YearSelector/>
         <br></br>
-Koszty
-<br></br>
+        Edytujesz rok: {editedYear}
+        <br></br>
+        <br></br>
+
+
+<ol>
+<h4>Koszty</h4>
 {Object.values(dataFromBaseExp).map((exp, index) => (
-      <div key={index}>
- {` numer ${exp.invoiceNum}, kwota ${exp.amount},
- data ${exp.day}-${exp.month}, nazwa ${exp.invoiceName}, 
- sprzedawca ${exp.sellerName}, forma ${exp.paymentForm}, 
- opis ${exp.description},
+      <li key={index}>
+ {` ${exp.invoiceNum}, 
+ ${exp.amount} zł,
+ ${exp.day}-${exp.month}, 
+ ${exp.invoiceName}, 
+ ${exp.sellerName}, 
+ ${exp.paymentForm}, 
+  ${exp.description},
  ${exp.paid ? "zaplacony" : 'niezapłacony'}
  `}
-      </div>
+      </li>
       
 ))}
-
-Przychody 
-<br></br>
+</ol> 
+<br></br><br></br>
+<ol>
+<h4>Przychody</h4>
 {Object.values(dataFromBaseInc).map((inc, index) => (
-      <div key={index}>
- {` numer ${inc.invoiceNum}, kwota ${inc.amount}, 
- data ${inc.day}-${inc.month}, nazwa ${inc.invoiceName}, 
- sprzedawca ${inc.sellerName}, forma ${inc.paymentForm}, 
- opis ${inc.description},
+    
+      <li key={index}>
+ {`  ${inc.invoiceNum}, 
+  ${inc.amount} zł, 
+  ${inc.day}-${inc.month}, 
+  ${inc.invoiceName}, 
+  ${inc.sellerName}, 
+  ${inc.paymentForm}, 
+  ${inc.description},
  ${inc.paid ? "zaplacony" : 'niezapłacony'}
  `}
-      </div>
-      
+      </li>
+     
 ))}
-Wynik 
+</ol>
+<br></br>
+<h3>Wynik</h3> 
+<br></br>
 {((yearIncomes - yearExpenses) > 0) ? 
 ` zysk ${yearIncomes - yearExpenses}` :
 ` strata ${yearIncomes - yearExpenses}`

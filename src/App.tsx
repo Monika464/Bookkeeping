@@ -20,6 +20,10 @@ import FormLoansCredits from './forms/FormLoansCredits'
 import { YearContextProvider } from './context/YearContextType'
 import ContractorsForm from './forms/ContractorsForm'
 import ContractorsPage from './pages/ContractorsPage'
+import Navbar from './components/Navbar'
+import LogInOut from './pages/LogInOut'
+import CalendarPage from './components/Calendar'
+import CheckForDuplicates from './components/display/CheckForDuplicate'
 
 export const app = initializeApp(config.firebaseConfig)
 //console.log("app",app)
@@ -33,13 +37,13 @@ function App() {
 
 
      return (
-    <>
+    <div className='app'>
 
-    <div className='container'>
  <BrowserRouter>  
-
+ <div className='container'>
  <UserContextProvider>  
  <YearContextProvider>
+      <Navbar/>
    <Routes>
 
        <Route 
@@ -57,13 +61,13 @@ function App() {
                }              
          />
 
-
+{/* 
        <Route 
         path="/month" 
         element={
          <MonthDisplay/>  
                }              
-         />
+         /> */}
 
 <Route 
         path="/balance" 
@@ -76,6 +80,27 @@ function App() {
         path="/contractor" 
         element={
          <ContractorsPage/>  
+               }              
+         />
+
+<Route 
+        path="/loginout" 
+        element={
+         <LogInOut/>  
+               }              
+         />
+
+<Route 
+        path="/calendar" 
+        element={
+         <CalendarPage/>  
+               }              
+         />
+
+<Route 
+        path="/hej" 
+        element={
+         <CheckForDuplicates/>  
                }              
          />
 
@@ -106,11 +131,12 @@ function App() {
    </Routes>
    </YearContextProvider>
    </UserContextProvider> 
-   
+ </div>  
    </BrowserRouter> 
    
     </div>
-    </>)
+   
+)
 }
 
 export default App

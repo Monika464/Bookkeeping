@@ -7,6 +7,7 @@ const ContractorsPage: React.FunctionComponent<IContractorsPage> =() => {
 
 return(<div>
 
+<h3>Kontrahenci</h3>
 <ContractorsForm/>
 <br></br>
 <Contractors/>

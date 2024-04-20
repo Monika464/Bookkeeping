@@ -33,6 +33,7 @@ const DynamicForm: React.FC<IForm1> = (props) => {
   
   const [formFields, setFormFields] = useState<FormField[]>([]);
   const [nextId, setNextId] = useState<number>(1);
+  const [showAddButton, setShowAddButton] = useState<boolean>(true);
   const {currentUser} = useContext(UserContext);
 const contractors = useGetContractors();
 //console.log("contractors",contractors)
@@ -45,8 +46,9 @@ const contractors = useGetContractors();
  // console.log("month",month)
   const day: number = getDate(thisDay);
   //console.log("day",day)
-  const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-const monthName = monthNames[month];
+   //const monthNames = ['Styczeń', 'Luty', 'Marzec', 'Kwiecień', 'Maj', 'Czerwiec', 'Lipiec', 'Sierpień', 'Wrzesień', 'Październik', 'Listopad', 'Grudzień'];
+   const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+  const monthName = monthNames[month];
   //const formattedDate = day + monthName;
   //console.log("formattedDate",formattedDate)
   //console.log("hej", format(props.thisDay, 'do LLLL yyyy', {locale: pl}))  
@@ -73,6 +75,7 @@ const monthName = monthNames[month];
           paid: true
         }]);
     setNextId(nextId + 1);
+    setShowAddButton(false); 
   };
 
   const handleInputChange = (id: number, inputName: string, value: string) => {
@@ -141,83 +144,61 @@ if (!isAmountFilled) {
   timestamp: serverTimestamp()
 
   }));
-
+  console.log("formData",formData)
 
   formData.forEach(async (data) => {
     await setDoc(doc(collectionRef), data);
-  });
+  })
 
   resetForm();
+  setShowAddButton(true)
   }
 
 
   return (
-    <div>
-
-
-      <button onClick={addFormField}>Dodaj pozycję</button>
-      {formFields.map((field) => (
-        <div key={field.id}>
-          {field.id}.
-          <input
-            type="text" 
-            placeholder="Nr faktury"
-            value={field.invoiceNum}
-            onChange={(e) => handleInputChange(field.id, 'invoiceNum', e.target.value)}
-          />
-          <input
-            type="text" 
-            placeholder="kwota w zł"
-            value={field.amount}
-            onChange={(e) => handleInputChange(field.id, 'amount', e.target.value)}
-          />
-            <input
-            type="text" 
-            placeholder="nazwa"
-            value={field.invoiceName}
-            onChange={(e) => handleInputChange(field.id, 'invoiceName', e.target.value)}
-          />
-          <select
-  value={field.sellerName}
-  onChange={(e) => handleInputChange(field.id, 'sellerName', e.target.value)}
->
-  <option value="">Kontrahent</option>
-  {Object.values(contractors).map((contractor, index) => (
-    <option key={contractor.itid} value={`${contractor.companyName} ${contractor.nip}`}>
-      {`${contractor.companyName} ${contractor.nip}`}
-    </option>
-  ))}
-</select>
-          {/* <select
+    <div className='invoiceForm'>
+      {showAddButton && <button onClick={addFormField} className='btn'>Dodaj pozycję</button>}
+        <div>
+        {formFields.map((field) => (
+              <div key={field.id}>
+                   {/* {field.id}. */}
+                 <input
+                  type="text" 
+                  placeholder="Nr faktury"
+                  value={field.invoiceNum}
+                  onChange={(e) => handleInputChange(field.id, 'invoiceNum', e.target.value)}
+                />
+                <input
+                  type="text" 
+                  placeholder="kwota w zł"
+                  value={field.amount}
+                  onChange={(e) => handleInputChange(field.id, 'amount', e.target.value)}
+                />
+                <input
+                type="text" 
+                placeholder="nazwa"
+                value={field.invoiceName}
+                onChange={(e) => handleInputChange(field.id, 'invoiceName', e.target.value)}
+                />
+            <select
             value={field.sellerName}
             onChange={(e) => handleInputChange(field.id, 'sellerName', e.target.value)}
-          >
-            <option value="">Kontrahent</option>
-  
-{Object.values(contractors).map((contractor, index) => (
-    <option key={contractor.itid} value={contractor.companyName}>
-      {contractor.companyName}{contractor.nip}
-    </option>
-  ))}
-       </select> */}
-            {/* <option value="">Kontrahent</option>
-            <option value="Jozek">Jozek</option>
-            <option value="Franek">Franek</option>
-            <option value="Zoska">Zoska</option> */}
-       
-          {/* <input
-            type="text"
-            placeholder="Nazwa sprzedawcy"
-            value={field.sellerName}
-            onChange={(e) => handleInputChange(field.id, 'sellerName', e.target.value)}
-          /> */}
+             >
+               <option value="">Kontrahent</option>
+                {Object.values(contractors).map((contractor, index) => (
+                <option key={contractor.itid} value={`${contractor.companyName} ${contractor.nip}`}>
+                  {`${contractor.companyName} ${contractor.nip}`}
+                </option>
+                ))}
+            </select>
+          
           <select
             value={field.paymentForm}
             onChange={(e) => handleInputChange(field.id, 'paymentForm', e.target.value)}
-          >
+           >
             <option value="przelew">Przelew</option>
             <option value="gotowka">Gotówka</option>
-          </select>
+           </select>
           <select
             value={field.category}
             onChange={(e) => handleInputChange(field.id, 'category', e.target.value)}
@@ -232,35 +213,22 @@ if (!isAmountFilled) {
             value={field.description}
             onChange={(e) => handleInputChange(field.id, 'description', e.target.value)}
           />
-<select
-  value={field.paid.toString()} // Konwertuj wartość boolean na string
-  onChange={(e) => {
-    // Konwertuj wartość z powrotem na boolean
-    const value = e.target.value === "true" ? true : false;
-    handleInputChange(field.id, 'paid', value);
-  }}
->
-  <option value="true">opłacone</option>
-  <option value="false">nieopłacone</option>
-</select>
-{/* <select
-            value={field.paid}
-            onChange={
-              (e) => {
-                handleInputChange(field.id, 'paid', e.target.value)
-                // console.log("target value",e.target.value)
-                // console.log("field.paid",typeof(field.paid))
-              }
-            
-            }
-          > 
-            <option value="true">opłacone</option>
-            <option value="false">nieopłacone</option>
+          <select
+            value={field.paid.toString()} // Konwertuj wartość boolean na string
+            onChange={(e) => {
+              // Konwertuj wartość z powrotem na boolean
+              const value = e.target.value === "true" ? true : false;
+              handleInputChange(field.id, 'paid', value);
+            }}
+          >
+          <option value="true">opłacone</option>
+          <option value="false">nieopłacone</option>
           </select>
-          */}
+          <br></br>
+          <button onClick={sendToBase} className='btn'>zapisz koszt</button>
         </div>
       ))}
-      <button onClick={sendToBase}>nowy wyslij koszt</button>
+      </div>
     </div>
   );
 };

@@ -1,9 +1,10 @@
 import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../context/UserContext";
-import { useYear } from "../../context/YearContextType";
-import { collection, deleteDoc, doc, getDocs } from "firebase/firestore";
+
+import {  deleteDoc, doc} from "firebase/firestore";
 import { db } from "../../App";
 import useGetContractors from "../../hooks/useGetContractors";
+import { useNavigate } from "react-router-dom";
 
 export interface IContractorsProps {
 };
@@ -19,6 +20,7 @@ const contractors = useGetContractors()
 //console.log("selectedContractors",selectedContractors)
 const [isEditMode, setIsEditMode] = useState(false);
 //zrob wyswietlanie i delete jak w day tutaj
+
 
 // Funkcja do obsługi zaznaczania i odznaczania checkboxów
 const handleCheckboxChange = (e) => {
@@ -42,9 +44,10 @@ const getButtonLabel = () => {
          selectedContractors.map(async(item)=>{
             console.log("iterms to delete", item)
             await deleteDoc(doc(db, `${userId}contractors`, item))
-           .then(()=>{console.log("sussecfuly deleted")})     
+           .then(()=>{console.log("sussecfuly deleted")})   
+          
      })
-      
+ 
        };
 
 return(<div>Contractors
@@ -84,13 +87,13 @@ return(<div>Contractors
         
     </div>
 ))}
-
-<button onClick={() => setIsEditMode(!isEditMode)}>
+{isEditMode && (
+        <button onClick={handleDeleteClick} className="btn">usun wybranego konrahenta</button>
+    )}
+<button onClick={() => setIsEditMode(!isEditMode)} className="btnsmall">
       {getButtonLabel()}
     </button>
-    {isEditMode && (
-        <button onClick={handleDeleteClick}>remove selected items</button>
-    )}
+    
 
     </div>)
 

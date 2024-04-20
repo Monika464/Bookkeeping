@@ -19,6 +19,7 @@ const userId = currentUser?.uid
 
 useEffect(()=>{
   readingFromBase()
+  //console.log("data from base",dataFromBase )
 },[currentUser])
 
 const readingFromBase = useCallback(async()=>{
@@ -61,7 +62,10 @@ const readingFromBase = useCallback(async()=>{
       //readingFromBase();
      // console.log('dataFromBase',dataFromBase)
       const duplicates = Object.values(dataFromBase).reduce((tempDuplicates, element1, index1, array) => {
+       // console.log("index1",index1, "element1", element1.invoiceNum)
         const foundDuplicates = array.filter((element2, index2) => {
+         // console.log("index2",index2, "element2", element2.invoiceNum)
+         // console.log("pokaz rowne",element1.invoiceNum === element2.invoiceNum,"indexy",index1,index2)
           return element1.invoiceNum === element2.invoiceNum && index1 !== index2;
         });
     
@@ -102,16 +106,21 @@ const readingFromBase = useCallback(async()=>{
     // console.log('duplicates',duplicates)
 
 return(<div>
+  
 <br></br><br></br>
+<ul>
   {/* <button onClick={readingFromBase}>read</button> */}
   {duplicates && <div style={{color: "red"}}>Zdublowane numery faktur</div> && Object.values(duplicates).map((dup, index) => (
-    <div key={index} style={{color: "red"}}>
+   
+    <li key={index} style={{color: "red"}}>
       {dup.type === "incomes" ? "przychody" : "koszty" }
       <br></br>
       {`data   ${dup.day} ${dup.month} ${dup.year}`}
-{` numer ${dup.invoiceNum}, kwota ${dup.amount}, nazwa ${dup.invoiceName}, sprzedawca ${dup.sellerName}, forma ${dup.paymentForm}, opis ${dup.description}`}
-</div>
+     {` numer ${dup.invoiceNum}, kwota ${dup.amount}, nazwa ${dup.invoiceName}, sprzedawca ${dup.sellerName}, forma ${dup.paymentForm}, opis ${dup.description}`}
+    </li>
+
   ))}
+  </ul>
 </div>)
 }
 

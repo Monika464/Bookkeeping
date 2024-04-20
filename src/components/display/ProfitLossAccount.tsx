@@ -82,7 +82,8 @@ const yearAdministration = useCounting(administracja);
    //console.log("dotacje",dotacje) 
     
     
-    return(<div style={{fontSize: 20}}>
+    //return(<div style={{fontSize: 20}}>
+        return(<div>
         <h1>Informacja dodatkowa do bilansu</h1>
         <br></br><br></br>
         Wynik: {yearResult}
