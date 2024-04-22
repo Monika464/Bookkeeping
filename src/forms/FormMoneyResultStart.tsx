@@ -1,11 +1,11 @@
-export interface IFormMoneyResultStart{}
+// export interface IFormMoneyResultStart{}
 
-const FormMoneyResultStart: React.FunctionComponent<IFormMoneyResultStart> =() => {
+// const FormMoneyResultStart: React.FunctionComponent<IFormMoneyResultStart> =() => {
 
-    return(<div>FormMoneyResultStart
+//     return(<div>FormMoneyResultStart
 
       
-    </div>)
-}
+//     </div>)
+// }
 
-export default FormMoneyResultStart;
+// export default FormMoneyResultStart;

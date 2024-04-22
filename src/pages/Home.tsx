@@ -28,6 +28,7 @@ const Home: React.FunctionComponent<IHome> =() => {
  <br></br><br></br>
  <p>Rejestr kontrahentów:</p>
  <button onClick={()=>{redirectTo(`/contractor`)}} className='btn'>Contractors</button>
+ <br></br><br></br>
  <p>Logowanie:</p>
  
  <button onClick={()=>{redirectTo(`/loginout`)}} className='btn'>Login</button>

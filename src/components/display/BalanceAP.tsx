@@ -66,19 +66,19 @@ const BalanceAP: React.FunctionComponent<IBalanceAP> = () => {
         <h3>Aktywa trwałe</h3>
         <p>w tym środki trwałe:{totalAssets} zł</p>
         <h3>Aktywa obrotowe</h3>
-        <p>{yearPrzychody + yearPozyczki +totalCash}zł</p>
+        <p>{yearPrzychody + yearPozyczki +totalCash} zł</p>
         <p>w tym środki pieniężne:{totalCash} zł </p>
        
         {/* <p>Naleznosci: {yearNaleznosci}</p> */}
         <br></br>
         <h2>PASYWA </h2>
-        <p>Fundusz statutowy: {yearZaplacone  + totalAssets +totalCash }</p>
-        <p>Zobowiazania:{ yearNiezaplacone + yearPozyczki}</p> 
-        <p>Wynik: {yearPrzychody - yearKoszty }</p>
+        <p>Fundusz statutowy: {yearZaplacone  + totalAssets +totalCash } zł</p>
+        <p>Zobowiazania:{ yearNiezaplacone + yearPozyczki} zł</p> 
+        <p>Wynik: {yearPrzychody - yearKoszty } zł</p>
 
 <h2>Suma Bilansowa</h2>
-<p>Aktywa {totalAssets + totalCash + yearPrzychody + yearPozyczki}</p>
-<p>Pasywa { yearZaplacone + totalAssets + totalCash + yearNiezaplacone + yearPozyczki + (yearPrzychody - yearKoszty) }</p>
+<p>Aktywa {totalAssets + totalCash + yearPrzychody + yearPozyczki} zł</p>
+<p>Pasywa { yearZaplacone + totalAssets + totalCash + yearNiezaplacone + yearPozyczki + (yearPrzychody - yearKoszty) } zł</p>
 
     </div>)
 }  

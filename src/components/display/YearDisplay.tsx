@@ -117,7 +117,8 @@ try {
         countingIncomes();
      },[dataFromBaseExp,dataFromBaseInc])
 
-    // console.log('yearExpenses',yearExpenses);
+     console.log('yearExpenses',yearExpenses);
+     console.log('dataFromBaseExp',dataFromBaseExp,'dataFromBaseInc',dataFromBaseInc)
      //console.log('yearIncomes',yearIncomes);
      //dopisz daty
 
@@ -142,6 +143,7 @@ try {
  ${exp.sellerName}, 
  ${exp.paymentForm}, 
   ${exp.description},
+  ${exp.category === "service" ? "usługi," : "administracja,"}
  ${exp.paid ? "zaplacony" : 'niezapłacony'}
  `}
       </li>
@@ -171,8 +173,8 @@ try {
 <h3>Wynik</h3> 
 <br></br>
 {((yearIncomes - yearExpenses) > 0) ? 
-` zysk ${yearIncomes - yearExpenses}` :
-` strata ${yearIncomes - yearExpenses}`
+` zysk ${yearIncomes - yearExpenses} zł` :
+` strata ${yearIncomes - yearExpenses} zł`
 }
 
     </div>)
