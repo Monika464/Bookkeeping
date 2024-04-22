@@ -5,7 +5,8 @@ import useCounting from "../../hooks/useCounting";
 
 export interface IBalanceAP{}
 
-const BalanceAP: React.FunctionComponent<IBalanceAP> = (props) => {
+
+const BalanceAP: React.FunctionComponent<IBalanceAP> = () => {
 
     const [totalCash, setTotalCash] = useState(0);
     const [totalAssets, setTotalAssets] = useState(0);
@@ -32,28 +33,23 @@ const BalanceAP: React.FunctionComponent<IBalanceAP> = (props) => {
     const yearKoszty = useCounting(koszty);
     const yearPozyczki = useCounting(pozyczki);
 
-  // console.log("niezaplacone",niezaplacone)
 
     const sumuOfCash =()=>{
         //let totalCash = 0;
-        Object.values(cash).forEach((exp, index) => {   
+        Object.values(cash).forEach((exp: any) => {   
+            //console.log("exp",exp)
             setTotalCash(exp.cashInBank + exp.cashInHand)
         })
     }
 
     const stateOfAssets = ()=>{
-        Object.values(assets).forEach((exp, index) => {   
+        Object.values(assets).forEach((exp: any) => {  
+            // console.log("exp",exp) 
             setTotalAssets(exp.assetsextra)
         })
     }
 
-    // const stateOfObligations =()=>{
-    //     Object.values(obligation).forEach((exp, index) => {   
-    //         setTotalObligation(exp.obligation)
-    //        // console.log("exp",exp.obligation)
-    //     })
-
-    // }
+   
 
     useEffect(()=>{    
         sumuOfCash();
@@ -61,55 +57,18 @@ const BalanceAP: React.FunctionComponent<IBalanceAP> = (props) => {
         //stateOfObligations();
     },[cash,assets])
 
-//zapasy czyli kosztowe faktury zapłacone
-//kosztowe faktury niezaplacome
-//do pasywow zobowiazan
 
-
-//console.log("totcash",totalCash)
-    // let totalExpenses = 0;
-    // Object.values(datafromBase).forEach((exp, index) => {
-    //    // console.log("suma wydatków", exp.amount);
-    //     totalExpenses += parseFloat(exp.amount);
-    //    // setYearExpenses((prevState) => prevState + exp.amount);
-    // });
-  
-    // return totalExpenses;
-
-    //srodki trwale śa z assets
-    //srodki finansowe w kasie i na rachunku
-
-    
-    //znajdz wszytskie expenses opłacone 
-    //to beda zapasy w akt obrotowych
-
-    //DODAJ:
-//incomes nieoplacone czyli naleznosci
-
-///PASYWA FUNDUSZ WLASNY 
-//suma przychodów to fundusz statutowy
-
-
-    //nieopłacone faktury kosztowe 
-    //plus obligation jesli sa
-    // to zadluzenie czyli zobowiązania
-
-    //do tego zysk lub strata
- 
-    //w kapital wlsny
-    //srodki trwale
-    //
-
-
-    //
 
     return(<div>
         <br></br>
         <h1>Bilans</h1>
         <h2>AKTYWA</h2>
-        <p>Srodki trwałe:{totalAssets} zł</p>
-        <p>Srodki pieniężne:{totalCash} zł </p>
-        <p>Zapasy:{yearPrzychody + yearPozyczki}zł</p>
+        <h3>Aktywa trwałe</h3>
+        <p>w tym środki trwałe:{totalAssets} zł</p>
+        <h3>Aktywa obrotowe</h3>
+        <p>{yearPrzychody + yearPozyczki +totalCash}zł</p>
+        <p>w tym środki pieniężne:{totalCash} zł </p>
+       
         {/* <p>Naleznosci: {yearNaleznosci}</p> */}
         <br></br>
         <h2>PASYWA </h2>

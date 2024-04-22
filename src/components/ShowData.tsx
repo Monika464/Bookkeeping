@@ -1,10 +1,23 @@
 
+export interface IInvoice {
+  invoiceNum: string;
+  amount: number;
+  day: number;
+  month: number;
+  invoiceName: string;
+  sellerName: string;
+  paymentForm: string;
+  description: string;
+  paid: boolean;
+}
+
 export interface IShowDataProps {
-    dataToShow: {}
+    dataToShow: IInvoice[];
 }
 const ShowData: React.FunctionComponent<IShowDataProps>=(props) => {
 
     const dataToShow = props.dataToShow;
+    console.log("data to show",dataToShow)
 
     return(
 

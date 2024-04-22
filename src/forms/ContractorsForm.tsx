@@ -17,7 +17,7 @@ interface FormField {
     nip: string;
   }
 
-const ContractorsForm: React.FunctionComponent<IContractorsFormProps> = (props) => {
+const ContractorsForm: React.FunctionComponent<IContractorsFormProps> = () => {
 
     const [formFields, setFormFields] = useState<FormField[]>([]);
     const [nextId, setNextId] = useState<number>(1);
@@ -61,7 +61,7 @@ const ContractorsForm: React.FunctionComponent<IContractorsFormProps> = (props) 
  //console.log("formFields", formFields);
 
 
- const sendToBase = async (e)=>{
+ const sendToBase = async (e: { preventDefault: () => void; })=>{
     e.preventDefault();
     
     // Sprawdź, czy wszystkie pola "kwota w zł" są wypełnione
@@ -114,7 +114,8 @@ const ContractorsForm: React.FunctionComponent<IContractorsFormProps> = (props) 
 
 
     return(<>
-        <button onClick={addFormField} className="btn">Dodaj kontrahenta</button>
+    {showAddButton &&  <button onClick={addFormField} className="btn">Dodaj kontrahenta</button>}
+       
       {formFields.map((field) => (
         <div key={field.id}>
           {/* {field.id}. */}

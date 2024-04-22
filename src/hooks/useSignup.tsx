@@ -5,13 +5,13 @@ import { useNavigate } from "react-router-dom";
 import { useAuthContext } from "./useAuthContext";
 
 export const useSignup = () => {
-     const [error, setError] = useState(null);
+     const [error, setError] = useState<string>('');
      const [isPending, setIsPending] = useState(false)
      const { dispatch } = useAuthContext()
      const navigate = useNavigate();
      
      const signup  = async (email: string, password: string) =>{
-        setError(null);
+        setError('');
         setIsPending(true);
 
 

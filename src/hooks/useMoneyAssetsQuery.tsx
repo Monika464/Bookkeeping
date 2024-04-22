@@ -18,7 +18,7 @@ const useMoneyAssetsQuery  = (elementName: string) => {
     const userId = currentUser?.uid;
     const { editedYear } = useYear();
     const [dataFromBase, setDataFromBase] = useState({})
-    const [isEmpty, setIsEmpty] = useState(false);
+    //const [isEmpty, setIsEmpty] = useState(false);
 
     
     const readQuery =useCallback(async() =>{
@@ -28,10 +28,10 @@ const useMoneyAssetsQuery  = (elementName: string) => {
               where("id", "==", `${elementName} ${editedYear}`)
           )
   
-          let newData = {}
+          let newData: any = {}
                   const querySnapshot1 = await getDocs(q);
                  if(querySnapshot1.empty){
-                  setIsEmpty(true)
+                 // setIsEmpty(true)
                  } else {
   
                   querySnapshot1.forEach((doc) => {
@@ -40,7 +40,7 @@ const useMoneyAssetsQuery  = (elementName: string) => {
                       newData[doc.id] = { ...doc.data(), itid: doc.id };
                     });
                     setDataFromBase(newData)
-                    setIsEmpty(false)
+                   // setIsEmpty(false)
                  }
                 
   

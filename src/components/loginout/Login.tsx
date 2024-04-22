@@ -1,11 +1,8 @@
 
-import React, { ChangeEvent, FormEvent,useContext,useState } from 'react';
+import React, { ChangeEvent, FormEvent,useState } from 'react';
 import './login.css';
 //import {   signInWithEmailAndPassword} from 'firebase/auth';
-import { Link, useNavigate } from 'react-router-dom';
-
-
-import { auth } from "../../App";
+import { Link} from 'react-router-dom';
 import { useLogin } from '../../hooks/useLogin';
 
 
@@ -17,17 +14,6 @@ const Login: React.FunctionComponent<ILoginProps> =() => {
     //const [authing, setIsAuthing] = useState(false)
     
 const {error, isPending, login} = useLogin();
-
-//console.log(login,"login")
-
-  //const [error, setError] = useState('')
-
-    const user = auth.currentUser;
-    //console.log("czy tu cos jest login", user); 
-    // jest jak sie recznie renderuje
-
-    const navigate = useNavigate();
-    //const [authing, setAuthing] = useState(false);
     
     const defaultFormFields = {
       email: '',
@@ -54,20 +40,7 @@ const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     const cleanedPassword = password.trim();
 
   login(cleanedEmail,cleanedPassword)
-//     // Send the email and password to firebase
-//     signInWithEmailAndPassword(auth, cleanedEmail, cleanedPassword)
-//     .then((res) =>{
-//      // useIsAdmin(res.user.uid) ? navigate('/adminpanel') : navigate('/userpanel')   
-//       setAuthing(true)
-//     })
-//     .then((res) =>{console.log("zalogowano")})
 
-//     .catch(error =>{
-//       console.log(error);
-//       setAuthing(false);
-//       setError(error)
-      
-//    })
 
   
 };
@@ -118,7 +91,8 @@ const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
 
           {/* <ForgotPass/> */}
           <Link to={'/forgotpass'} style={{fontSize: 'small'}}>Nie pamiętam hasła</Link>
-         {error && <p>{error.toString().split('Firebase: ')[1]}</p>}
+ 
+         {error && <p>{error.toString().split('Firebase: ')[1]}</p>}  
          {/* {error && typeof error === 'object' && <p>{error.toString().split('Firebase: ')[1]}</p>} */}
     </div>
     )

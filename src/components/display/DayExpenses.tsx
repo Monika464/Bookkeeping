@@ -1,17 +1,17 @@
-import { collection, deleteDoc, deleteField, doc, getDocs, query, updateDoc, where } from "firebase/firestore";
+import { collection, deleteDoc, doc, getDocs, query, updateDoc, where } from "firebase/firestore";
 import { db } from "../../App";
 import { useContext, useEffect, useState } from 'react'
 import { UserContext } from '../../context/UserContext';
-import { Value } from "../Calendar";
+import { Value} from "../Calendar";
 import { getDate, getMonth, getYear } from "date-fns";
-import { useNavigate } from "react-router-dom";
 
-export interface IDayExpenses {
-    thisDay: Value 
-};
+export interface IDayExpenses{
+  thisDay: Value;
+}
 
 //props z calendara to bedzie data this date
 export interface Invoice {
+  [key: string]: string | number | boolean;
   amount: string;
   category: string;
   day: number;
@@ -25,17 +25,17 @@ export interface Invoice {
   paymentForm: string;
   sellerName: string;
 }
+//export type Value = Date | string | null
 
-
-const DayExpenses : React.FunctionComponent<IDayExpenses> =(props) =>{
+const DayExpenses : React.FunctionComponent <IDayExpenses>=(props) =>{
     // const [selectedInvoices, setSelectedInvoices] = useState([]);
-    const [selectedInvoices, setSelectedInvoices] = useState<{[key: string]: Invoice[]}>([]);
+    const [selectedInvoices, setSelectedInvoices] = useState<Invoice[]>([]);
     const [invoices, setInvoices] = useState<{[key: string]: Invoice}>({});
     const [isEditMode, setIsEditMode] = useState(false);
     const [isEditModePaid, setIsEditModePaid] = useState(false);
 
-
-    const thisDay = props.thisDay;
+    //console.log("props",props)
+    const thisDay= props.thisDay;
 
     
     const {currentUser} = useContext(UserContext);
@@ -48,7 +48,7 @@ const DayExpenses : React.FunctionComponent<IDayExpenses> =(props) =>{
     const userId = currentUser?.uid;
     const year: number = getYear(thisDay);
     //console.log("currentUser",currentUser)
-    const navigate = useNavigate();
+    //const navigate = useNavigate();
     
     const readingFromBase =async()=>{
 
@@ -60,7 +60,7 @@ const DayExpenses : React.FunctionComponent<IDayExpenses> =(props) =>{
                 where('type', '==', 'expenses'), 
                 where('day', '==', day), 
               )
-              let newData = {}
+              let newData: any = {}
               const querySnapshot = await getDocs(q);
 
   querySnapshot.forEach((doc) => {
@@ -84,7 +84,7 @@ const DayExpenses : React.FunctionComponent<IDayExpenses> =(props) =>{
 
     }
  
-  console.log('expenses',invoices)
+  //console.log('expenses',invoices)
   //console.log("invoices",invoices)
 
  
@@ -94,7 +94,7 @@ useEffect(()=>{
 },[props])
 
 // Funkcja do obsługi zaznaczania i odznaczania checkboxów
-const handleCheckboxChange = (e) => {
+const handleCheckboxChange = (e: { target: { value: any; checked: any; }; }) => {
     const value = e.target.value;
     if (e.target.checked) {
       setSelectedInvoices([...selectedInvoices, value]);
@@ -108,7 +108,7 @@ const handleCheckboxChange = (e) => {
    // const usersCollectionRef = collection(db, `${userId}`);
 selectedInvoices.map(async(item)=>{
    // console.log("iterms to delete", item)
-   await deleteDoc(doc(db, `${userId}`, item));
+   await deleteDoc(doc(db, `${userId}`, `${item}`));
 })
 //navigate('/loginout');
   };
@@ -122,7 +122,8 @@ const getButtonLabel = () => {
   const handlePayClick = async () => {
     // const usersCollectionRef = collection(db, `${userId}`);
    selectedInvoices.map(async(item)=>{
-     const itemRefI = doc(db, userId, item);
+     //const itemRefI = doc(db, userId, item);
+     const itemRefI = doc(db, `${userId}`, `${item}`);
       if(item){
         await updateDoc(itemRefI, {
          paid: true

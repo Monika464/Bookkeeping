@@ -1,14 +1,29 @@
 export interface IYearDisplay {}
 import { useCallback, useContext, useEffect, useState } from 'react';
 import { UserContext } from '../../context/UserContext';
-import { collection, getDocs, orderBy, query, where } from 'firebase/firestore';
+import { collection, getDocs, query, where } from 'firebase/firestore';
 import { db } from '../../App';
 import { YearSelector, useYear } from '../../context/YearContextType';
 
-const YearDisplay: React.FunctionComponent<IYearDisplay> =(props) => {
+export interface Invoice {
+    [key: string]: string | number | boolean;
+    amount: string;
+    category: string;
+    day: number;
+    description: string;
+    id: number;
+    invoiceName: string;
+    invoiceNum: string;
+    itid: string;
+    month: string;
+    paid: boolean; // Poprawka: zmiana typu na boolean
+    paymentForm: string;
+    sellerName: string;
+}
+const YearDisplay: React.FunctionComponent<IYearDisplay> =() => {
 
-    const [dataFromBaseExp, setDataFromBaseExp] = useState({})
-    const [dataFromBaseInc, setDataFromBaseInc] = useState({})
+    const [dataFromBaseExp, setDataFromBaseExp] = useState<Invoice[]>([])
+    const [dataFromBaseInc, setDataFromBaseInc] = useState<Invoice[]>([])
     const [yearExpenses, setYearExpenses] = useState(0)
     const [yearIncomes, setYearIncomes] = useState(0)
     const {currentUser} = useContext(UserContext);
@@ -35,7 +50,7 @@ try {
             where("type", "==", "expenses"),
 
             );
-         let newDataExp = {}
+         let newDataExp: any = {}
 
         const querySnapshot1 = await getDocs(q1);
         querySnapshot1.forEach((doc) => {
@@ -50,7 +65,7 @@ try {
             where("year", "==", editedYearNum),
             where("type", "==", "incomes"),
             );
-         let newDataInc = {}
+         let newDataInc: any = {}
 
         const querySnapshot2 = await getDocs(q2);
         querySnapshot2.forEach((doc) => {
@@ -78,7 +93,7 @@ try {
     
      const countingExpenses = () => {
         let totalExpenses = 0;
-        Object.values(dataFromBaseExp).forEach((exp, index) => {
+        Object.values(dataFromBaseExp).forEach((exp) => {
            // console.log("suma wydatków", exp.amount);
             totalExpenses += parseFloat(exp.amount);
            // setYearExpenses((prevState) => prevState + exp.amount);
@@ -88,7 +103,7 @@ try {
  
     const countingIncomes = () => {
         let totalIncomes = 0;
-        Object.values(dataFromBaseInc).forEach((inc, index) => {
+        Object.values(dataFromBaseInc).forEach((inc) => {
            // console.log("suma przychodow", inc.amount);
             totalIncomes += parseFloat(inc.amount);
            // setYearExpenses((prevState) => prevState + exp.amount);

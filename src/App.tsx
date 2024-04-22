@@ -1,8 +1,6 @@
 
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import './App.css'
-import Form1 from './forms/Form1'
-import Form2 from './forms/Form2'
 import Home from './pages/Home'
 import Login from './components/loginout/Login'
 import Signup from './components/loginout/Signup'
@@ -12,13 +10,10 @@ import { getFirestore } from 'firebase/firestore'
 import { getStorage } from 'firebase/storage'
 import { getAnalytics } from 'firebase/analytics'
 import { config } from './config'
-import { UserContext, UserContextProvider } from './context/UserContext'
+import { UserContextProvider } from './context/UserContext'
 import YearDisplay from './components/display/YearDisplay'
-import MonthDisplay from './components/display/MonthDisplay'
 import Balance from './pages/Balance'
-import FormLoansCredits from './forms/FormLoansCredits'
 import { YearContextProvider } from './context/YearContextType'
-import ContractorsForm from './forms/ContractorsForm'
 import ContractorsPage from './pages/ContractorsPage'
 import Navbar from './components/Navbar'
 import LogInOut from './pages/LogInOut'
@@ -100,7 +95,7 @@ function App() {
 <Route 
         path="/hej" 
         element={
-         <CheckForDuplicates/>  
+         <CheckForDuplicates year={undefined} type={''} amount={''} category={''} day={0} description={''} id={0} invoiceName={''} invoiceNum={''} itid={''} month={''} paid={false} paymentForm={''} sellerName={''}/>  
                }              
          />
 

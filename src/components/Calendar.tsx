@@ -8,57 +8,32 @@ import { pl } from "date-fns/locale";
 import DayExpenses from "./display/DayExpenses";
 import Form3 from "../forms/Form3";
 import DayIncomes from "./display/DayIncomes";
-import { useYear } from "../context/YearContextType";
 import CheckForDuplicates from "./display/CheckForDuplicate";
 
-export interface ICalendarProps {};
+export type Value = Date | string
+// export type ValuePiece = Date | string | null;
+//export type Value = ValuePiece | [ValuePiece, ValuePiece];
 
-export type ValuePiece = Date | string | null;
-//type ValuePiece = Date;
-
-export type Value = ValuePiece | [ValuePiece, ValuePiece];
-
-const CalendarElement: React.FunctionComponent<ICalendarProps> =() => {
-    const [value, onChange] = useState<Value>(new Date());
-    const [chosenDay, setChosenDay] = useState<ValuePiece>();
-    const { editedYear } = useYear();
-  //console.log("hej", format(value, 'do LLLL yyyy', {locale: pl}))  
-    // console.log("typeV",typeof(value))
-    // const today = new Date();
-    //console.log("today",typeof(today))
-
-    const saveToDatabase = (selectedDate: ValuePiece) => {
-        // Tutaj można dodać kod odpowiedzialny za zapisanie daty w bazie danych
-        // W tym przykładzie użyjemy prostego alertu, aby pokazać, że data została zapisana
-        alert(`Wybrana data: ${selectedDate}`);
+const CalendarElement: React.FunctionComponent =() => {
+    const [value, setValue] =  useState<Value>(new Date());
+ 
+    const [chosenDay, setChosenDay] = useState<Value>();
+   
+    const handleDayClick = (elem: string | Date) => {
+      
+        setChosenDay(elem);
+       setValue(elem);
+        
+        //setChosenDay(value instanceof Date ? value : null)   
     };
 
-    const handleDayClick = (value: ValuePiece) => {
-       setChosenDay(value);
-        //setChosenDay(value instanceof Date ? value : null)
-    };
 
-    // const sendSelectedDateExpense = () => {
-    //     if (chosenDay !== undefined && chosenDay !== null) {
-    //         saveToDatabase(chosenDay);
-    //     }
-    // };
-
-    // const sendSelectedDateIncome = () => {
-    //     if (chosenDay !== undefined && chosenDay !== null) {
-    //         saveToDatabase(chosenDay);
-    //     }
-    // };
-
-    //console.log("chosenDay",typeof(chosenDay))
-    //console.log("chosenDay2",new Date(chosenDay?.getTime()))
-    //to jest format daty
 
     return (
         <div>
              
              <br></br>
-            <Calendar onChange={onChange} value={value} onClickDay={handleDayClick} />
+            <Calendar onChange={()=> handleDayClick} value={value} onClickDay={handleDayClick} />
 
             {chosenDay && (
                
@@ -83,7 +58,7 @@ const CalendarElement: React.FunctionComponent<ICalendarProps> =() => {
                  </div>
             )}
 
-<CheckForDuplicates/>
+<CheckForDuplicates year={undefined} type={""} amount={""} category={""} day={0} description={""} id={0} invoiceName={""} invoiceNum={""} itid={""} month={""} paid={false} paymentForm={""} sellerName={""}/>
 
         </div>
     );
@@ -91,28 +66,6 @@ const CalendarElement: React.FunctionComponent<ICalendarProps> =() => {
 
 export default CalendarElement;
 
-// import { useState } from "react";
-// import Calendar from 'react-calendar'
-// import 'react-calendar/dist/Calendar.css';
-
-// export interface ICalendarProps {};
-
-// type ValuePiece = Date | null;
-
-// type Value = ValuePiece | [ValuePiece, ValuePiece];
-
-// const CalendarPage: React.FunctionComponent<ICalendarProps> =() => {
-//     const [value, onChange] = useState<Value>(new Date());
-//     const [chosenDay, setChosenDay] = useState<number>()
-//     console.log("value", value)
-
-// return( <div>
-//     <Calendar onChange={onChange} value={value} />
- 
-//   </div>)
-// }
-
-// export default CalendarPage;
 
 
-//https://www.npmjs.com/package/react-calendar
+// //https://www.npmjs.com/package/react-calendar

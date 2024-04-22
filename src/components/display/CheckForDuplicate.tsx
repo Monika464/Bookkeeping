@@ -4,14 +4,27 @@ import { useCallback, useContext, useEffect, useState } from 'react'
 import { UserContext } from '../../context/UserContext';
 
 export interface IDup  {
-   
+  year: any;
+  type: string;
+  amount: string;
+  category: string;
+  day: number;
+  description: string;
+  id: number;
+  invoiceName: string;
+  invoiceNum: string;
+  itid: string;
+  month: string;
+  paid: boolean; // Poprawka: zmiana typu na boolean
+  paymentForm: string;
+  sellerName: string;
 };
 
-const CheckForDuplicates : React.FunctionComponent<IDup> =(props) =>{
+const CheckForDuplicates : React.FunctionComponent<IDup> =() =>{
 
 const [duplicates,setDuplicates] = useState<IDup[] | null>();
 const [dataFromBase, setDataFromBase] = useState({})
-const [dataFromBase2, setDataFromBase2] = useState({})
+//const [dataFromBase2, setDataFromBase2] = useState({})
 const {currentUser} = useContext(UserContext);
 
 
@@ -25,9 +38,8 @@ useEffect(()=>{
 const readingFromBase = useCallback(async()=>{
 
    try {
-    let newData = {};
-    let newDataAssets = {};
-    //const testD = []
+    //let newData  ={};
+    let newData: { [key: string]: {} } = {};
     const querySnapshot = await getDocs(collection(db, `${userId}`));
     
     querySnapshot.forEach((doc) => {
@@ -55,55 +67,24 @@ const readingFromBase = useCallback(async()=>{
     
    }
       
-},[setDataFromBase, setDataFromBase2, userId])
+},[setDataFromBase, userId])
 
      
      useEffect(() => {
-      //readingFromBase();
-     // console.log('dataFromBase',dataFromBase)
-      const duplicates = Object.values(dataFromBase).reduce((tempDuplicates, element1, index1, array) => {
-       // console.log("index1",index1, "element1", element1.invoiceNum)
-        const foundDuplicates = array.filter((element2, index2) => {
-         // console.log("index2",index2, "element2", element2.invoiceNum)
-         // console.log("pokaz rowne",element1.invoiceNum === element2.invoiceNum,"indexy",index1,index2)
-          return element1.invoiceNum === element2.invoiceNum && index1 !== index2;
+   
+      const duplicates: any = Object.values(dataFromBase).reduce((tempDuplicates: any, element1:any, index1, array) => {
+          const foundDuplicates = array.filter((element2: any, index2) => {
+           return element1.invoiceNum === element2.invoiceNum && index1 !== index2;
         });
-    
-        if (foundDuplicates.length > 0) {
+            if (foundDuplicates.length > 0) {
           tempDuplicates.push(element1);
         }
-    
-        return tempDuplicates;
+            return tempDuplicates;
       }, []);
-    
-      setDuplicates(duplicates);
+          setDuplicates(duplicates);
     }, [dataFromBase]);
 
-    //  useEffect(()=>{
-    //   Object.values(dataFromBase).forEach((element1, index1) => {
 
-    //     console.log('element1',element1.invoiceNum)
-
-    //     const temp =[]
-          
-    //     Object.values(dataFromBase).forEach((element2, index2) => {
-         
-    //     if( (element1.invoiceNum === element2.invoiceNum) && (index1 !== index2) ){
-
-    //       console.log("identyczne",element1.invoiceNum)
-      
-    //    temp.push(element1)
-    //     }
-    //     })
-  
-    //     setDuplicates(temp)
-        
-    //    })
-    //  },[dataFromBase])
-     
-
-  
-    // console.log('duplicates',duplicates)
 
 return(<div>
   

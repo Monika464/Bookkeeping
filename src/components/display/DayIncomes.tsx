@@ -1,4 +1,4 @@
-import { collection, deleteDoc, deleteField, doc, getDocs, query, updateDoc, where } from "firebase/firestore";
+import { collection, deleteDoc, doc, getDocs, query, updateDoc, where } from "firebase/firestore";
 import { db } from "../../App";
 import { useContext, useEffect, useState } from 'react'
 import { UserContext } from '../../context/UserContext';
@@ -7,10 +7,11 @@ import { getDate, getMonth, getYear } from "date-fns";
 import '../../index.css'
 
 export interface IDayIncomes  {
-    thisDay: Value
+    thisDay: Value;
 };
 
 export interface Invoice {
+  [key: string]: string | number | boolean;
   amount: string;
   category: string;
   day: number;
@@ -60,7 +61,7 @@ const monthName = monthNames[month];
                 where('type', '==', 'incomes'), 
                 where('day', '==', day), 
               )
-              let newData = {}
+              let newData: any = {}
               const querySnapshot = await getDocs(q);
                 querySnapshot.forEach((doc) => {
                 // console.log(doc.id, " march=> ", doc.data());
@@ -88,7 +89,7 @@ useEffect(()=>{
 },[props])
 
 // Funkcja do obsługi zaznaczania i odznaczania checkboxów
-const handleCheckboxChange = (e) => {
+const handleCheckboxChange = (e: { target: { value: any; checked: any; }; }) => {
     const value = e.target.value;
     if (e.target.checked) {
       setSelectedInvoices([...selectedInvoices, value]);
@@ -102,7 +103,7 @@ const handleCheckboxChange = (e) => {
    // const usersCollectionRef = collection(db, `${userId}`);
 selectedInvoices.map((item)=>{
    // console.log("iterms to delete", item)
-    deleteDoc(doc(db, `${userId}`, item));
+    deleteDoc(doc(db, `${userId}`, `${item}`));
 })
    
   };
@@ -117,7 +118,7 @@ const getButtonLabel = () => {
   const handlePayClick = async () => {
     // const usersCollectionRef = collection(db, `${userId}`);
  selectedInvoices.map((item)=>{
-  const itemRefI = doc(db, userId, item);
+  const itemRefI = doc(db, `${userId}`, `${item}`);
   if(item){
     updateDoc(itemRefI, {
      paid: true

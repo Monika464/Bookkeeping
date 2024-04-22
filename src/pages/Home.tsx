@@ -1,6 +1,5 @@
 
-import { useContext } from 'react'
-import { UserContext } from '../context/UserContext';
+
 import { To, useNavigate } from "react-router-dom";
 //import DynamicForm3 from "../forms/Form3";
 
@@ -18,10 +17,19 @@ const Home: React.FunctionComponent<IHome> =() => {
 
     return(<>
  
+ <p>Zapisywanie faktur:</p>
  <button onClick={()=>{redirectTo(`/calendar`)}} className='btn'>Calendar</button>
- <button onClick={()=>{redirectTo(`/balance`)}} className='btn'>Balance</button>
+ <br></br><br></br>
+ <p>Bilans:</p>
+  <button onClick={()=>{redirectTo(`/balance`)}} className='btn'>Balance</button>
+  <br></br><br></br>
+ <p>Zestawienie roczne faktur</p>
  <button onClick={()=>{redirectTo(`/year`)}} className='btn'>Year</button>
+ <br></br><br></br>
+ <p>Rejestr kontrahentów:</p>
  <button onClick={()=>{redirectTo(`/contractor`)}} className='btn'>Contractors</button>
+ <p>Logowanie:</p>
+ 
  <button onClick={()=>{redirectTo(`/loginout`)}} className='btn'>Login</button>
  {/* <button onClick={redirectToAdminPanel}>Calendar</button> */}
     </>)

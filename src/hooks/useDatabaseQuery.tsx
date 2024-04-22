@@ -1,6 +1,6 @@
 import { useCallback, useContext, useEffect, useState } from "react";
 import { UserContext } from "../context/UserContext";
-import { and, collection, getDocs, or, query, where } from "firebase/firestore";
+import { collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "../App";
 import { useYear } from "../context/YearContextType";
 
@@ -45,7 +45,7 @@ export interface IDatabaseQuery{
                 where(`${other1}`, "==", other2),
                  where("type", "==", `${typeInvoice}`)   
                 )
-                let newData = {}
+                let newData: any = {}
                 const querySnapshot1 = await getDocs(q);
                 querySnapshot1.forEach((doc) => {
                   // doc.data() is never undefined for query doc snapshots
@@ -64,7 +64,7 @@ export interface IDatabaseQuery{
               
                 )
 
-                let newData = {}
+                let newData: any = {}
                 const querySnapshot1 = await getDocs(q);
 
              

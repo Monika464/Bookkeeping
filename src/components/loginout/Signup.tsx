@@ -1,13 +1,6 @@
 
-import React, { ChangeEvent, FormEvent, useContext, useState } from 'react';
+import React, { ChangeEvent, FormEvent, useState } from 'react';
 import './login.css';
-import { 
-  createUserWithEmailAndPassword, 
-  getAuth,
-   signOut
-  } from 'firebase/auth';
-import { useNavigate } from 'react-router-dom';
-import { UserContext } from '../../context/UserContext';
 import { useSignup } from '../../hooks/useSignup';
 
 
@@ -16,11 +9,11 @@ export interface IApplicationProps {};
 
 
 const Signup: React.FunctionComponent<IApplicationProps> =() => {
-    const auth = getAuth();
-    const navigate = useNavigate();
+    // const auth = getAuth();
+    // const navigate = useNavigate();
    
 
-    const { currentUser} = useContext(UserContext);
+    //const { currentUser} = useContext(UserContext);
     
     const {error, isPending, signup} = useSignup();
 
@@ -40,10 +33,10 @@ const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
   setFormFields({...formFields, [name]: value })
 }
 
-const logout=()=> {
-  navigate('/login');
-    return signOut(auth);
-    }
+// const logout=()=> {
+//   navigate('/login');
+//     return signOut(auth);
+//     }
     
 const handleSubmit = async(event: FormEvent<HTMLFormElement>) => {
   event.preventDefault()   

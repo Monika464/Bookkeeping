@@ -1,13 +1,12 @@
 //EXPENSES
 // //EXPENCES 
 
-import React, { useEffect, useState } from 'react';
-import { format, getDate, getMonth, getYear, parse } from 'date-fns';
+import React, { useState } from 'react';
+import { getDate, getMonth, getYear} from 'date-fns';
 import { useContext } from 'react'
 import { UserContext } from '../context/UserContext';
-import { collection, doc, getDoc, getDocs, query, serverTimestamp, setDoc, where } from 'firebase/firestore';
+import { collection, doc, serverTimestamp, setDoc} from 'firebase/firestore';
 import { db } from '../App';
-import { pl } from 'date-fns/locale';
 import { Value } from '../components/Calendar';
 import useGetContractors from '../hooks/useGetContractors';
 
@@ -26,10 +25,10 @@ interface FormField {
 }
 
 interface IForm3 {
-  thisDay: ValuePiece;
+  thisDay: Value;
 }
 
-type ValuePiece = Date | null | string;
+//type ValuePiece = Date | null | string;
 
 const DynamicForm3: React.FC<IForm3> = (props) => {
   
@@ -108,7 +107,7 @@ const DynamicForm3: React.FC<IForm3> = (props) => {
   //formFields.map((el)=>{console.log("el",el)})
 //tu bedzie funcja wysylajaca do bazy
 
-const sendToBase = async (e)=>{
+const sendToBase = async (e: { preventDefault: () => void; })=>{
    e.preventDefault();
    // Sprawdź, czy wszystkie pola "kwota w zł" są wypełnione
 const isAmountFilled = formFields.every(field => field.amount.trim() !== '');
@@ -185,7 +184,7 @@ if (!isAmountFilled) {
   onChange={(e) => handleInputChange(field.id, 'sellerName', e.target.value)}
 >
   <option value="">Kontrahent</option>
-  {Object.values(contractors).map((contractor, index) => (
+  {Object.values(contractors).map((contractor: any) => (
     <option key={contractor.itid} value={`${contractor.companyName} ${contractor.nip}`}>
       {`${contractor.companyName} ${contractor.nip}`}
     </option>
@@ -227,7 +226,7 @@ if (!isAmountFilled) {
   onChange={(e) => {
     // Konwertuj wartość z powrotem na boolean
     const value = e.target.value === "true" ? true : false;
-    handleInputChange(field.id, 'paid', value);
+    handleInputChange(field.id, 'paid', `${value}`);
   }}
 >
 <option value="true">opłacone</option>

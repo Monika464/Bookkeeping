@@ -2,20 +2,22 @@ import { useCallback, useContext, useEffect, useState } from "react";
 import { UserContext } from "../context/UserContext";
 import { collection, deleteField, doc, getDocs, query, setDoc, updateDoc, where } from "firebase/firestore";
 import { db } from "../App";
-import { YearSelector, useYear } from "../context/YearContextType";
+import { useYear } from "../context/YearContextType";
 
-interface CashState {
+export interface ICashState {
     totalCash: number;
     cashInHand: number;
     cashInBank: number;
+    id: string;
   }
   
   const CashForm: React.FC = () => {
 
-    const [cashState, setCashState] = useState<CashState>({
+    const [cashState, setCashState] = useState<ICashState>({
       totalCash: 0,
       cashInHand: 0,
       cashInBank: 0,
+      id: '',
     });
   
     const [cashInHandInput, setCashInHandInput] = useState<number | ''>('');
@@ -58,7 +60,7 @@ interface CashState {
     const saveInBase = async()=>{
        
         if(editedYear){
-            const itemRefI = doc(db, uid, `cash ${editedYear}`)  
+            const itemRefI = doc(db,`${uid}`, `cash ${editedYear}`)  
               await setDoc(itemRefI, {
                 cashInHand: cashState.cashInHand,
                 cashInBank: cashState.cashInBank,
@@ -73,7 +75,7 @@ interface CashState {
     const removeState =async ()=>{
 
         if(editedYear){
-            const itemRefI = doc(db, uid, `cash ${editedYear}`) 
+            const itemRefI = doc(db,`${uid}`, `cash ${editedYear}`) 
         await updateDoc(itemRefI, {
             cashInHand: deleteField(),
             cashInBank: deleteField(),
@@ -91,7 +93,7 @@ interface CashState {
             where("id", "==", `cash ${editedYear}`)
         )
 
-        let newData = {}
+        let newData: any = {}
                 const querySnapshot1 = await getDocs(q);
                if(querySnapshot1.empty){
                 setIsEmpty(true)
@@ -102,6 +104,7 @@ interface CashState {
                    // console.log("nasz rok",doc.id, " => ", doc.data());
                     newData[doc.id] = { ...doc.data(), itid: doc.id };
                   });
+                 // console.log("newData",newData)
                   setDataFromBase(newData)
                   setIsEmpty(false)
                }
@@ -120,24 +123,24 @@ interface CashState {
 
 {!isEmpty && <div>
 
-    {Object.values(dataFromBase).map((element, index) => (
+    {Object.values(dataFromBase).map((element: any, index) => (
       <div key={index}>
-        w kasie: {element.cashInHand} w banku {element.cashInBank} poczatek {element.id}
+        w kasie: {element.cashInHand} w banku: {element.cashInBank}
         </div>
 ))}
 
-<button onClick={removeState}>wyczysc stan kasy</button>
+<button onClick={removeState} className="btnsmall">wyczysc stan kasy</button>
     </div>}
 
 
 {isEmpty && <div>
     
     <label>
-          Stan kasy na początku okresu bilansowego:
+          Stan kasy w ostatnim dniu bilansu:
           <input type="number" value={cashState.totalCash} onChange={handleTotalCashChange} />
         </label>
         <br />
-        <button onClick={handleOkClick}>OK</button>
+        <button onClick={handleOkClick} className="btnsmall">OK</button>
         {/* <button onClick={removeState}>wyczysc stan kasy</button> */}
   
 
@@ -152,14 +155,14 @@ interface CashState {
               />
             </label>
             <br />
-            <button onClick={handleCalculateClick}>Oblicz</button>
+            <button onClick={handleCalculateClick} className="btnsmall">Oblicz</button>
             <br />
             <div>
               Gotówka: {cashState.cashInHand}
               <br />
               Na koncie: {cashState.cashInBank}
             </div>
-             <button onClick={saveInBase}>zapisz w bazie</button>
+             <button onClick={saveInBase} className="btnsmall">zapisz w bazie</button>
 
           </div>
 

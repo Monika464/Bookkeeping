@@ -1,23 +1,43 @@
-import {ReactNode, createContext,useReducer } from 'react'
+import {Dispatch, ReactNode, createContext,useReducer } from 'react'
 
 interface Props {
     children?: ReactNode
   }
   
-  interface IAuthState {
-    user: any
-  }
+  // interface IAuthState {
+  //   user: any
+  // }
+  interface IUser {
+    // definicja użytkownika
+    providerId: string; 
+uid: string;  
 
+  }
+  
+  interface IAuthState {
+    // definicja stanu autentykacji
+    user: IUser | null;
+  }
+  export interface IAuthContext {
+    state: IAuthState;
+    dispatch: Dispatch<{ type: string; payload: IUser }>; // zmień na odpowiedni typ akcji
+  }
   
 // export const AuthContext= createContext('authcontext')
+///
+
+//export const AuthContext = createContext<IAuthContext | undefined>(undefined);
+
 export const AuthContext = createContext<{
     state: IAuthState;
-    dispatch: React.Dispatch<null>;
+    dispatch: React.Dispatch<{ type: string; payload: IUser }>;
   }>
   ({
     state: { user: null },
     dispatch: () => null
   });
+
+  ////
 
 export const authReducer =(state: IAuthState, action: any) =>{
     switch(action.type) {
@@ -45,6 +65,7 @@ export const AuthContextProvider: React.FC<Props> =({children}) =>{
  })
 
 console.log("auth context", state)
+
 
 //https://react.dev/reference/react/createContext
 //https://react.dev/reference/react/useReducer

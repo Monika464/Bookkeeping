@@ -3,19 +3,18 @@ import { useYear } from "../context/YearContextType";
 import { collection, deleteField, doc, getDocs, query, setDoc, updateDoc, where } from "firebase/firestore";
 import { db } from "../App";
 import { UserContext } from "../context/UserContext";
-import ShowData from "../components/ShowData";
-import { is } from "date-fns/locale/is";
+
 
 export interface IAssetsForAmortisationProps {}
 
-const AssetsForAmortisation: React.FunctionComponent<IAssetsForAmortisationProps> = (props) => {
+const AssetsForAmortisation: React.FunctionComponent<IAssetsForAmortisationProps> = () => {
     const [assetsState, setAssetsState] = useState(0);
     const [assetsStateInBase, setAssetsStateInBase] = useState(0);
     const [isSend, setIssend] = useState(false)
     const { editedYear } = useYear();
     const {currentUser} = useContext(UserContext);
     const uid = currentUser?.uid
-    const editedYearNum = parseInt(editedYear);
+    //const editedYearNum = parseInt(editedYear);
     const [isEmptyAsset, setIsEmptyAsset] = useState(false);
 
     const handleTotalAssetsChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -27,7 +26,7 @@ const AssetsForAmortisation: React.FunctionComponent<IAssetsForAmortisationProps
     const saveInBase = async()=>{
        
         if(editedYear){
-            const itemRefI = doc(db, uid, `assets ${editedYear}`)  
+            const itemRefI = doc(db, `${uid}`, `assets ${editedYear}`)  
               await setDoc(itemRefI, {
                 assetsextra: assetsState,
                 id: `assets ${editedYear}`
@@ -45,7 +44,7 @@ const AssetsForAmortisation: React.FunctionComponent<IAssetsForAmortisationProps
                 where("id", "==", `assets ${editedYear}`)
               )
           
-              let newData = {}
+              let newData: any = {}
                       const querySnapshot1 = await getDocs(q);
                      if(querySnapshot1.empty){
                         setIsEmptyAsset(true)
@@ -77,7 +76,7 @@ const AssetsForAmortisation: React.FunctionComponent<IAssetsForAmortisationProps
           const removeAssets =async ()=>{
 
             if(editedYear){
-                const itemRefI = doc(db, uid, `assets ${editedYear}`) 
+                const itemRefI = doc(db, `${uid}`, `assets ${editedYear}`) 
             await updateDoc(itemRefI, {
               assetsextra: deleteField(),
                 id:deleteField()
@@ -97,7 +96,8 @@ const AssetsForAmortisation: React.FunctionComponent<IAssetsForAmortisationProps
             </label>
             <br></br>
             {assetsState}
-            <button onClick={saveInBase}>wyslij</button>
+            <br></br>
+            <button onClick={saveInBase} className="btnsmall">wyslij</button>
             {isSend && <p>zapisano w bazie</p>}
             {/* {assetsStateInBase} */}
             </div>}
@@ -110,7 +110,7 @@ const AssetsForAmortisation: React.FunctionComponent<IAssetsForAmortisationProps
         </div>
      ))}
 
-<button onClick={removeAssets}>wyczysc stan środków trwałych</button>
+<button onClick={removeAssets} className="btnsmall">wyczysc stan środków trwałych</button>
               </div>}
         </div>
     );

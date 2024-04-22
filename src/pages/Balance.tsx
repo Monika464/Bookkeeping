@@ -32,7 +32,7 @@ const Balance: React.FunctionComponent<IBalance> =() => {
 Edytujesz rok: {editedYear}
 <br></br><br></br>
 
-<button onClick={handleEdit} >
+<button onClick={handleEdit} className="btnsmall" >
 {isEdited ? 'Zakończ edycję' : 'Edytuj dane uzupełniające'}
 </button>
 

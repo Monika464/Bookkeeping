@@ -1,29 +1,26 @@
-import { useContext, useEffect, useState } from "react";
-import { useYear } from "../../context/YearContextType";
+
 import useDataBaseQuery from "../../hooks/useDatabaseQuery";
-import { UserContext } from "../../context/UserContext";
-import useMoneyAssetsQuery from "../../hooks/useMoneyAssetsQuery";
 import useCounting from "../../hooks/useCounting";
 
 export interface IProfitLossAccount {}
 
-const ProfitLossAccount: React.FunctionComponent<IProfitLossAccount> =(props) => {
+const ProfitLossAccount: React.FunctionComponent<IProfitLossAccount> =() => {
 
     //const {currentUser} = useContext(UserContext);
 
 
    // const userId = currentUser?.uid;
-    const { editedYear } = useYear();
-    const editedYearNum = parseInt(editedYear)
+   // const { editedYear } = useYear();
+   // const editedYearNum = parseInt(editedYear)
 //const [yearExpenses, setYearExpenses] = useState(0);
 //const [yearIncomes, setYearIncomes] = useState(0);
 
     //const dane = useDataBaseQuery(editedYearNum,"expenses","paymentForm","gotowka");
-    const dane = useDataBaseQuery("expenses","paymentForm","gotowka");
+   // const dane = useDataBaseQuery("expenses","paymentForm","gotowka");
    // console.log("daneGotowq",dane)
-    const daneprzel = useDataBaseQuery("expenses","paymentForm","przelew");
+    //const daneprzel = useDataBaseQuery("expenses","paymentForm","przelew");
     //console.log("daneprzel",daneprzel)
-    const danepPrzychInne = useDataBaseQuery("incomes","source","inne");
+    //const danepPrzychInne = useDataBaseQuery("incomes","source","inne");
    // console.log("danepPrzychInne",danepPrzychInne)
     // const daneNieoplKoszty = useDataBaseQuery("expenses","paid","false");
     // console.log("daneNieoplKoszty",daneNieoplKoszty)
@@ -55,31 +52,7 @@ const yearInne = useCounting(inne);
 const yearUslugi = useCounting(uslugi);
 const yearAdministration = useCounting(administracja);
 
-    const inneDane1 = useMoneyAssetsQuery("cash");
-    const inneDane2 = useMoneyAssetsQuery("assets");
-    const inneDane3 = useMoneyAssetsQuery("obligation");
-    // console.log("inneDane1",inneDane1);
-    // console.log("inneDane2",inneDane2)
-    // console.log("inneDane3",inneDane3)
 
-
-    //  A. Przychody z działalności statutowej
-    // dotacje
-    //składki
-    //darowizny
-    //pozostale
-
-    //B. Koszty działalności statutowej
-    // wszystkie koszty
-    //podzielone na usługi i administracyjne
-
-    // C. Zysk (strata) z działalności statutowej (A-B)
-
-
-
-
-    
-   //console.log("dotacje",dotacje) 
     
     
     //return(<div style={{fontSize: 20}}>

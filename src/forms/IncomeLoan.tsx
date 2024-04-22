@@ -1,30 +1,29 @@
-import { useCallback, useContext, useEffect, useState } from "react";
-import useQuerySrodkiTrwale from "../hooks/useQuerySrodkiTrwale";
-import { collection, deleteDoc, doc, getDocs, query, updateDoc, where } from "firebase/firestore";
+import { SetStateAction, useCallback, useContext, useEffect, useState } from "react";
+import { collection, doc, getDocs, query, updateDoc, where } from "firebase/firestore";
 import { UserContext } from "../context/UserContext";
 import { useYear } from "../context/YearContextType";
 import { db } from "../App";
-import ShowData from "../components/ShowData";
+
 
 export interface IIncomeLoan{}
 
-const IncomeLoan: React.FC<IIncomeLoan> = (props) => {
+const IncomeLoan: React.FC<IIncomeLoan> = () => {
 
     const [dataFromBaseInc, setDataFromBaseInc] = useState({})
-    const [isEmptyInc, setIsEmptyInc] = useState(false);
+    //const [isEmptyInc, setIsEmptyInc] = useState(false);
     const [dataFromBaseIncLoan, setDataFromBaseIncLoan] = useState({})
-  const [isEmptyIncLong, setIsEmptyIncLoan] = useState(false);
-    const [selectedOptionI, setSelectedOptionI] = useState('');
+  //const [isEmptyIncLong, setIsEmptyIncLoan] = useState(false);
+    const [selectedOptionI, setSelectedOptionI] = useState<string>('');
     const [sendI,isSendI] = useState(false);
     const [isEditMode, setIsEditMode] = useState(false);
-    const [selectedInvoices, setSelectedInvoices] = useState([]);
+    const [selectedInvoices, setSelectedInvoices] = useState<String[]>([]);
 
     const {currentUser} = useContext(UserContext);
     const uid = currentUser?.uid
     const { editedYear } = useYear();
  const editedYearNum = parseInt(editedYear);
 
- //console.log("editedYear",editedYear)
+
     
  const readIncomes =useCallback(async() =>{
         //  const itemRefI = doc(db, uid, `cash ${editedYear}`) 
@@ -35,10 +34,10 @@ const IncomeLoan: React.FC<IIncomeLoan> = (props) => {
             //   where("longTerm", "==", true)
           )
       
-          let newData = {}
+          let newData: any = {}
                   const querySnapshot1 = await getDocs(q);
                  if(querySnapshot1.empty){
-                  setIsEmptyInc(true)
+                 // setIsEmptyInc(true)
                  } else {
       
                   querySnapshot1.forEach((doc) => {
@@ -47,7 +46,7 @@ const IncomeLoan: React.FC<IIncomeLoan> = (props) => {
                       newData[doc.id] = { ...doc.data(), itid: doc.id };
                     });
                     setDataFromBaseInc(newData)
-                    setIsEmptyInc(false)
+                   // setIsEmptyInc(false)
                  }
                 
       
@@ -66,10 +65,10 @@ const IncomeLoan: React.FC<IIncomeLoan> = (props) => {
               where("loan", "==", true)
           )
       
-          let newData = {}
+          let newData: any = {}
                   const querySnapshot1 = await getDocs(q);
                  if(querySnapshot1.empty){
-                  setIsEmptyIncLoan(true)
+                 // setIsEmptyIncLoan(true)
                  } else {
       
                   querySnapshot1.forEach((doc) => {
@@ -80,7 +79,7 @@ const IncomeLoan: React.FC<IIncomeLoan> = (props) => {
                     //console.log("new data", newData)
                     setDataFromBaseIncLoan(newData)
                    // console.log("dataFromBaseIncLong",dataFromBaseIncLoan)
-                    setIsEmptyIncLoan(false)
+                   // setIsEmptyIncLoan(false)
                  }
                 
       
@@ -88,9 +87,9 @@ const IncomeLoan: React.FC<IIncomeLoan> = (props) => {
                  //console.log("dataFromBaseIncLoan",dataFromBaseIncLoan)
       },[uid,editedYear])
 
-      // useEffect(() => {
-      //   console.log("dataFromBaseIncLoan", dataFromBaseIncLoan);
-      // }, [dataFromBaseIncLoan]);
+      useEffect(() => {
+        //console.log("dataFromBaseIncLoan", dataFromBaseIncLoan);
+      }, [dataFromBaseIncLoan]);
       
 
       useEffect(()=>{
@@ -99,13 +98,13 @@ const IncomeLoan: React.FC<IIncomeLoan> = (props) => {
         
       },[uid,editedYear,readIncomes,readIncomesLoan])
 
-      const handleSelectChangeI = (event) => {
+      const handleSelectChangeI = (event: { target: { value: SetStateAction<string>; }; }) => {
         setSelectedOptionI(event.target.value); // Ustawienie nowej wybranej wartości
         isSendI(false)
       };
 
       const updateInvest = async()=>{
-        const itemRefI = doc(db, uid, selectedOptionI)
+        const itemRefI = doc(db, `${uid}`, selectedOptionI)
         if(selectedOptionI){
           await updateDoc(itemRefI, {
               loan: true
@@ -116,27 +115,30 @@ const IncomeLoan: React.FC<IIncomeLoan> = (props) => {
       };
 
       // Funkcja do obsługi zaznaczania i odznaczania checkboxów
-const handleCheckboxChange = (e) => {
+const handleCheckboxChange = (e: { target: { value: any; checked: any; }; }) => {
   const value = e.target.value;
+  //console.log("value",value)
   if (e.target.checked) {
     setSelectedInvoices([...selectedInvoices, value]);
+    //console.log("selectedInvoices",selectedInvoices)
   } else {
     setSelectedInvoices(selectedInvoices.filter(invoice => invoice !== value));
   }
 };
 
+
 // Funkcja do zmiany nazwy przycisku
 const getButtonLabel = () => {
-  return isEditMode ? "Finish" : "Edit";
+  return isEditMode ? "zakończ edycję" : "Edytuj";
 };
 
 //delete updatujac w bazie czyli usywajac zawartosc loan
 const handleDeleteClick = async () => {
   // const usersCollectionRef = collection(db, `${userId}`);
-  selectedInvoices.map((item)=>{
+  selectedInvoices.map(async(item)=>{
 
-   const docRef = doc(db, `${uid}`, item);
-   const updateTimestamp = updateDoc(docRef, {
+   const docRef = doc(db, `${uid}`, `${item}`);
+   await updateDoc(docRef, {
     loan: false
 });
 })
@@ -147,8 +149,8 @@ const handleDeleteClick = async () => {
         Oznacz otrzymany kredyt lub pozyczkę pozyczki
         <br></br>
         <select value={selectedOptionI} onChange={handleSelectChangeI}>
-  <option value="" disabled defaultValue>Wybierz opcję...</option>
-  {dataFromBaseInc && Object.values(dataFromBaseInc).map((el, index) => (
+  <option value="" disabled >Wybierz opcję...</option>
+  {dataFromBaseInc && Object.values(dataFromBaseInc).map((el: any) => (
     <option key={el.itid} value={el.itid}>
       {`${el.invoiceNum},${el.amount},${el.day}-${el.month},${el.invoiceName}, ${el.sellerName}`}
     </option>
@@ -163,11 +165,11 @@ const handleDeleteClick = async () => {
   ))}
 
 </select> */}
-<br></br>
-<button onClick={updateInvest}>oznacz</button>
+
+<button onClick={updateInvest} className="btnsmall">wybierz</button>
 {sendI && <p>zapisano fakturę jako  środki otrzymane z pożyczki, kredytu</p>}
  {/* <ShowData dataToShow={dataFromBaseIncLoan}/>  */}
- {Object.values(dataFromBaseIncLoan).map((invoice, index) => (
+ {Object.values(dataFromBaseIncLoan).map((invoice: any, index) => (
    <div key={index}>
        {isEditMode && (
             <>
@@ -187,9 +189,9 @@ const handleDeleteClick = async () => {
  ))}
 
 {isEditMode && (
-        <button onClick={handleDeleteClick}>remove selected items</button>
+        <button onClick={handleDeleteClick} className="btnsmall">usuń wybrane pozycje</button>
       )}
- <button onClick={() => setIsEditMode(!isEditMode)}>
+ <button onClick={() => setIsEditMode(!isEditMode)} className="btnsmall">
       {getButtonLabel()}
     </button>
 
