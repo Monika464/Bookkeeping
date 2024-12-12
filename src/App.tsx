@@ -1,26 +1,25 @@
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import "./App.css";
+import Home from "./pages/Home";
+import Login from "./components/loginout/Login";
+import Signup from "./components/loginout/Signup";
+import { initializeApp } from "firebase/app";
+import { getAuth } from "firebase/auth";
+import { getFirestore } from "firebase/firestore";
+import { getStorage } from "firebase/storage";
+import { getAnalytics } from "firebase/analytics";
+import { config } from "./config";
+import { UserContextProvider } from "./context/UserContext";
+import YearDisplay from "./components/display/YearDisplay";
+import Balance from "./pages/Balance";
+import { YearContextProvider } from "./context/YearContextType";
+import ContractorsPage from "./pages/ContractorsPage";
+import Navbar from "./components/Navbar";
+import LogInOut from "./pages/LogInOut";
+import CalendarPage from "./components/Calendar";
+import CheckForDuplicates from "./components/display/CheckForDuplicate";
 
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
-import './App.css'
-import Home from './pages/Home'
-import Login from './components/loginout/Login'
-import Signup from './components/loginout/Signup'
-import { initializeApp } from 'firebase/app'
-import { getAuth } from 'firebase/auth'
-import { getFirestore } from 'firebase/firestore'
-import { getStorage } from 'firebase/storage'
-import { getAnalytics } from 'firebase/analytics'
-import { config } from './config'
-import { UserContextProvider } from './context/UserContext'
-import YearDisplay from './components/display/YearDisplay'
-import Balance from './pages/Balance'
-import { YearContextProvider } from './context/YearContextType'
-import ContractorsPage from './pages/ContractorsPage'
-import Navbar from './components/Navbar'
-import LogInOut from './pages/LogInOut'
-import CalendarPage from './components/Calendar'
-import CheckForDuplicates from './components/display/CheckForDuplicate'
-
-export const app = initializeApp(config.firebaseConfig)
+export const app = initializeApp(config.firebaseConfig);
 //console.log("app",app)
 export const auth = getAuth();
 export const db = getFirestore();
@@ -28,35 +27,19 @@ export const storage = getStorage();
 export const analytics = getAnalytics(app);
 
 function App() {
-  
+  return (
+    <div className="app">
+      <BrowserRouter>
+        <div className="container">
+          <UserContextProvider>
+            <YearContextProvider>
+              <Navbar />
+              <Routes>
+                <Route path="/" element={<Home />} />
 
+                <Route path="/year" element={<YearDisplay />} />
 
-     return (
-    <div className='app'>
-
- <BrowserRouter>  
- <div className='container'>
- <UserContextProvider>  
- <YearContextProvider>
-      <Navbar/>
-   <Routes>
-
-       <Route 
-        path="/" 
-        element={
-         <Home />        
-               }              
-         />
-
-
-       <Route 
-        path="/year" 
-        element={
-         <YearDisplay/>  
-               }              
-         />
-
-{/* 
+                {/* 
        <Route 
         path="/month" 
         element={
@@ -64,74 +47,53 @@ function App() {
                }              
          /> */}
 
-<Route 
-        path="/balance" 
-        element={
-         <Balance/>  
-               }              
-         />
+                <Route path="/balance" element={<Balance />} />
 
-<Route 
-        path="/contractor" 
-        element={
-         <ContractorsPage/>  
-               }              
-         />
+                <Route path="/contractor" element={<ContractorsPage />} />
 
-<Route 
-        path="/loginout" 
-        element={
-         <LogInOut/>  
-               }              
-         />
+                <Route path="/loginout" element={<LogInOut />} />
 
-<Route 
-        path="/calendar" 
-        element={
-         <CalendarPage/>  
-               }              
-         />
+                <Route path="/calendar" element={<CalendarPage />} />
 
-<Route 
-        path="/hej" 
-        element={
-         <CheckForDuplicates year={undefined} type={''} amount={''} category={''} day={0} description={''} id={0} invoiceName={''} invoiceNum={''} itid={''} month={''} paid={false} paymentForm={''} sellerName={''}/>  
-               }              
-         />
+                <Route
+                  path="/hej"
+                  element={
+                    <CheckForDuplicates
+                      year={undefined}
+                      type={""}
+                      amount={""}
+                      category={""}
+                      day={0}
+                      description={""}
+                      id={0}
+                      invoiceName={""}
+                      invoiceNum={""}
+                      itid={""}
+                      month={""}
+                      paid={false}
+                      paymentForm={""}
+                      sellerName={""}
+                    />
+                  }
+                />
 
-
-{/* <Route 
+                {/* <Route 
         path="/loans" 
         element={
          <FormLoansCredits/>  
                }              
          /> */}
 
+                <Route path="/login2" element={<Login />} />
 
-<Route 
-        path="/login2" 
-        element={                      
-                  <Login />       
-               }
-       />
-
-
-
-<Route 
-        path="/signup2" 
-        element={                      
-                  <Signup />       
-               }
-       />
-   </Routes>
-   </YearContextProvider>
-   </UserContextProvider> 
- </div>  
-   </BrowserRouter> 
-   
+                <Route path="/signup2" element={<Signup />} />
+              </Routes>
+            </YearContextProvider>
+          </UserContextProvider>
+        </div>
+      </BrowserRouter>
     </div>
-   
-)
+  );
 }
 
-export default App
+export default App;

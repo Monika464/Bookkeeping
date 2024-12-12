@@ -91,7 +91,7 @@ const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
 
           {/* <ForgotPass/> */}
           <Link to={'/forgotpass'} style={{fontSize: 'small'}}>Nie pamiętam hasła</Link>
- 
+ <br></br> <br></br>
          {error && <p>{error.toString().split('Firebase: ')[1]}</p>}  
          {/* {error && typeof error === 'object' && <p>{error.toString().split('Firebase: ')[1]}</p>} */}
     </div>
