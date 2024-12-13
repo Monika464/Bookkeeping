@@ -9,48 +9,46 @@ import { useState } from "react";
 
 export interface IBalance {}
 
-const Balance: React.FunctionComponent<IBalance> =() => {
+const Balance: React.FunctionComponent<IBalance> = () => {
   const [isEdited, setIsEdited] = useState<boolean>(false);
 
-    const { editedYear } = useYear();
-    //const editedYearNum = parseInt(editedYear)
-    //const dataFromBaseE = useDataBaseQuery(editedYearNum,"expenses");
-    //const dataFromBaseI = useDataBaseQuery(editedYearNum,"incomes");
-    //const dataFromBaseLongTermE = useDataBaseQuery(editedYearNum,"expenses","longTerm",true);
-    //const dataFromBaseLongTermI = useDataBaseQuery(editedYearNum,"incomes","longTerm",true);
+  const { editedYear } = useYear();
 
-    const handleEdit =()=>{
-      setIsEdited(!isEdited)
-  
-    }
+  const handleEdit = () => {
+    setIsEdited(!isEdited);
+  };
 
-   // console.log("dataFromBaseE",dataFromBaseE)
-    return(<div>Balance
-<br></br><br></br>
-<YearSelector/>
-<br></br>
-Edytujesz rok: {editedYear}
-<br></br><br></br>
-
-<button onClick={handleEdit} className="btnsmall" >
-{isEdited ? 'Zakończ edycję' : 'Edytuj dane uzupełniające'}
-</button>
-
-{isEdited && <div>
-  <CashForm/>
-<br></br><br></br>
-        <AssetsForAmortisation/>
-        <br></br><br></br>
-      <IncomeLoan/>
-  </div>}
-
-
-
-        <br></br><br></br>
-        <ProfitLossAccount/>
-        <BalanceAP/> 
-        
-    </div>)
-}
+  // console.log("dataFromBaseE",dataFromBaseE)
+  return (
+    <div>
+      <h1>Bilans oraz Informacja dodatkowa</h1>
+      <br></br>
+      <br></br>
+      <YearSelector />
+      <br></br>
+      Edytujesz rok: {editedYear}
+      <br></br>
+      <br></br>
+      <button onClick={handleEdit} className="btnsmall">
+        {isEdited ? "Zakończ edycję" : "Edytuj dane uzupełniające"}
+      </button>
+      {isEdited && (
+        <div>
+          <CashForm />
+          <br></br>
+          <br></br>
+          <AssetsForAmortisation />
+          <br></br>
+          <br></br>
+          <IncomeLoan />
+        </div>
+      )}
+      <br></br>
+      <br></br>
+      <ProfitLossAccount />
+      <BalanceAP />
+    </div>
+  );
+};
 
 export default Balance;

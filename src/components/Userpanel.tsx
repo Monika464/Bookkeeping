@@ -12,6 +12,18 @@ const Userpanel: React.FunctionComponent<IUserpanel> = () => {
 
   return (
     <>
+      <p>Instrukcja:</p>
+      <button
+        onClick={() => {
+          redirectTo(`/manual`);
+        }}
+        className="btn"
+      >
+        Manual
+      </button>
+      <br></br>
+      <br></br>
+
       <p>Zapisywanie faktur:</p>
       <button
         onClick={() => {
