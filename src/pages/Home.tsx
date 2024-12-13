@@ -1,36 +1,15 @@
-import { To, useNavigate } from "react-router-dom";
-//import DynamicForm3 from "../forms/Form3";
+import React from "react";
+import chart from "../../public/assets/chart.svg";
+import "./home.css";
 
 export interface IHome {}
 
 const Home: React.FunctionComponent<IHome> = () => {
-  const navigate = useNavigate();
-
-  const redirectTo = (localisation: To) => {
-    navigate(localisation);
-  };
-
   return (
-    <>
-      <p>home</p>
-      {/*  
- <p>Zapisywanie faktur:</p>
- <button onClick={()=>{redirectTo(`/calendar`)}} className='btn'>Calendar</button>
- <br></br><br></br>
- <p>Bilans:</p>
-  <button onClick={()=>{redirectTo(`/balance`)}} className='btn'>Balance</button>
-  <br></br><br></br>
- <p>Zestawienie roczne faktur</p>
- <button onClick={()=>{redirectTo(`/year`)}} className='btn'>Year</button>
- <br></br><br></br>
- <p>Rejestr kontrahentów:</p>
- <button onClick={()=>{redirectTo(`/contractor`)}} className='btn'>Contractors</button>
- <br></br><br></br>
- <p>Logowanie:</p>
- 
- <button onClick={()=>{redirectTo(`/loginout`)}} className='btn'>Login</button>
- <button onClick={redirectToAdminPanel}>Calendar</button> */}
-    </>
+    <div className="home-container">
+      <h1 className="home-title">Book keeping for small clubs</h1>
+      <img src={chart} alt="chart" className="home-chart" />
+    </div>
   );
 };
 

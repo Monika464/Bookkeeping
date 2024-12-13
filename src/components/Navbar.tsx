@@ -1,6 +1,6 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { signOut } from "firebase/auth";
-
+import chart from "../../public/assets/chart.svg";
 import { NavLink, useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import "./navbar.css";
@@ -22,10 +22,13 @@ const Navbar: React.FunctionComponent<INavbarProps> = () => {
     }
   };
 
-  // const logout = () => {
-  //   navigate("/login");
-  //   return signOut(auth);
-  // };
+  // useEffect(() => {
+  //   if (!state.user) {
+  //     navigate("/");
+  //   } else {
+  //     navigate("/userpanel");
+  //   }
+  // }, [state.user, navigate]); // Efekt reaguje na zmiany w stanie użytkownika
 
   // const toggleLanguage = (language: "en" | "pl") => {
   //   setCurrentLanguage(language);
@@ -35,6 +38,10 @@ const Navbar: React.FunctionComponent<INavbarProps> = () => {
     <>
       <nav className="navbar">
         <ul>
+          <li className="logo">
+            <img src={chart} alt="logo" />
+            <span className="title">Bookkeeper</span>
+          </li>
           <li>
             {!state.user && (
               <NavLink to="/signup2" className="navlink">
@@ -87,7 +94,7 @@ const Navbar: React.FunctionComponent<INavbarProps> = () => {
           </li>
           <li>
             {state.user && (
-              <button onClick={logout} className="navlink">
+              <button onClick={logout} className="btn">
                 Logout
               </button>
             )}

@@ -15,11 +15,11 @@ import Balance from "./pages/Balance";
 import { YearContextProvider } from "./context/YearContextType";
 import ContractorsPage from "./pages/ContractorsPage";
 import Navbar from "./components/Navbar";
-import LogInOut from "./pages/LogInOut";
 import CalendarPage from "./components/Calendar";
 import CheckForDuplicates from "./components/display/CheckForDuplicate";
 import "./App.css";
 import Userpanel from "./components/Userpanel";
+import Manual from "./components/Manual";
 export const app = initializeApp(config.firebaseConfig);
 //console.log("app",app)
 export const auth = getAuth();
@@ -31,7 +31,7 @@ export const analytics = getAnalytics(app);
 
 function App() {
   return (
-    <div className="app">
+    <div className="App">
       <AuthContextProvider>
         <BrowserRouter>
           <div className="container">
@@ -53,6 +53,7 @@ function App() {
                   <Route path="/calendar" element={<CalendarPage />} />
 
                   <Route path="/userpanel" element={<Userpanel />} />
+                  <Route path="/manual" element={<Manual />} />
 
                   <Route
                     path="/hej"

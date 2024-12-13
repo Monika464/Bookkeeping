@@ -1,4 +1,59 @@
 .navbar {
+  width: 100%;
+  padding: 30px 0;
+  box-sizing: border-box;
+  margin-bottom: 40px;
+}
+.navbar ul {
+  display: flex;
+  margin: 0 auto;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+}
+.navbar .logo {
+  font-weight: bold;
+  color: var(--heading-color);
+  letter-spacing: 1px;
+  display: flex;
+  align-items: center;
+  margin-right: auto;
+}
+.navbar .logo img {
+  margin-right: 10px;
+  filter: invert(25%);
+  width: 36px;
+  margin-top: -8px;
+}
+.navbar a {
+  color: #333;
+  text-decoration: none;
+  margin-right: 20px;
+}
+
+.navbar a:hover {
+  color: #888;
+}
+
+.navbar button {
+}
+.language-switch {
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.language-switch span {
+  margin: 0 5px;
+  cursor: pointer;
+}
+
+.language-switch .active-language {
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+
+/* .navbar {
     width: 100%;
     padding: 30px 0;
     box-sizing: border-box;
@@ -107,4 +162,4 @@
     margin-right: 20px;
      
   }
-  */
+  */ */
