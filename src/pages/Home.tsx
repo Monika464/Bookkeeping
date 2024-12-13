@@ -1,22 +1,19 @@
-
-
 import { To, useNavigate } from "react-router-dom";
 //import DynamicForm3 from "../forms/Form3";
 
 export interface IHome {}
 
-const Home: React.FunctionComponent<IHome> =() => {
- 
-
+const Home: React.FunctionComponent<IHome> = () => {
   const navigate = useNavigate();
-  
-  const redirectTo =(localisation: To)=>{
+
+  const redirectTo = (localisation: To) => {
     navigate(localisation);
+  };
 
-  }
-
-    return(<>
- 
+  return (
+    <>
+      <p>home</p>
+      {/*  
  <p>Zapisywanie faktur:</p>
  <button onClick={()=>{redirectTo(`/calendar`)}} className='btn'>Calendar</button>
  <br></br><br></br>
@@ -32,8 +29,9 @@ const Home: React.FunctionComponent<IHome> =() => {
  <p>Logowanie:</p>
  
  <button onClick={()=>{redirectTo(`/loginout`)}} className='btn'>Login</button>
- {/* <button onClick={redirectToAdminPanel}>Calendar</button> */}
-    </>)
-}
+ <button onClick={redirectToAdminPanel}>Calendar</button> */}
+    </>
+  );
+};
 
 export default Home;
