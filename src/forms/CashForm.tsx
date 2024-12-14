@@ -13,6 +13,8 @@ import {
 } from "firebase/firestore";
 import { db } from "../App";
 import { useYear } from "../context/YearContextType";
+import { useLanguage } from "../context/LanguageContext.tsx";
+import translations from "./cashform-translations.ts";
 
 export interface ICashState {
   totalCash: number;
@@ -22,6 +24,9 @@ export interface ICashState {
 }
 
 const CashForm: React.FC = () => {
+  const { currentLanguage } = useLanguage();
+  const t = translations[currentLanguage as "en" | "pl"];
+
   const [cashState, setCashState] = useState<ICashState>({
     totalCash: 0,
     cashInHand: 0,
@@ -126,12 +131,12 @@ const CashForm: React.FC = () => {
         <div>
           {Object.values(dataFromBase).map((element: any, index) => (
             <div key={index}>
-              w kasie: {element.cashInHand} w banku: {element.cashInBank}
+              {t.incash} {element.cashInHand} {t.inbank} {element.cashInBank}
             </div>
           ))}
 
           <button onClick={removeState} className="btnsmall">
-            wyczysc stan kasy
+            {t.clear}
           </button>
         </div>
       )}
@@ -139,7 +144,7 @@ const CashForm: React.FC = () => {
       {isEmpty && (
         <div>
           <label>
-            Stan kasy w ostatnim dniu bilansu:
+            {t.lastday}
             <input
               type="number"
               value={cashState.totalCash}
@@ -155,7 +160,7 @@ const CashForm: React.FC = () => {
           {showCashInHandInput && (
             <div>
               <label>
-                Ile w gotówce:
+                {t.howmuchCash}
                 <input
                   type="number"
                   value={cashInHandInput}
@@ -164,16 +169,16 @@ const CashForm: React.FC = () => {
               </label>
               <br />
               <button onClick={handleCalculateClick} className="btnsmall">
-                Oblicz
+                {t.calculate}
               </button>
               <br />
               <div>
-                Gotówka: {cashState.cashInHand}
+                {t.cash} {cashState.cashInHand}
                 <br />
-                Na koncie: {cashState.cashInBank}
+                {t.onAccount} {cashState.cashInBank}
               </div>
               <button onClick={saveInBase} className="btnsmall">
-                zapisz w bazie
+                {t.save}
               </button>
             </div>
           )}

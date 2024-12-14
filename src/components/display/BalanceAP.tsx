@@ -14,22 +14,29 @@ const BalanceAP: React.FunctionComponent<IBalanceAP> = () => {
   const cash = useMoneyAssetsQuery("cash");
   //const obligation = useMoneyAssetsQuery("obligation");
 
-  const formatNumber = (value: number) => parseFloat(value.toFixed(2));
+  const formatNumber = (value: number) => parseFloat(value.toFixed(0));
 
-  const zaplacone = useDataBaseQuery("expenses", "paid", true);
-  const niezaplacone = useDataBaseQuery("expenses", "paid", false);
+  const kosztyOplacone = useDataBaseQuery("expenses", "paid", true);
+  const kosztyNieoplacone = useDataBaseQuery("expenses", "paid", false);
   // const naleznosci = useDataBaseQuery("incomes","paid",false);
-  const przychody = useDataBaseQuery("incomes");
+  const przychodyOpłacone = useDataBaseQuery("incomes", "paid", true);
+  const przychodyNiezaplacone = useDataBaseQuery("incomes", "paid", false);
   const koszty = useDataBaseQuery("expenses");
+  console.log("koszty prosto z bazy", koszty);
+  const przychody = useDataBaseQuery("incomes");
   const pozyczki = useDataBaseQuery("incomes", "loan", true);
 
   //console.log("pozyczki",pozyczki)
 
-  const yearZaplacone = useCounting(zaplacone);
-  const yearNiezaplacone = useCounting(niezaplacone);
+  //const yearZaplaconeKoszty = useCounting(kosztyOplacone);
+  const yearNiezaplaconeKoszty = useCounting(kosztyNieoplacone);
+  const yearNiezaplaconePrzychody = useCounting(przychodyNiezaplacone);
   //const yearNaleznosci = useCounting(naleznosci);
-  const yearPrzychody = useCounting(przychody);
-  const yearKoszty = useCounting(koszty);
+  //const yearZaplaconePrzychody = useCounting(przychodyOpłacone);
+  const yearKosztySuma = useCounting(koszty);
+  //console.log("yearkoszty suma", yearKosztySuma);
+  //const yearKosztySumaOplacone = useCounting(kosztyOplacone);
+  const yearPrzychodySuma = useCounting(przychody);
   const yearPozyczki = useCounting(pozyczki);
 
   const sumuOfCash = () => {
@@ -61,7 +68,19 @@ const BalanceAP: React.FunctionComponent<IBalanceAP> = () => {
       <h3>Aktywa trwałe</h3>
       <p>w tym środki trwałe:{totalAssets} zł</p>
       <h3>Aktywa obrotowe</h3>
-      <p>{yearPrzychody + yearPozyczki + totalCash} zł</p>
+
+      <p>
+        {formatNumber(
+          totalAssets +
+            totalCash +
+            yearNiezaplaconePrzychody +
+            (yearPrzychodySuma - yearKosztySuma)
+        )}{" "}
+        zł
+      </p>
+      <p>
+        w tym nalezności krótkoterminowe:{<p>{yearNiezaplaconePrzychody} zł</p>}{" "}
+      </p>
       <p>w tym środki pieniężne:{totalCash} zł </p>
 
       {/* <p>Naleznosci: {yearNaleznosci}</p> */}
@@ -69,21 +88,35 @@ const BalanceAP: React.FunctionComponent<IBalanceAP> = () => {
       <h2>PASYWA </h2>
       <p>
         Fundusz statutowy:{" "}
-        {formatNumber(yearZaplacone + totalAssets + totalCash)} zł
+        {formatNumber(
+          yearPrzychodySuma - yearKosztySuma + totalAssets + totalCash
+        )}{" "}
+        zł
       </p>
-      <p>Zobowiazania:{formatNumber(yearNiezaplacone + yearPozyczki)} zł</p>
-      <p>Wynik: {formatNumber(yearPrzychody - yearKoszty)} zł</p>
+      <p>
+        Zobowiazania:{formatNumber(yearNiezaplaconeKoszty + yearPozyczki)} zł
+      </p>
 
       <h2>Suma Bilansowa</h2>
-      <p>Aktywa {totalAssets + totalCash + yearPrzychody + yearPozyczki} zł</p>
+      {/* <p>Aktywa {totalAssets + totalCash + yearPrzychody + yearPozyczki} zł</p> */}
+      <p>
+        Aktywa{" "}
+        {formatNumber(
+          totalAssets +
+            totalCash +
+            yearNiezaplaconePrzychody +
+            (yearPrzychodySuma - yearKosztySuma)
+        )}{" "}
+        zł
+      </p>
       <p>
         Pasywa{" "}
-        {yearZaplacone +
+        {formatNumber(
           totalAssets +
-          totalCash +
-          yearNiezaplacone +
-          yearPozyczki +
-          (yearPrzychody - yearKoszty)}{" "}
+            totalCash +
+            yearNiezaplaconePrzychody +
+            (yearPrzychodySuma - yearKosztySuma)
+        )}{" "}
         zł
       </p>
     </div>

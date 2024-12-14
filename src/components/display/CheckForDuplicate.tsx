@@ -1,7 +1,10 @@
+import React from "react";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../../App";
 import { useCallback, useContext, useEffect, useState } from "react";
 import { UserContext } from "../../context/UserContext";
+import { useLanguage } from "../../context/LanguageContext.tsx";
+import translations from "./yeardisplay-translations.tsx";
 
 export interface IDup {
   year: any;
@@ -15,15 +18,17 @@ export interface IDup {
   invoiceNum: string;
   itid: string;
   month: string;
-  paid: boolean; // Poprawka: zmiana typu na boolean
+  paid: boolean;
   paymentForm: string;
   sellerName: string;
 }
 
 const CheckForDuplicates: React.FunctionComponent<IDup> = () => {
+  const { currentLanguage } = useLanguage();
+  const t = translations[currentLanguage as "en" | "pl"];
+
   const [duplicates, setDuplicates] = useState<IDup[] | null>();
   const [dataFromBase, setDataFromBase] = useState({});
-  //const [dataFromBase2, setDataFromBase2] = useState({})
   const { currentUser } = useContext(UserContext);
 
   const userId = currentUser?.uid;
@@ -40,8 +45,6 @@ const CheckForDuplicates: React.FunctionComponent<IDup> = () => {
       const querySnapshot = await getDocs(collection(db, `${userId}`));
 
       querySnapshot.forEach((doc) => {
-        // doc.data() is never undefined for query doc snapshots
-        //console.log(doc.id, " => ", doc.data());
         const idHasCash = /cash/i.test(doc.id);
         const idHasAssets = /assets/i.test(doc.id);
         const idHasObligation = /obligation/i.test(doc.id);
@@ -49,14 +52,8 @@ const CheckForDuplicates: React.FunctionComponent<IDup> = () => {
         if (!idHasCash && !idHasAssets && !idHasObligation) {
           newData[doc.id] = { ...doc.data(), itid: doc.id };
         }
-
-        //const testD = [{...doc.data()},doc.id]
-        //testD.push({...doc.data()},doc.id)
-        //console.log("test", testD )
       });
       setDataFromBase(newData);
-
-      //setDataFromBase2(testD)
     } catch (error) {}
   }, [setDataFromBase, userId]);
 
@@ -83,38 +80,20 @@ const CheckForDuplicates: React.FunctionComponent<IDup> = () => {
       <br></br>
       {duplicates && duplicates.length > 0 && (
         <>
-          <div style={{ color: "red" }}>Zdublowane numery faktur</div>
+          <div style={{ color: "red" }}>{t.double}</div>
           <ul>
             {Object.values(duplicates).map((dup, index) => (
               <li key={index} style={{ color: "red" }}>
-                {dup.type === "incomes" ? "przychody" : "koszty"}
+                {dup.type === "incomes" ? t.incomes : t.expenses}
                 <br />
-                {`data   ${dup.day} ${dup.month} ${dup.year}`}
-                {` numer ${dup.invoiceNum}, kwota ${dup.amount}, nazwa ${dup.invoiceName}, sprzedawca ${dup.sellerName}, forma ${dup.paymentForm}, opis ${dup.description}`}
+                {`${t.date}   ${dup.day} ${dup.month} ${dup.year}`}
+                {` ${t.number} ${dup.invoiceNum}, ${t.amount} ${dup.amount}, ${t.name} ${dup.invoiceName}, ${t.contractor} ${dup.sellerName}, ${t.payform} ${dup.paymentForm}, ${t.description} ${dup.description}`}
               </li>
             ))}
           </ul>
         </>
       )}
     </>
-    // <div>
-    //   <br></br>
-    //   <br></br>
-    //   <ul>
-    //     {/* <button onClick={readingFromBase}>read</button> */}
-    //     {duplicates && (
-    //         <div style={{ color: "red" }}>Zdublowane numery faktur</div>
-    //       ) &&
-    //       Object.values(duplicates).map((dup, index) => (
-    //         <li key={index} style={{ color: "red" }}>
-    //           {dup.type === "incomes" ? "przychody" : "koszty"}
-    //           <br></br>
-    //           {`data   ${dup.day} ${dup.month} ${dup.year}`}
-    //           {` numer ${dup.invoiceNum}, kwota ${dup.amount}, nazwa ${dup.invoiceName}, sprzedawca ${dup.sellerName}, forma ${dup.paymentForm}, opis ${dup.description}`}
-    //         </li>
-    //       ))}
-    //   </ul>
-    // </div>
   );
 };
 

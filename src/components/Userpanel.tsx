@@ -6,11 +6,9 @@ import translations from "../components/userpanel-translations.ts";
 export interface IUserpanel {}
 
 const Userpanel: React.FunctionComponent<IUserpanel> = () => {
-  const { currentLanguage } = useLanguage();
-
   const navigate = useNavigate();
+  const { currentLanguage } = useLanguage();
   const t = translations[currentLanguage as "en" | "pl"];
-  //const t = translations[currentLanguage as keyof typeof translations];
 
   const redirectTo = (localisation: To) => {
     navigate(localisation);

@@ -33,7 +33,7 @@ const ProfitLossAccount: React.FunctionComponent<IProfitLossAccount> = () => {
   const yearUslugi = useCounting(uslugi);
   const yearAdministration = useCounting(administracja);
 
-  const formatNumber = (value: number) => parseFloat(value.toFixed(2));
+  const formatNumber = (value: number) => parseFloat(value.toFixed(0));
 
   //return(<div style={{fontSize: 20}}>
   return (
@@ -47,9 +47,9 @@ const ProfitLossAccount: React.FunctionComponent<IProfitLossAccount> = () => {
       <br></br>Z czego
       <h3>A. Przychody z działalności statutowej</h3>
       <br></br>
-      <p>Z dotacji: {yearDotacje} zł</p>
-      <p>Ze składek: {yearSkladki} zł</p>
-      <p>Z darowizn: {yearDarowizny} zł</p>
+      <p>Z dotacji: {formatNumber(yearDotacje)} zł</p>
+      <p>Ze składek: {formatNumber(yearSkladki)} zł</p>
+      <p>Z darowizn: {formatNumber(yearDarowizny)} zł</p>
       <p>Inne: {yearInne} zł</p>
       <br></br>
       <h3>B. Koszty działalności statutowej</h3>
