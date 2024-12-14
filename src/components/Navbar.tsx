@@ -1,16 +1,21 @@
 import React, { useContext } from "react";
 import { signOut } from "firebase/auth";
-import chart from "../../public/assets/chart.svg";
+import chart from "../assets/chart.svg";
 import { NavLink, useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import "./navbar.css";
 import { auth } from "../App";
+import { useLanguage } from "../context/LanguageContext.tsx";
+import translations from "../components/navbar-translations.tsx";
 
 export interface INavbarProps {}
 
 const Navbar: React.FunctionComponent<INavbarProps> = () => {
   const { state, dispatch } = useContext(AuthContext);
+  const { currentLanguage, setCurrentLanguage } = useLanguage();
+
   const navigate = useNavigate();
+  const t = translations[currentLanguage as "en" | "pl"];
 
   const logout = async () => {
     try {
@@ -21,18 +26,9 @@ const Navbar: React.FunctionComponent<INavbarProps> = () => {
       console.error("Error during logout:", error);
     }
   };
-
-  // useEffect(() => {
-  //   if (!state.user) {
-  //     navigate("/");
-  //   } else {
-  //     navigate("/userpanel");
-  //   }
-  // }, [state.user, navigate]); // Efekt reaguje na zmiany w stanie użytkownika
-
-  // const toggleLanguage = (language: "en" | "pl") => {
-  //   setCurrentLanguage(language);
-  // };
+  const toggleLanguage = (language: "en" | "pl") => {
+    setCurrentLanguage(language);
+  };
 
   return (
     <>
@@ -60,35 +56,35 @@ const Navbar: React.FunctionComponent<INavbarProps> = () => {
           <li>
             {state.user && (
               <NavLink to="/calendar" className="navlink">
-                Kalendarz
+                {t.calendar}
               </NavLink>
             )}
           </li>
           <li>
             {state.user && (
               <NavLink to="/balance" className="navlink">
-                Bilans
+                {t.balance}
               </NavLink>
             )}
           </li>
           <li>
             {state.user && (
               <NavLink to="/year" className="navlink">
-                Rok
+                {t.year}
               </NavLink>
             )}
           </li>
           <li>
             {state.user && (
               <NavLink to="/contractor" className="navlink">
-                Kontrahent
+                {t.contractors}
               </NavLink>
             )}
           </li>
           <li>
             {state.user && (
               <NavLink to="/userpanel" className="navlink">
-                Userpanel
+                Panel
               </NavLink>
             )}
           </li>
@@ -98,6 +94,22 @@ const Navbar: React.FunctionComponent<INavbarProps> = () => {
                 Logout
               </button>
             )}
+          </li>
+          {/* Language switch */}
+          <li className="language-switch">
+            <span
+              className={currentLanguage === "en" ? "active-language" : ""}
+              onClick={() => toggleLanguage("en")}
+            >
+              EN
+            </span>{" "}
+            |{" "}
+            <span
+              className={currentLanguage === "pl" ? "active-language" : ""}
+              onClick={() => toggleLanguage("pl")}
+            >
+              PL
+            </span>
           </li>
         </ul>
       </nav>

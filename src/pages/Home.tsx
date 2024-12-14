@@ -1,5 +1,5 @@
 import React from "react";
-import chart from "../../public/assets/chart.svg";
+import chart from "../assets/chart.svg";
 import "./home.css";
 
 export interface IHome {}

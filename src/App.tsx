@@ -20,6 +20,7 @@ import CheckForDuplicates from "./components/display/CheckForDuplicate";
 import "./App.css";
 import Userpanel from "./components/Userpanel";
 import Manual from "./components/Manual";
+import { LanguageProvider } from "./context/LanguageContext";
 export const app = initializeApp(config.firebaseConfig);
 //console.log("app",app)
 export const auth = getAuth();
@@ -32,67 +33,69 @@ export const analytics = getAnalytics(app);
 function App() {
   return (
     <div className="App">
-      <AuthContextProvider>
-        <BrowserRouter>
-          <div className="container">
+      <LanguageProvider>
+        <AuthContextProvider>
+          <BrowserRouter>
             <UserContextProvider>
               <YearContextProvider>
-                <Navbar />
-                <Routes>
-                  <Route path="/" element={<Home />} />
+                <div className="container">
+                  <Navbar />
+                  <Routes>
+                    <Route path="/" element={<Home />} />
 
-                  <Route path="/year" element={<YearDisplay />} />
+                    <Route path="/year" element={<YearDisplay />} />
 
-                  <Route path="/balance" element={<Balance />} />
+                    <Route path="/balance" element={<Balance />} />
 
-                  <Route path="/contractor" element={<ContractorsPage />} />
+                    <Route path="/contractor" element={<ContractorsPage />} />
 
-                  <Route path="/signup" element={<Signup />} />
-                  <Route path="/login" element={<Login />} />
+                    <Route path="/signup" element={<Signup />} />
+                    <Route path="/login" element={<Login />} />
 
-                  <Route path="/calendar" element={<CalendarPage />} />
+                    <Route path="/calendar" element={<CalendarPage />} />
 
-                  <Route path="/userpanel" element={<Userpanel />} />
-                  <Route path="/manual" element={<Manual />} />
+                    <Route path="/userpanel" element={<Userpanel />} />
+                    <Route path="/manual" element={<Manual />} />
 
-                  <Route
-                    path="/hej"
-                    element={
-                      <CheckForDuplicates
-                        year={undefined}
-                        type={""}
-                        amount={""}
-                        category={""}
-                        day={0}
-                        description={""}
-                        id={0}
-                        invoiceName={""}
-                        invoiceNum={""}
-                        itid={""}
-                        month={""}
-                        paid={false}
-                        paymentForm={""}
-                        sellerName={""}
-                      />
-                    }
-                  />
+                    <Route
+                      path="/hej"
+                      element={
+                        <CheckForDuplicates
+                          year={undefined}
+                          type={""}
+                          amount={""}
+                          category={""}
+                          day={0}
+                          description={""}
+                          id={0}
+                          invoiceName={""}
+                          invoiceNum={""}
+                          itid={""}
+                          month={""}
+                          paid={false}
+                          paymentForm={""}
+                          sellerName={""}
+                        />
+                      }
+                    />
 
-                  {/* <Route 
+                    {/* <Route 
         path="/loans" 
         element={
          <FormLoansCredits/>  
                }              
          /> */}
 
-                  <Route path="/login2" element={<Login />} />
+                    <Route path="/login2" element={<Login />} />
 
-                  <Route path="/signup2" element={<Signup />} />
-                </Routes>
+                    <Route path="/signup2" element={<Signup />} />
+                  </Routes>
+                </div>
               </YearContextProvider>
             </UserContextProvider>
-          </div>
-        </BrowserRouter>
-      </AuthContextProvider>
+          </BrowserRouter>
+        </AuthContextProvider>
+      </LanguageProvider>
     </div>
   );
 }

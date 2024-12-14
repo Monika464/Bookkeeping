@@ -1,11 +1,16 @@
 import React from "react";
 import { To, useNavigate } from "react-router-dom";
-//import DynamicForm3 from "../forms/Form3";
+import { useLanguage } from "../context/LanguageContext.tsx";
+import translations from "../components/userpanel-translations.ts";
 
 export interface IUserpanel {}
 
 const Userpanel: React.FunctionComponent<IUserpanel> = () => {
+  const { currentLanguage } = useLanguage();
+
   const navigate = useNavigate();
+  const t = translations[currentLanguage as "en" | "pl"];
+  //const t = translations[currentLanguage as keyof typeof translations];
 
   const redirectTo = (localisation: To) => {
     navigate(localisation);
@@ -13,7 +18,7 @@ const Userpanel: React.FunctionComponent<IUserpanel> = () => {
 
   return (
     <>
-      <p>Instrukcja:</p>
+      <p>{t.manual}</p>
       <button
         onClick={() => {
           redirectTo(`/manual`);
@@ -24,8 +29,7 @@ const Userpanel: React.FunctionComponent<IUserpanel> = () => {
       </button>
       <br></br>
       <br></br>
-
-      <p>Zapisywanie faktur:</p>
+      <p>{t.saving}</p>
       <button
         onClick={() => {
           redirectTo(`/calendar`);
@@ -36,7 +40,7 @@ const Userpanel: React.FunctionComponent<IUserpanel> = () => {
       </button>
       <br></br>
       <br></br>
-      <p>Bilans:</p>
+      <p>{t.balance}</p>
       <button
         onClick={() => {
           redirectTo(`/balance`);
@@ -47,7 +51,7 @@ const Userpanel: React.FunctionComponent<IUserpanel> = () => {
       </button>
       <br></br>
       <br></br>
-      <p>Zestawienie roczne faktur</p>
+      <p>{t.year}</p>
       <button
         onClick={() => {
           redirectTo(`/year`);
@@ -58,7 +62,7 @@ const Userpanel: React.FunctionComponent<IUserpanel> = () => {
       </button>
       <br></br>
       <br></br>
-      <p>Rejestr kontrahentów:</p>
+      <p>{t.contractors}</p>
       <button
         onClick={() => {
           redirectTo(`/contractor`);
@@ -69,16 +73,15 @@ const Userpanel: React.FunctionComponent<IUserpanel> = () => {
       </button>
       <br></br>
       <br></br>
-      <p>Logowanie:</p>
-
-      <button
+      {/* <p>Logowanie:</p> */}
+      {/* <button
         onClick={() => {
           redirectTo(`/loginout`);
         }}
         className="btn"
       >
         Login
-      </button>
+      </button> */}
       {/* <button onClick={redirectToAdminPanel}>Calendar</button> */}
     </>
   );
