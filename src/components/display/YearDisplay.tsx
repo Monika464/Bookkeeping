@@ -36,6 +36,8 @@ const YearDisplay: React.FunctionComponent<IYearDisplay> = () => {
   const { editedYear } = useYear();
   const editedYearNum = parseInt(editedYear);
 
+  const formatNumber = (value: number) => parseFloat(value.toFixed(0));
+
   useEffect(() => {
     readingFromBase();
   }, [currentUser, editedYear]);
@@ -160,8 +162,8 @@ const YearDisplay: React.FunctionComponent<IYearDisplay> = () => {
       <h3>{t.result}</h3>
       <br></br>
       {yearIncomes - yearExpenses > 0
-        ? ` ${t.profit} ${yearIncomes - yearExpenses} zł`
-        : ` ${t.loss} ${yearIncomes - yearExpenses} zł`}
+        ? ` ${t.profit} ${formatNumber(yearIncomes - yearExpenses)} zł`
+        : ` ${t.loss} ${formatNumber(yearIncomes - yearExpenses)} zł`}
     </div>
   );
 };

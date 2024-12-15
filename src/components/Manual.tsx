@@ -1,6 +1,6 @@
 import React from "react";
 import { useLanguage } from "../context/LanguageContext";
-import translations from "./display/manual-translations";
+import translations from "./manual-translations";
 
 export interface INavbarProps {}
 
@@ -36,6 +36,18 @@ const Manual: React.FunctionComponent<INavbarProps> = () => {
           ))}
         </ol>
       </div>
+      <div>
+        <h4>{t.addWarning.title}</h4>
+        <ol>
+          {t.addWarning.instructions.map((instruction, index) => (
+            <li key={index} style={{ fontSize: "15px" }}>
+              {instruction}
+            </li>
+          ))}
+        </ol>
+      </div>
+      <br></br>
+      <br></br>
     </>
   );
 };

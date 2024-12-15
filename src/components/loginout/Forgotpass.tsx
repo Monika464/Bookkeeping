@@ -25,7 +25,7 @@ const ForgotPass: React.FunctionComponent<IForgotPassProps> = () => {
   const handleSubmit = (event: { preventDefault: () => void }) => {
     event.preventDefault();
     handleSendPass();
-    console.log("email wysłano");
+    console.log(t.emailSent);
     setIsSend(true);
     // navigate('/login')
   };

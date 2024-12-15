@@ -8,6 +8,7 @@ const translations = {
     sentToThis: "A reset email has been sent to: ",
     sentPass: "Password sent to email",
     error: "Error resetting password",
+    emailSent: "Email sent",
   },
   pl: {
     giveEmail: "Podaj email na jaki wysłać hasło",
@@ -17,6 +18,7 @@ const translations = {
     sentToThis: "Wysłano e-mail resetujący na adres: ",
     sentPass: "Wyslano hasło na email",
     error: "Błąd podczas resetowania hasła",
+    emailSent: "Email wysłano",
   },
 };
 

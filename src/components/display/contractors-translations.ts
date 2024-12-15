@@ -8,7 +8,7 @@ const translations = {
   pl: {
     contractors: "Kontrahenci",
     name: "Nazwa",
-    address: "Address",
+    address: "Adres",
     deleteChosen: "Usuń wybranego kontrahenta",
   },
 };

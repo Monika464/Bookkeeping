@@ -27,6 +27,13 @@ const translations = {
         "If even-numbered items in red appear at the bottom, it means there are duplicate invoices in your database.",
       ],
     },
+
+    addWarning: {
+      title: "Warning about limitations:",
+      instructions: [
+        "The application is for illustrative purposes only and may not comply with detailed accounting rules",
+      ],
+    },
   },
   pl: {
     title: "Kroki obsługi programu:",
@@ -54,6 +61,13 @@ const translations = {
         "Pole 'opłacone/nieopłacone' możesz edytować w późniejszym czasie.",
         "Żeby podejrzeć wprowadzone rachunki pod konkretną datą, trzeba odświeżyć pole, klikając w datę.",
         "Jeżeli na dole wyświetlają się parzyste pozycje w kolorze czerwonym, to oznacza, że w twojej bazie pojawiły się duplikaty rachunków.",
+      ],
+    },
+
+    addWarning: {
+      title: "Ostrzeżenie o ograniczeniach:",
+      instructions: [
+        "Aplikacja ma charakter wyłacznie poglądowy i może nie być zgodna ze szczegółowymi zasadami ksiegowości",
       ],
     },
   },
