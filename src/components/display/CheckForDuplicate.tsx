@@ -4,7 +4,7 @@ import { db } from "../../App";
 import { useCallback, useContext, useEffect, useState } from "react";
 import { UserContext } from "../../context/UserContext";
 import { useLanguage } from "../../context/LanguageContext.tsx";
-import translations from "./yeardisplay-translations.tsx";
+import translations from "./checkforduplicates-translations.tsx";
 
 export interface IDup {
   year: any;

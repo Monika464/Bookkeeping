@@ -5,6 +5,7 @@ const translations = {
     clear: "Clear fixed assets status",
     send: "Send",
     assetsfix: "Fixed assets state",
+    assetcash: "Cash",
   },
   pl: {
     assetsdep: "Środki trwałe (po amortyzacji jeśli dotyczy)",
@@ -12,6 +13,7 @@ const translations = {
     clear: "Wyczyść stan środków trwałych",
     send: "Wyslij",
     assetsfix: "Stan środków trwałych",
+    assetcash: "Środki pieniężne",
   },
 };
 

@@ -123,7 +123,7 @@ const AssetsForAmortisation: React.FunctionComponent<
         <div>
           {Object.values(assetsStateInBase).map((element, index) => (
             <div key={index}>
-              {t.assets}: {element.assetsextra}
+              {t.assetsdep}: {element.assetsextra}
             </div>
           ))}
 
