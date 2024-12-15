@@ -141,6 +141,9 @@ const YearDisplay: React.FunctionComponent<IYearDisplay> = () => {
         ))}
       </ol>
       <br></br>
+      <p>
+        {t.yearExpenses}: {yearExpenses} zł
+      </p>
       <br></br>
       <ol>
         <h4>{t.incomes}</h4>
@@ -158,6 +161,10 @@ const YearDisplay: React.FunctionComponent<IYearDisplay> = () => {
           </li>
         ))}
       </ol>
+      <br></br>
+      <p>
+        {t.yearIncomes}: {yearIncomes} zł
+      </p>
       <br></br>
       <h3>{t.result}</h3>
       <br></br>

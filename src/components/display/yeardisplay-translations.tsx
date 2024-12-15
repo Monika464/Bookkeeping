@@ -11,6 +11,8 @@ const translations = {
     result: "Result",
     services: "service, ",
     administration: "administrtion, ",
+    yearExpenses: "Year expenses",
+    yearIncomes: "Year incomes",
   },
   pl: {
     statement: "Roczne zestawienie",
@@ -24,6 +26,8 @@ const translations = {
     result: "wynik",
     services: "usługi, ",
     administration: "administracja, ",
+    yearExpenses: "Roczne koszty",
+    yearIncomes: "Roczne przychody",
   },
 };
 
