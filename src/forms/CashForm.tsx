@@ -119,7 +119,6 @@ const CashForm: React.FC = () => {
     //  console.log("dataFromBaseCash",dataFromBase)
   }, [uid, editedYear]);
 
-  useEffect(() => {});
   useEffect(() => {
     readCash();
   }, [uid, readCash, editedYear]);
@@ -129,6 +128,8 @@ const CashForm: React.FC = () => {
 
       {!isEmpty && (
         <div>
+          <p>{t.cashassets}</p>
+          <br></br>
           {Object.values(dataFromBase).map((element: any, index) => (
             <div key={index}>
               {t.incash} {element.cashInHand} {t.inbank} {element.cashInBank}

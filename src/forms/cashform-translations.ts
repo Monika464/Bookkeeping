@@ -1,5 +1,6 @@
 const translations = {
   en: {
+    cashassets: "Cash assets",
     incash: "in cash:",
     inbank: "In the bank",
     clear: "Clear checkout status",
@@ -11,6 +12,7 @@ const translations = {
     save: "Save to database",
   },
   pl: {
+    cashassets: "Środki pieniężne",
     incash: "w kasie:",
     inbank: "W banku",
     clear: "wyczysc stan kasy",

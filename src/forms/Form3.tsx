@@ -9,6 +9,8 @@ import { collection, doc, serverTimestamp, setDoc } from "firebase/firestore";
 import { db } from "../App";
 import { Value } from "../components/Calendar";
 import useGetContractors from "../hooks/useGetContractors";
+import { useLanguage } from "../context/LanguageContext.tsx";
+import translations from "./form3-translations.ts";
 
 interface FormField {
   id: number;
@@ -36,6 +38,9 @@ const DynamicForm3: React.FC<IForm3> = (props) => {
   const [showAddButton, setShowAddButton] = useState<boolean>(true);
   const { currentUser } = useContext(UserContext);
   const contractors = useGetContractors();
+
+  const { currentLanguage } = useLanguage();
+  const t = translations[currentLanguage as "en" | "pl"];
 
   const thisDay = props.thisDay;
 
@@ -126,7 +131,7 @@ const DynamicForm3: React.FC<IForm3> = (props) => {
 
     // Jeśli nie wszystkie pola "kwota w zł" są wypełnione, zatrzymaj wysyłanie formularza
     if (!isAmountFilled) {
-      alert("Proszę wypełnić pole 'kwota w zł'!");
+      alert(t.pleaseFill);
       return;
     }
     //const uid = currentUser?.uid;
@@ -180,7 +185,7 @@ const DynamicForm3: React.FC<IForm3> = (props) => {
     <div className="invoiceForm">
       {showAddButton && (
         <button onClick={addFormField} className="btn">
-          Dodaj pozycję
+          {t.addPosition}
         </button>
       )}
       <div>
@@ -189,7 +194,7 @@ const DynamicForm3: React.FC<IForm3> = (props) => {
             {/* {field.id}. */}
             <input
               type="text"
-              placeholder="Nr faktury"
+              placeholder={t.invoiceNum}
               value={field.invoiceNum}
               onChange={(e) =>
                 handleInputChange(field.id, "invoiceNum", e.target.value)
@@ -197,7 +202,7 @@ const DynamicForm3: React.FC<IForm3> = (props) => {
             />
             <input
               type="text"
-              placeholder="kwota w zł"
+              placeholder={t.amount}
               value={field.amount}
               onChange={(e) =>
                 handleInputChange(field.id, "amount", e.target.value)
@@ -205,7 +210,7 @@ const DynamicForm3: React.FC<IForm3> = (props) => {
             />
             <input
               type="text"
-              placeholder="nazwa"
+              placeholder={t.invoiceName}
               value={field.invoiceName}
               onChange={(e) =>
                 handleInputChange(field.id, "invoiceName", e.target.value)
@@ -218,7 +223,7 @@ const DynamicForm3: React.FC<IForm3> = (props) => {
                 handleInputChange(field.id, "sellerName", e.target.value)
               }
             >
-              <option value="">Kontrahent</option>
+              <option value="">{t.contractor}</option>
               {Object.values(contractors).map((contractor: any) => (
                 <option
                   key={contractor.itid}
@@ -235,31 +240,25 @@ const DynamicForm3: React.FC<IForm3> = (props) => {
                 handleInputChange(field.id, "paymentForm", e.target.value)
               }
             >
-              <option value="przelew">Przelew</option>
-              <option value="gotowka">Gotówka</option>
+              <option value="przelew">{t.transfer}</option>
+              <option value="gotowka">{t.cash}</option>
             </select>
-            {/* <select
-            value={field.category}
-            onChange={(e) => handleInputChange(field.id, 'category', e.target.value)}
-          >
-            <option value="service">Usługi</option>
-            <option value="administration">Administracja</option>
-          </select> */}
+
             <select
               value={field.source}
               onChange={(e) =>
                 handleInputChange(field.id, "source", e.target.value)
               }
             >
-              <option value="skladki">skladki</option>
-              <option value="dotacje">dotacje</option>
-              <option value="darowizny">darowizny</option>
-              <option value="inne">inne</option>
+              <option value="skladki">{t.contributions}</option>
+              <option value="dotacje">{t.subsidies}</option>
+              <option value="darowizny">{t.donations}</option>
+              <option value="inne">{t.other}</option>
             </select>
 
             <input
               type="text"
-              placeholder="opis"
+              placeholder={t.description}
               value={field.description}
               onChange={(e) =>
                 handleInputChange(field.id, "description", e.target.value)
@@ -274,19 +273,13 @@ const DynamicForm3: React.FC<IForm3> = (props) => {
                 // handleInputChange(field.id, 'paid', `${value}`);
               }}
             >
-              <option value="true">opłacone</option>
-              <option value="false">nieopłacone</option>
+              <option value="true">{t.paid}</option>
+              <option value="false">{t.notpaid}</option>
             </select>
-            {/* <select
-            value={field.paid}
-            onChange={(e) => handleInputChange(field.id, 'paid', e.target.value)}
-          >
-            <option value="true">opłacone</option>
-            <option value="false">nieopłacone</option>
-          </select> */}
+
             <br></br>
             <button onClick={sendToBase} className="btn">
-              zapisz przychód
+              {t.save}
             </button>
           </div>
         ))}

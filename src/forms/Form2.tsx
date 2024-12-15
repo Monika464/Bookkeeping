@@ -1,5 +1,4 @@
-
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
 interface FormField {
   id: number;
@@ -18,19 +17,20 @@ const DynamicForm2: React.FC = () => {
   const [nextId, setNextId] = useState<number>(1);
 
   const addFormField = () => {
-    setFormFields([...formFields, { 
-        id: nextId, 
-        value: '',
-        name: '',
-        streetName: '',
-        buildingNum: '',
-        flatNum: '',
-        postcode: '',
-        city: '',
-        email: ''
-        
-        
-        }]);
+    setFormFields([
+      ...formFields,
+      {
+        id: nextId,
+        value: "",
+        name: "",
+        streetName: "",
+        buildingNum: "",
+        flatNum: "",
+        postcode: "",
+        city: "",
+        email: "",
+      },
+    ]);
     setNextId(nextId + 1);
   };
 
@@ -41,56 +41,62 @@ const DynamicForm2: React.FC = () => {
     setFormFields(updatedFormFields);
   };
 
-  const submitForm =()=>{
-    console.log("formFields",formFields)
-  }
+  const submitForm = () => {
+    console.log("formFields", formFields);
+  };
 
   return (
     <div>
-        <br></br>
-        Dodaj kontrahenta
-
+      <br></br>
+      {/* Dodaj kontrahenta */}
       <button onClick={addFormField}>Dodaj</button>
       <form onSubmit={submitForm}>
-      {formFields.map((field) => (
-       
-        <div key={field.id}>
-          <input
-            type="text"
-            placeholder="name"
-            value={field.name}
-            onChange={(e) => handleInputChange(field.id, 'invoiceNum', e.target.value)}
-          />
-          <input
-            type="text"
-            placeholder="street"
-            value={field.streetName}
-            onChange={(e) => handleInputChange(field.id, 'invoiceDate', e.target.value)}
-          />
-          <input
-            type="text"
-            placeholder="num"
-            value={field.buildingNum}
-            onChange={(e) => handleInputChange(field.id, 'building-num', e.target.value)}
-          />
-          <input
-            type="text"
-            placeholder="poscode"
-            value={field.postcode}
-            onChange={(e) => handleInputChange(field.id, 'postcode', e.target.value)}
-          />
- <input
-            type="text"
-            placeholder="city"
-            value={field.city}
-            onChange={(e) => handleInputChange(field.id, 'city', e.target.value)}
-          />
-
-        </div>
-           
-      ))}
-      <br></br>
-      <button>send</button>
+        {formFields.map((field) => (
+          <div key={field.id}>
+            <input
+              type="text"
+              placeholder="name"
+              value={field.name}
+              onChange={(e) =>
+                handleInputChange(field.id, "invoiceNum", e.target.value)
+              }
+            />
+            <input
+              type="text"
+              placeholder="street"
+              value={field.streetName}
+              onChange={(e) =>
+                handleInputChange(field.id, "invoiceDate", e.target.value)
+              }
+            />
+            <input
+              type="text"
+              placeholder="num"
+              value={field.buildingNum}
+              onChange={(e) =>
+                handleInputChange(field.id, "building-num", e.target.value)
+              }
+            />
+            <input
+              type="text"
+              placeholder="poscode"
+              value={field.postcode}
+              onChange={(e) =>
+                handleInputChange(field.id, "postcode", e.target.value)
+              }
+            />
+            <input
+              type="text"
+              placeholder="city"
+              value={field.city}
+              onChange={(e) =>
+                handleInputChange(field.id, "city", e.target.value)
+              }
+            />
+          </div>
+        ))}
+        <br></br>
+        <button>Send</button>
       </form>
     </div>
   );
@@ -137,7 +143,7 @@ export default DynamicForm2;
 //         />
 //          {field.value}{field.id}
 //         </div>
-       
+
 //       ))}
 //     </div>
 //   );

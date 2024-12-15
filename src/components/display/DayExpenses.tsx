@@ -13,6 +13,8 @@ import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../context/UserContext";
 import { Value } from "../Calendar";
 import { getDate, getMonth, getYear } from "date-fns";
+import { useLanguage } from "../../context/LanguageContext.tsx";
+import translations from "./dayexpenses-translation.ts";
 
 export interface IDayExpenses {
   thisDay: Value;
@@ -42,6 +44,9 @@ const DayExpenses: React.FunctionComponent<IDayExpenses> = (props) => {
   const [invoices, setInvoices] = useState<{ [key: string]: Invoice }>({});
   const [isEditMode, setIsEditMode] = useState(false);
   const [isEditModePaid, setIsEditModePaid] = useState(false);
+
+  const { currentLanguage } = useLanguage();
+  const t = translations[currentLanguage as "en" | "pl"];
 
   //console.log("props",props)
   const thisDay = props.thisDay;
@@ -95,7 +100,7 @@ const DayExpenses: React.FunctionComponent<IDayExpenses> = (props) => {
       });
       setInvoices(newData);
     } catch (error) {
-      console.error("Błąd podczas odczytu z bazy danych:", error);
+      console.error(t.errorReadingDatabase, error);
     }
   };
 
@@ -132,7 +137,7 @@ const DayExpenses: React.FunctionComponent<IDayExpenses> = (props) => {
 
   // Funkcja do zmiany nazwy przycisku delete
   const getButtonLabel = () => {
-    return isEditMode ? "Finish editing for delete" : "Edit for delete";
+    return isEditMode ? t.finishEditForDelete : t.editForDelete;
   };
 
   // Funkcja obsługująca kliknięcie przycisku "Zaplac"
@@ -152,7 +157,7 @@ const DayExpenses: React.FunctionComponent<IDayExpenses> = (props) => {
 
   // Funkcja do zmiany nazwy przycisku
   const getButtonLabelPaid = () => {
-    return isEditModePaid ? "Finish editing for pay" : "Edit for pay";
+    return isEditModePaid ? t.finishEditForPay : t.editForPay;
   };
 
   //console.log("invoices",invoices);
@@ -180,7 +185,7 @@ const DayExpenses: React.FunctionComponent<IDayExpenses> = (props) => {
            ${invoice.sellerName}, 
            ${invoice.paymentForm}, 
            ${invoice.description},
-          ${invoice.paid ? "zaplacony" : "niezapłacony"}
+          ${invoice.paid ? t.paid : t.notpaid}
           `}
                 </label>
               </>
@@ -201,7 +206,7 @@ const DayExpenses: React.FunctionComponent<IDayExpenses> = (props) => {
            ${invoice.sellerName}, 
            ${invoice.paymentForm}, 
            ${invoice.description},
-             ${invoice.paid ? "zapłacony" : "niezapłacony"}
+             ${invoice.paid ? t.notpaid : t.notpaid}
           `}
                 </label>
               </>
@@ -215,7 +220,7 @@ const DayExpenses: React.FunctionComponent<IDayExpenses> = (props) => {
            ${invoice.sellerName}, 
            ${invoice.paymentForm}, 
            ${invoice.description},
-          ${invoice.paid ? "zaplacony" : "niezapłacony"}
+          ${invoice.paid ? t.paid : t.notpaid}
            `}
               </div>
             )}
@@ -225,7 +230,7 @@ const DayExpenses: React.FunctionComponent<IDayExpenses> = (props) => {
 
         {isEditMode && (
           <button onClick={handleDeleteClick} className="btn">
-            usuń wybrane faktury
+            {t.deleteInvoices}
           </button>
         )}
         {/* <button onClick={() => setIsEditMode(!isEditMode)}>edytuj</button> */}
@@ -240,7 +245,7 @@ const DayExpenses: React.FunctionComponent<IDayExpenses> = (props) => {
 
         {isEditModePaid && (
           <button onClick={handlePayClick} className="btn">
-            opłać wybraną fakturę
+            {t.payInvoice}
           </button>
         )}
         {/* <button onClick={() => setIsEditMode(!isEditMode)}>edytuj</button> */}

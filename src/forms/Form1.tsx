@@ -8,6 +8,8 @@ import { collection, doc, serverTimestamp, setDoc } from "firebase/firestore";
 import { db } from "../App";
 import { Value } from "../components/Calendar";
 import useGetContractors from "../hooks/useGetContractors";
+import { useLanguage } from "../context/LanguageContext.tsx";
+import translations from "./form1-translations.ts";
 
 interface FormField {
   id: number;
@@ -27,6 +29,9 @@ interface IForm1 {
 }
 
 const DynamicForm: React.FC<IForm1> = (props) => {
+  const { currentLanguage } = useLanguage();
+  const t = translations[currentLanguage as "en" | "pl"];
+
   const [formFields, setFormFields] = useState<FormField[]>([]);
   const [nextId, setNextId] = useState<number>(1);
   const [showAddButton, setShowAddButton] = useState<boolean>(true);
@@ -58,15 +63,6 @@ const DynamicForm: React.FC<IForm1> = (props) => {
     "December",
   ];
   const monthName = monthNames[month];
-  //const formattedDate = day + monthName;
-  //console.log("formattedDate",formattedDate)
-  //console.log("hej", format(props.thisDay, 'do LLLL yyyy', {locale: pl}))
-
-  //const thisDayData = new Date(thisDay?.getTime())
-  //console.log("thisDaytype",typeof(thisDayData))
-  //const formattedDate: string = format(thisDay, 'dMMMM'); // 'd' - oznacza dzień, 'MMMM' - oznacza nazwę miesiąca
-
-  //console.log(formattedDate); // Wyświetli np. "19March"
 
   const addFormField = () => {
     setFormFields([
@@ -118,13 +114,10 @@ const DynamicForm: React.FC<IForm1> = (props) => {
 
     // Jeśli nie wszystkie pola "kwota w zł" są wypełnione, zatrzymaj wysyłanie formularza
     if (!isAmountFilled) {
-      alert("Proszę wypełnić pole 'kwota w zł'!");
+      alert(t.pleaseFill);
       return;
     }
 
-    //const uid = currentUser?.uid;
-    //console.log("currentUser?.uid",currentUser?.uid)
-    //const uid = "user1id";
     const userId = currentUser?.uid;
     const collectionRef = collection(db, `${userId}`);
 
@@ -174,7 +167,7 @@ const DynamicForm: React.FC<IForm1> = (props) => {
     <div className="invoiceForm">
       {showAddButton && (
         <button onClick={addFormField} className="btn">
-          Dodaj pozycję
+          {t.addPosition}
         </button>
       )}
       <div>
@@ -183,7 +176,7 @@ const DynamicForm: React.FC<IForm1> = (props) => {
             {/* {field.id}. */}
             <input
               type="text"
-              placeholder="Nr faktury"
+              placeholder={t.invoiceNum}
               value={field.invoiceNum}
               onChange={(e) =>
                 handleInputChange(field.id, "invoiceNum", e.target.value)
@@ -191,7 +184,7 @@ const DynamicForm: React.FC<IForm1> = (props) => {
             />
             <input
               type="text"
-              placeholder="kwota w zł"
+              placeholder={t.amount}
               value={field.amount}
               onChange={(e) =>
                 handleInputChange(field.id, "amount", e.target.value)
@@ -199,7 +192,7 @@ const DynamicForm: React.FC<IForm1> = (props) => {
             />
             <input
               type="text"
-              placeholder="nazwa"
+              placeholder={t.invoiceName}
               value={field.invoiceName}
               onChange={(e) =>
                 handleInputChange(field.id, "invoiceName", e.target.value)
@@ -211,7 +204,7 @@ const DynamicForm: React.FC<IForm1> = (props) => {
                 handleInputChange(field.id, "sellerName", e.target.value)
               }
             >
-              <option value="">Kontrahent</option>
+              <option value="">{t.contractor}</option>
               {Object.values(contractors).map((contractor: any) => (
                 <option
                   key={contractor.itid}
@@ -228,8 +221,8 @@ const DynamicForm: React.FC<IForm1> = (props) => {
                 handleInputChange(field.id, "paymentForm", e.target.value)
               }
             >
-              <option value="przelew">Przelew</option>
-              <option value="gotowka">Gotówka</option>
+              <option value="przelew">{t.transfer}</option>
+              <option value="gotowka">{t.cash}</option>
             </select>
             <select
               value={field.category}
@@ -237,13 +230,13 @@ const DynamicForm: React.FC<IForm1> = (props) => {
                 handleInputChange(field.id, "category", e.target.value)
               }
             >
-              <option value="service">Usługi</option>
-              <option value="administration">Administracja</option>
+              <option value="service">{t.services}</option>
+              <option value="administration">{t.administrations}</option>
             </select>
 
             <input
               type="text"
-              placeholder="opis"
+              placeholder={t.description}
               value={field.description}
               onChange={(e) =>
                 handleInputChange(field.id, "description", e.target.value)
@@ -253,17 +246,14 @@ const DynamicForm: React.FC<IForm1> = (props) => {
               value={field.paid.toString()} // Konwertuj wartość boolean na string
               onChange={(e) => {
                 handleBooleanChange(field.id, "paid", e.target.value);
-                // Konwertuj wartość z powrotem na boolean
-                // const value = e.target.value === "true" ? true : false;
-                // handleInputChange(field.id, "paid", `${value}`);
               }}
             >
-              <option value="true">opłacone</option>
-              <option value="false">nieopłacone</option>
+              <option value="true">{t.paid}</option>
+              <option value="false">{t.notpaid}</option>
             </select>
             <br></br>
             <button onClick={sendToBase} className="btn">
-              zapisz koszt
+              {t.save}
             </button>
           </div>
         ))}

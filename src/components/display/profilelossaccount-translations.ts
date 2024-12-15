@@ -1,0 +1,38 @@
+const translations = {
+  en: {
+    additionalInfo: "Additional information to the balance sheet",
+    result: "Result",
+    ofwhat: "Of what",
+    revenues: "Revenues from statutory activities",
+    costsStatutory: "Costs of statutory activities",
+    fromSubsidies: "From subsidies",
+    fromContributions: "From contributions",
+    fromDonations: "From donations",
+    allcosts: "All costs",
+    taskCosts: "Task costs",
+    adminCosts: "Administrative costs",
+    profitLoss: "Profit (loss) from statutory activities",
+    profit: "Profit",
+    loss: "Loss",
+    other: "Other",
+  },
+  pl: {
+    additionalInfo: "Informacja dodatkowa do bilansu",
+    result: "Wynik",
+    ofwhat: "Z czego",
+    revenues: "Przychody z działalności statutowej",
+    costsStatutory: "Koszty działanosci statutowej",
+    fromSubsidies: "Z dotacji",
+    fromContributions: "Ze składek",
+    fromDonations: "Z darowizn",
+    allcosts: "Wszystkei koszty",
+    taskCosts: "Koszty zadań",
+    adminCosts: "Koszty administracyjne",
+    profitLoss: "Zysk (strata) z działalności statutowej",
+    profit: "Zysk",
+    loss: "Strata",
+    other: "Inne",
+  },
+};
+
+export default translations;

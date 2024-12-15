@@ -5,6 +5,8 @@ import { UserContext } from "../../context/UserContext";
 import { deleteDoc, doc } from "firebase/firestore";
 import { db } from "../../App";
 import useGetContractors from "../../hooks/useGetContractors";
+import { useLanguage } from "../../context/LanguageContext.tsx";
+import translations from "./contractors-translations.ts";
 
 export interface Icontractor {
   [key: string]: string | number;
@@ -22,6 +24,9 @@ export interface Icontractor {
 }
 
 const Contractors: React.FunctionComponent = () => {
+  const { currentLanguage } = useLanguage();
+  const t = translations[currentLanguage as "en" | "pl"];
+
   const { currentUser } = useContext(UserContext);
   const userId = currentUser?.uid;
 
@@ -60,7 +65,7 @@ const Contractors: React.FunctionComponent = () => {
       //console.log("iterms to delete", item)
       //await deleteDoc(doc(db, `${userId}contractors`, item))
       await deleteDoc(doc(db, `${userId}contractors`, `${item}`)).then(() => {
-        console.log("sussecfuly deleted");
+        console.log("succesfuly deleted");
       });
     });
   };
@@ -81,7 +86,7 @@ const Contractors: React.FunctionComponent = () => {
               />
               <label htmlFor={`invoice-checkbox-${index}`}>
                 {`
-           nazwa ${contractor.companyName}, adres ${contractor.street}, 
+           ${t.name}: ${contractor.companyName}, ${t.address}: ${contractor.street}, 
           ${contractor.buildingNumber},${contractor.flatNumber}, 
           ${contractor.postCode}, ${contractor.city},${contractor.country}
           ${contractor.nip}
@@ -89,7 +94,7 @@ const Contractors: React.FunctionComponent = () => {
               </label>
             </>
           )}
-          nazwa: {contractor.companyName}, adres: {contractor.street},
+          {t.name}: {contractor.companyName}, {t.address}: {contractor.street},
           {contractor.buildingNumber},{contractor.flatNumber},
           {contractor.postCode},{contractor.city},{contractor.country}, NIP:{" "}
           {contractor.nip},
@@ -97,7 +102,7 @@ const Contractors: React.FunctionComponent = () => {
       ))}
       {isEditMode && (
         <button onClick={handleDeleteClick} className="btn">
-          usun wybranego konrahenta
+          {t.deleteChosen}
         </button>
       )}
       <button onClick={() => setIsEditMode(!isEditMode)} className="btnsmall">

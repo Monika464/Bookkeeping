@@ -2,10 +2,15 @@ import { useEffect, useState } from "react";
 import useMoneyAssetsQuery from "../../hooks/useMoneyAssetsQuery";
 import useDataBaseQuery from "../../hooks/useDatabaseQuery";
 import useCounting from "../../hooks/useCounting";
+import { useLanguage } from "../../context/LanguageContext.tsx";
+import translations from "./balanceap-translations.ts";
 
 export interface IBalanceAP {}
 
 const BalanceAP: React.FunctionComponent<IBalanceAP> = () => {
+  const { currentLanguage } = useLanguage();
+  const t = translations[currentLanguage as "en" | "pl"];
+
   const [totalCash, setTotalCash] = useState(0);
   const [totalAssets, setTotalAssets] = useState(0);
   //const [totalObligation, setTotalObligation] = useState(0);
@@ -16,13 +21,13 @@ const BalanceAP: React.FunctionComponent<IBalanceAP> = () => {
 
   const formatNumber = (value: number) => parseFloat(value.toFixed(0));
 
-  const kosztyOplacone = useDataBaseQuery("expenses", "paid", true);
+  //const kosztyOplacone = useDataBaseQuery("expenses", "paid", true);
   const kosztyNieoplacone = useDataBaseQuery("expenses", "paid", false);
   // const naleznosci = useDataBaseQuery("incomes","paid",false);
-  const przychodyOpłacone = useDataBaseQuery("incomes", "paid", true);
+  //const przychodyOpłacone = useDataBaseQuery("incomes", "paid", true);
   const przychodyNiezaplacone = useDataBaseQuery("incomes", "paid", false);
   const koszty = useDataBaseQuery("expenses");
-  console.log("koszty prosto z bazy", koszty);
+  //console.log("koszty prosto z bazy", koszty);
   const przychody = useDataBaseQuery("incomes");
   const pozyczki = useDataBaseQuery("incomes", "loan", true);
 
@@ -63,11 +68,13 @@ const BalanceAP: React.FunctionComponent<IBalanceAP> = () => {
   return (
     <div>
       <br></br>
-      <h1>Bilans</h1>
-      <h2>AKTYWA</h2>
-      <h3>Aktywa trwałe</h3>
-      <p>w tym środki trwałe:{totalAssets} zł</p>
-      <h3>Aktywa obrotowe</h3>
+      <h1>{t.balance}</h1>
+      <h2>{t.assets}</h2>
+      <h3>{t.fixedassets}</h3>
+      <p>
+        {t.includeAssets}: {totalAssets} zł
+      </p>
+      <h3>{t.currentassets}</h3>
 
       <p>
         {formatNumber(
@@ -79,28 +86,32 @@ const BalanceAP: React.FunctionComponent<IBalanceAP> = () => {
         zł
       </p>
       <p>
-        w tym nalezności krótkoterminowe:{<p>{yearNiezaplaconePrzychody} zł</p>}{" "}
+        {t.incshorttrmrec}
+        {<p>{yearNiezaplaconePrzychody} zł</p>}{" "}
       </p>
-      <p>w tym środki pieniężne:{totalCash} zł </p>
+      <p>
+        {t.includecash}
+        {totalCash} zł{" "}
+      </p>
 
       {/* <p>Naleznosci: {yearNaleznosci}</p> */}
       <br></br>
-      <h2>PASYWA </h2>
+      <h2>{t.liabilities}</h2>
       <p>
-        Fundusz statutowy:{" "}
+        {t.statutoryfund}:{" "}
         {formatNumber(
           yearPrzychodySuma - yearKosztySuma + totalAssets + totalCash
         )}{" "}
         zł
       </p>
       <p>
-        Zobowiazania:{formatNumber(yearNiezaplaconeKoszty + yearPozyczki)} zł
+        {t.obligations}:{formatNumber(yearNiezaplaconeKoszty + yearPozyczki)} zł
       </p>
 
-      <h2>Suma Bilansowa</h2>
+      <h2>{t.balanceTotal}</h2>
       {/* <p>Aktywa {totalAssets + totalCash + yearPrzychody + yearPozyczki} zł</p> */}
       <p>
-        Aktywa{" "}
+        {t.assetssmall}{" "}
         {formatNumber(
           totalAssets +
             totalCash +
@@ -110,7 +121,7 @@ const BalanceAP: React.FunctionComponent<IBalanceAP> = () => {
         zł
       </p>
       <p>
-        Pasywa{" "}
+        {t.liabilitiessmall}{" "}
         {formatNumber(
           totalAssets +
             totalCash +

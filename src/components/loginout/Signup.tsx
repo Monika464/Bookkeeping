@@ -1,118 +1,89 @@
+import React, { ChangeEvent, FormEvent, useState } from "react";
+import "./login.css";
+import { useSignup } from "../../hooks/useSignup";
+import { useLanguage } from "../../context/LanguageContext.tsx";
+import translations from "./signup-translations.ts";
 
-import React, { ChangeEvent, FormEvent, useState } from 'react';
-import './login.css';
-import { useSignup } from '../../hooks/useSignup';
-
-
-export interface IApplicationProps {};
+export interface IApplicationProps {}
 //interface URL {}
 
+const Signup: React.FunctionComponent<IApplicationProps> = () => {
+  const { currentLanguage } = useLanguage();
+  const t = translations[currentLanguage as "en" | "pl"];
 
-const Signup: React.FunctionComponent<IApplicationProps> =() => {
-    // const auth = getAuth();
-    // const navigate = useNavigate();
-   
+  const { error, isPending, signup } = useSignup();
 
-    //const { currentUser} = useContext(UserContext);
-    
-    const {error, isPending, signup} = useSignup();
+  const defaultFormFields = {
+    email: "",
+    password: "",
+  };
 
+  const [formFields, setFormFields] = useState(defaultFormFields);
+  const { email, password } = formFields;
 
-    const defaultFormFields = {
-      email: '',
-      password: '',
-    }
+  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = event.target;
 
-    const [formFields, setFormFields] = useState(defaultFormFields)
-    const { email, password } = formFields
+    setFormFields({ ...formFields, [name]: value });
+  };
 
-    
-const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-  const { name, value } = event.target
-  
-  setFormFields({...formFields, [name]: value })
-}
+  // const logout=()=> {
+  //   navigate('/login');
+  //     return signOut(auth);
+  //     }
 
-// const logout=()=> {
-//   navigate('/login');
-//     return signOut(auth);
-//     }
-    
-const handleSubmit = async(event: FormEvent<HTMLFormElement>) => {
-  event.preventDefault()   
-  //setError('');
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    //setError('');
 
-  // Usunięcie spacji z emaila i hasła 
-  const cleanedEmail = email.trim();
-  const cleanedPassword = password.trim();
-  signup(cleanedEmail,cleanedPassword );
-    // // Send the email and password to firebase
-    // await createUserWithEmailAndPassword(auth, cleanedEmail, cleanedPassword)
-    // .then((response) =>{
-    //   navigate('/');
-    //   console.log("data created", response);
-    //       })
+    // Usunięcie spacji z emaila i hasła
+    const cleanedEmail = email.trim();
+    const cleanedPassword = password.trim();
+    signup(cleanedEmail, cleanedPassword);
+  };
 
-  
-    //  .catch(error =>{
-    //   console.log("blad",error);
-    //   setError(error)
-    //   setAuthing(false);   
-    // })
+  return (
+    <div id="main" className="login-form">
+      <div className="title">{t.signup}</div>
+      <br />
 
-   
-}
+      <div id="fields"></div>
 
+      <form onSubmit={handleSubmit}>
+        <input
+          type="email"
+          name="email"
+          value={email}
+          onChange={handleChange}
+          placeholder="Email"
+          required
+        />
 
-    return (  
-      
+        <input
+          type="password"
+          name="password"
+          value={password}
+          onChange={handleChange}
+          placeholder={t.password}
+          required
+        />
 
-     <div id="main" className="login-form"> 
-        <div className='title'>Załóż konto</div>
-        <br/>
-      
-         <div id="fields">
-         </div>
-         
-         
-         <form onSubmit={handleSubmit}>
-    
-              <input
-                type="email"
-                name="email"
-                value={email}
-                onChange={handleChange}
-                placeholder="Email"
-                required
-              />
-    
-              <input
-             
-                type='password'
-                name='password'
-                value={password}
-                onChange={handleChange}
-                placeholder="Password"
-                required
-              />
+        {/*<input id='recaptcha' type="submit" />*/}
+        <br />
+        <button className="btn" disabled={isPending}>
+          {t.loginin}
+        </button>
+      </form>
 
-           
-              {/*<input id='recaptcha' type="submit" />*/}
-              <br/>
-          <button className="btn" disabled={isPending} >Załóż konto </button>
-          </form>
-       
-   
-            {/* <p>Google</p>
+      {/* <p>Google</p>
             <button onClick={signInWithGoogle} disabled={authing}>signInWithGoogle</button>
         */}
 
-        {/* <button onClick={logout}>logout</button> */}
-        {/* {error && <p>{error.toString()}</p>} */}
-        {error && <p>{error.toString().split('Firebase: ')[1]}</p>}
-</div> 
-    )
-}
-
+      {/* <button onClick={logout}>logout</button> */}
+      {/* {error && <p>{error.toString()}</p>} */}
+      {error && <p>{error.toString().split("Firebase: ")[1]}</p>}
+    </div>
+  );
+};
 
 export default Signup;

@@ -7,10 +7,15 @@ import AssetsForAmortisation from "../forms/AssetsForAmortisation";
 import IncomeLoan from "../forms/IncomeLoan";
 import ProfitLossAccount from "../components/display/ProfitLossAccount";
 import { useState } from "react";
+import { useLanguage } from "../context/LanguageContext.tsx";
+import translations from "./balance-translations.ts";
 
 export interface IBalance {}
 
 const Balance: React.FunctionComponent<IBalance> = () => {
+  const { currentLanguage } = useLanguage();
+  const t = translations[currentLanguage as "en" | "pl"];
+
   const [isEdited, setIsEdited] = useState<boolean>(false);
 
   const { editedYear } = useYear();
@@ -22,16 +27,16 @@ const Balance: React.FunctionComponent<IBalance> = () => {
   // console.log("dataFromBaseE",dataFromBaseE)
   return (
     <div>
-      <h1>Bilans oraz Informacja dodatkowa</h1>
+      <h1>{t.balanceSheet}</h1>
       <br></br>
       <br></br>
       <YearSelector />
       <br></br>
-      Edytujesz rok: {editedYear}
+      {t.editedYear} {editedYear}
       <br></br>
       <br></br>
       <button onClick={handleEdit} className="btnsmall">
-        {isEdited ? "Zakończ edycję" : "Edytuj dane uzupełniające"}
+        {isEdited ? t.finishedit : t.edit}
       </button>
       {isEdited && (
         <div>

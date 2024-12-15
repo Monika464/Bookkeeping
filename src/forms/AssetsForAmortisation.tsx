@@ -101,7 +101,7 @@ const AssetsForAmortisation: React.FunctionComponent<
       {isEmptyAsset && (
         <div>
           <label>
-            {t.assets}
+            {t.assetsdep}
             <input
               type="number"
               value={assetsState}

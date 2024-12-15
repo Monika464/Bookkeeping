@@ -1,10 +1,14 @@
 import React from "react";
 import useDataBaseQuery from "../../hooks/useDatabaseQuery";
 import useCounting from "../../hooks/useCounting";
-
+import { useLanguage } from "../../context/LanguageContext.tsx";
+import translations from "./profilelossaccount-translations.ts";
 export interface IProfitLossAccount {}
 
 const ProfitLossAccount: React.FunctionComponent<IProfitLossAccount> = () => {
+  const { currentLanguage } = useLanguage();
+  const t = translations[currentLanguage as "en" | "pl"];
+
   const yearExpense = useDataBaseQuery("expenses");
   const yearIncome = useDataBaseQuery("incomes");
   //console.log("yearExpenses",yearExpense)
@@ -38,29 +42,45 @@ const ProfitLossAccount: React.FunctionComponent<IProfitLossAccount> = () => {
   //return(<div style={{fontSize: 20}}>
   return (
     <div>
-      <h1>Informacja dodatkowa do bilansu</h1>
+      <h1>{t.additionalInfo}</h1>
       <br></br>
       <br></br>
       {/* Wynik: {yearResult} zł */}
-      Wynik: {formatNumber(yearResult)} zł
+      {t.result} {formatNumber(yearResult)} zł
       <br></br>
-      <br></br>Z czego
-      <h3>A. Przychody z działalności statutowej</h3>
       <br></br>
-      <p>Z dotacji: {formatNumber(yearDotacje)} zł</p>
-      <p>Ze składek: {formatNumber(yearSkladki)} zł</p>
-      <p>Z darowizn: {formatNumber(yearDarowizny)} zł</p>
-      <p>Inne: {yearInne} zł</p>
+      <h3>A. {t.revenues}</h3>
       <br></br>
-      <h3>B. Koszty działalności statutowej</h3>
-      <p>Wszystkie koszty: {formatNumber(yearExpenses)} zł</p>z czego:
-      <p> koszty zadań: {formatNumber(yearUslugi)} zł</p>
-      <p>koszty administracyjne {formatNumber(yearAdministration)} zł</p>
+      <p>
+        {t.fromSubsidies}: {formatNumber(yearDotacje)} zł
+      </p>
+      <p>
+        {t.fromContributions}: {formatNumber(yearSkladki)} zł
+      </p>
+      <p>
+        {t.fromDonations}: {formatNumber(yearDarowizny)} zł
+      </p>
+      <p>
+        {t.other}: {yearInne} zł
+      </p>
       <br></br>
-      <h3>C. Zysk (strata) z działalności statutowej (A-B)</h3>
+      <h3>B. {t.costsStatutory}</h3>
+      <p>
+        {t.allcosts}: {formatNumber(yearExpenses)} zł
+      </p>
+      {t.ofwhat}:
+      <p>
+        {" "}
+        {t.taskCosts}: {formatNumber(yearUslugi)} zł
+      </p>
+      <p>
+        {t.adminCosts} {formatNumber(yearAdministration)} zł
+      </p>
+      <br></br>
+      <h3>C. {t.profitLoss} (A-B)</h3>
       {yearIncomes - yearExpenses >= 0
-        ? `zysk ${formatNumber(yearIncomes - yearExpenses)} zł`
-        : `strata ${formatNumber(yearIncomes - yearExpenses)} zł`}
+        ? `${t.profit} ${formatNumber(yearIncomes - yearExpenses)} zł`
+        : `${t.loss} ${formatNumber(yearIncomes - yearExpenses)} zł`}
       {/* <h3>C. Zysk (strata) z działalności statutowej (A-B)</h3>
       {yearIncomes - yearExpenses >= 0
         ? `zysk ${yearIncomes - yearExpenses} zł`
