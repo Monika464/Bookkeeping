@@ -3,7 +3,7 @@ import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import Form1 from "../forms/Form1";
 import { format } from "date-fns";
-import { pl } from "date-fns/locale";
+import { enUS, pl } from "date-fns/locale";
 import DayExpenses from "./display/DayExpenses";
 import Form3 from "../forms/Form3";
 import DayIncomes from "./display/DayIncomes";
@@ -18,6 +18,7 @@ export type Value = Date | string;
 const CalendarElement: React.FunctionComponent = () => {
   const { currentLanguage } = useLanguage();
   const t = translations[currentLanguage as "en" | "pl"];
+  const locale = currentLanguage === "pl" ? pl : enUS;
 
   const [value, setValue] = useState<Value>(new Date());
 
@@ -42,7 +43,7 @@ const CalendarElement: React.FunctionComponent = () => {
       {chosenDay && (
         <div>
           <br></br> <br></br>
-          {`${format(chosenDay, "do LLLL yyyy", { locale: pl })}`}
+          {`${format(chosenDay, "do LLLL yyyy", { locale })}`}
           <br></br> <br></br>
           {t.expenses}
           {/* 'tu sie z bazy maja wyswietlac koszty dla tego dnia' */}
