@@ -21,6 +21,7 @@ import "./App.css";
 import Userpanel from "./components/Userpanel";
 import Manual from "./components/Manual";
 import { LanguageProvider } from "./context/LanguageContext";
+import ForgotPass from "./components/loginout/forgotpass";
 export const app = initializeApp(config.firebaseConfig);
 //console.log("app",app)
 export const auth = getAuth();
@@ -56,9 +57,10 @@ function App() {
 
                     <Route path="/userpanel" element={<Userpanel />} />
                     <Route path="/manual" element={<Manual />} />
+                    <Route path="forgotpass" element={<ForgotPass />} />
 
                     <Route
-                      path="/hej"
+                      path="/dup"
                       element={
                         <CheckForDuplicates
                           year={undefined}

@@ -25,7 +25,7 @@ const translations = {
     fromSubsidies: "Z dotacji",
     fromContributions: "Ze składek",
     fromDonations: "Z darowizn",
-    allcosts: "Wszystkei koszty",
+    allcosts: "Wszystkie koszty",
     taskCosts: "Koszty zadań",
     adminCosts: "Koszty administracyjne",
     profitLoss: "Zysk (strata) z działalności statutowej",

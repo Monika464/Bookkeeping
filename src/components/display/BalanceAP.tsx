@@ -98,7 +98,7 @@ const BalanceAP: React.FunctionComponent<IBalanceAP> = () => {
       <br></br>
       <h2>{t.liabilities}</h2>
       <p>
-        {t.statutoryfund}:{" "}
+        {t.statutoryfund}{" "}
         {formatNumber(
           yearPrzychodySuma - yearKosztySuma + totalAssets + totalCash
         )}{" "}
