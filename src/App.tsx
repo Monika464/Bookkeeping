@@ -17,7 +17,7 @@ import ContractorsPage from "./pages/ContractorsPage";
 import Navbar from "./components/Navbar";
 import CalendarPage from "./components/Calendar";
 import CheckForDuplicates from "./components/display/CheckForDuplicate";
-import "./App.css";
+import "./app.css";
 import Userpanel from "./components/Userpanel";
 import Manual from "./components/Manual";
 import { LanguageProvider } from "./context/LanguageContext";
