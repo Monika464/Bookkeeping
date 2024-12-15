@@ -4,6 +4,8 @@ import { SetStateAction, useState } from "react";
 import "./login.css";
 import { Link } from "react-router-dom";
 import { getAuth, sendPasswordResetEmail } from "firebase/auth";
+import { useLanguage } from "../../context/LanguageContext.tsx";
+import translations from "./forgotpass-translations.ts";
 
 export interface IForgotPassProps {}
 
@@ -11,6 +13,9 @@ const ForgotPass: React.FunctionComponent<IForgotPassProps> = () => {
   const [email, setEmail] = useState<string>("");
   const [isSend, setIsSend] = useState(false);
   //const [isError, setIsError] = useState('');
+
+  const { currentLanguage } = useLanguage();
+  const t = translations[currentLanguage as "en" | "pl"];
 
   const handleSendPass = () => {
     if (email) {
@@ -34,7 +39,7 @@ const ForgotPass: React.FunctionComponent<IForgotPassProps> = () => {
 
   const sendCustomPasswordResetEmail = (email: string) => {
     // Tutaj możesz umieścić własną logikę wysyłania e-maila resetującego, np. za pomocą usługi SMTP
-    console.log(`Wysłano e-mail resetujący na adres: ${email}`);
+    console.log(` ${t.sentToThis} ${email}`);
     // W rzeczywistej aplikacji powinieneś użyć odpowiedniej usługi lub API do wysyłania e-maili
   };
 
@@ -45,17 +50,17 @@ const ForgotPass: React.FunctionComponent<IForgotPassProps> = () => {
         return sendCustomPasswordResetEmail(email);
       })
       .then(() => {
-        console.log("wyslano hasło na email");
+        console.log(t.sentPass);
       })
       .catch((error) => {
-        console.error("Błąd podczas resetowania hasła:", error.message);
+        console.error(t.error, error.message);
         // Tutaj możesz obsłużyć błędy związane z wysyłaniem e-maila resetującego
       });
   };
   return (
     <div>
       <div id="main" className="login-form">
-        <div className="title">Podaj email na jaki wysłać hasło</div>
+        <div className="title">{t.giveEmail}</div>
 
         <form onSubmit={handleSubmit}>
           <input
@@ -67,14 +72,14 @@ const ForgotPass: React.FunctionComponent<IForgotPassProps> = () => {
             required
           />
           <br></br>
-          <button className="btn">wyslij</button>
+          <button className="btn">{t.send}</button>
         </form>
 
         {isSend && (
           <div>
-            <p>wysłano link do zmiany hasła na podany email</p>
+            <p>{t.linkSent}</p>
             <Link to={"../login"} style={{ fontSize: "small" }}>
-              Przejdź do logowania
+              {t.goLogin}
             </Link>
           </div>
         )}

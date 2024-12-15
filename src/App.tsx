@@ -21,7 +21,7 @@ import "./App.css";
 import Userpanel from "./components/Userpanel";
 import Manual from "./components/Manual";
 import { LanguageProvider } from "./context/LanguageContext";
-import ForgotPass from "./components/loginout/forgotpass";
+import ForgotPass from "./components/loginout/Forgotpass";
 export const app = initializeApp(config.firebaseConfig);
 //console.log("app",app)
 export const auth = getAuth();
