@@ -20,7 +20,7 @@ const ProfitLossAccount: React.FunctionComponent<IProfitLossAccount> = () => {
   //ANALIZA PRZYCHODOW
   const dotacje = useDataBaseQuery("incomes", "source", "dotacje");
   const skladki = useDataBaseQuery("incomes", "source", "skladki");
-  const darowizny = useDataBaseQuery("incomes", "source", "darowizmy");
+  const darowizny = useDataBaseQuery("incomes", "source", "darowizny");
   const inne = useDataBaseQuery("incomes", "source", "inne");
 
   const uslugi = useDataBaseQuery("expenses", "category", "service");
@@ -35,6 +35,7 @@ const ProfitLossAccount: React.FunctionComponent<IProfitLossAccount> = () => {
   const yearDarowizny = useCounting(darowizny);
   const yearInne = useCounting(inne);
   const yearUslugi = useCounting(uslugi);
+
   const yearAdministration = useCounting(administracja);
 
   const formatNumber = (value: number) => parseFloat(value.toFixed(0));
@@ -70,7 +71,6 @@ const ProfitLossAccount: React.FunctionComponent<IProfitLossAccount> = () => {
       </p>
       {t.ofwhat}:
       <p>
-        {" "}
         {t.taskCosts}: {formatNumber(yearUslugi)} zł
       </p>
       <p>
