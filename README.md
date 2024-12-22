@@ -34,9 +34,7 @@ cd Bookkeeping
 npm install
 npm run dev
 
-## Local Setup
-
-Requirements
+## Requirements
 
 Node.js: >=16.0.0 (recommended LTS version)
 npm: >=7.0.0
