@@ -34,9 +34,9 @@ export const analytics = getAnalytics(app);
 function App() {
   return (
     <div className="App">
-      <LanguageProvider>
-        <AuthContextProvider>
-          <BrowserRouter>
+      <BrowserRouter>
+        <LanguageProvider>
+          <AuthContextProvider>
             <UserContextProvider>
               <YearContextProvider>
                 <div className="container">
@@ -95,9 +95,9 @@ function App() {
                 </div>
               </YearContextProvider>
             </UserContextProvider>
-          </BrowserRouter>
-        </AuthContextProvider>
-      </LanguageProvider>
+          </AuthContextProvider>
+        </LanguageProvider>
+      </BrowserRouter>
     </div>
   );
 }
