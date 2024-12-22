@@ -1,30 +1,57 @@
-# React + TypeScript + Vite
+# Bookkeepeng
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Overview
 
-Currently, two official plugins are available:
+This app is designed for creating an annual report for small non-profit organizations and includes features such as:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- a convenient and time-saving formula for adding bills by clicking on the appropriate date
+- annual report listing all invoices
+- calculated annual result and overall balance sheet
 
-## Expanding the ESLint configuration
+## Preview
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+You can test the app at the following link:
 
-- Configure the top-level `parserOptions` property like this:
+- **Preview:** [Bookkeeper](https://virtual-bookkeeper-c1afd.web.app/)
 
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
-```
+### Credentials for testing:
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+- **Login:** test@test.com
+- **Password:** 123456
+
+## Video Demonstration
+
+[![Obrazek](https://firebasestorage.googleapis.com/v0/b/my-dojo-web.appspot.com/o/git-pictures%2FBookkeeper.png?alt=media&token=b44e45a6-f446-46f5-bc51-9047ca678232)](https://vimeo.com/1041230673?share=copy#t=0)
+
+## Local Setup
+
+To run this project locally, follow these steps:
+
+bash
+
+git clone https://github.com/Monika464/Bookkeeping
+cd Bookkeeping
+npm install
+npm run dev
+
+## Local Setup
+
+Requirements
+
+Node.js: >=16.0.0 (recommended LTS version)
+npm: >=7.0.0
+
+## Technologies:
+
+| Tech           | Use                        |
+| -------------- | -------------------------- |
+| React          | Front-end framework        |
+| Typecript      | Language                   |
+| Vite           | Build tool for fast dev    |
+| Firebase       | Real-time database         |
+| React Calendar | Datepicker compoment       |
+| React Select   | Dropdown/select components |
+| Date Fns       | Date manipulation          |
+| Prettier       | Code formatter             |
+
+###### Club Management App © 2024 by MK is licensed under CC BY-NC-ND 4.0 -->
