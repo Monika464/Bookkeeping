@@ -52,4 +52,4 @@ npm run dev
 | Date Fns       | Date manipulation          |
 | Prettier       | Code formatter             |
 
-###### Club Management App © 2024 by MK
+###### Bookkeeper © 2024 by MK
